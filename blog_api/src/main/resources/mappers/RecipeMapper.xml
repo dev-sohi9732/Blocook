@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.ssafy.blog.mapper.RecipeMapper">
+
+	<select id="selectAllRecipes" resultType="com.ssafy.blog.dto.RecipeDto">
+		SELECT *
+		FROM recipe
+	</select>
+
+	<select id="selectByNationCode" parameterType="String" resultType="com.ssafy.blog.dto.RecipeDto">
+		SELECT * 
+		FROM recipe 
+		WHERE nation_code = #{nationCode}
+		order by recipe_id
+	</select>
+
+	<select id="selectByIrdnts" parameterType="String" resultType="com.ssafy.blog.dto.RecipeDto">
+		SELECT * 
+		FROM recipe 
+		WHERE irdnts LIKE #{title}
+	</select>
+	
+	<select id="selectByTitle" parameterType="String" resultType="com.ssafy.blog.dto.RecipeDto">
+		SELECT * 
+		FROM recipe 
+		WHERE recipe_nm_ko LIKE CONCAT('%', #{title}, '%')
+	</select>
+	
+	<select id="selectRecipeById" parameterType="String" resultType="com.ssafy.blog.dto.RecipeDto">
+		SELECT * FROM recipe WHERE recipe_id = #{recipeId}
+	</select>
+	
+	<select id="selectCookingById" parameterType="String" resultType="com.ssafy.blog.dto.CookingDto">
+		SELECT * FROM recipe_cooking WHERE recipe_id = #{recipeId} order by cooking_no
+	</select>
+	
+	<select id="selectIrdntById" parameterType="String" resultType="com.ssafy.blog.dto.IrdntDto">
+		select * from recipe_irdnt where recipe_id = #{recipeId} order by irdnt_sn
+	</select>
+	
+	<select id="selectAllIrdnts" resultType="String">
+		select distinct irdnt_nm from recipe_irdnt
+	</select>
+	
+	<insert id="bookmarkRecipe">
+		INSERT INTO recipe_bookmark ( recipe_id, uid )
+		VALUES ( #{recipeId}, #{uid} );
+	</insert>
+	
+	<delete id="unBookmarkRecipe">
+		DELETE 
+		FROM recipe_bookmark
+		WHERE recipe_id = #{recipeId} AND uid = #{uid};
+	</delete>
+	
+	<select id="selectBookmarkCount" parameterType="String" resultType="Integer">
+		SELECT COUNT(*) 
+		FROM recipe_bookmark
+		WHERE recipe_id = #{recipeId};
+	</select>
+	
+	<insert id="addRecipe">
+		INSERT INTO recipe ( recipe_id, recipe_nm_ko, sumry, nation_code, nation_nm, ty_code, ty_nm, cooking_time, calorie, qnt, level_nm, irdnt_code, img_url, det_url)
+		VALUES ( #{recipeId}, #{recipeNmKo}, #{sumry}, #{nationCode}, #{nationNm}, #{tyCode}, #{tyNm}, #{cookingTime}, #{calorie}, #{qnt}, #{levelNm}, #{irdntCode}, #{imgUrl}, #{detUrl});
+	</insert>
+	
+	<insert id="addCooking">
+		INSERT INTO recipe_cooking ( recipe_id, cooking_no, cooking_dc, stre_step_image_url, step_tip)
+		VALUES ( #{recipeId}, #{cookingNo}, #{cookingDc}, #{streStepImageUrl}, #{stepTip} );
+	</insert>
+	
+	<insert id="addIrdnt">
+		INSERT INTO recipe_irdnt ( recipe_id, irdnt_sn, irdnt_nm, irdnt_cpcty, irdnt_ty_code, irdnt_ty_nm)
+		VALUES ( #{recipeId}, #{irdntSn}, #{irdntNm}, #{irdntCpcty}, #{irdntTyCode}, #{irdntTyNm});
+	</insert>
+	
+	<select id="selectMaxId" resultType="Integer">
+		SELECT max(recipe_id) 
+		FROM recipe;
+	</select>
+	
+</mapper>
+
+
