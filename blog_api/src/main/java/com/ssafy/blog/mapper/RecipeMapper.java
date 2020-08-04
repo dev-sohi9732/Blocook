@@ -16,7 +16,7 @@ public interface RecipeMapper {
 	
 	public List<RecipeDto> selectByNationCode(String nationCode);
 	
-	public List<RecipeDto> selectByIrdnts(String irdntStr);
+	public List<RecipeDto> selectByIrdnts(String[] irdntArr);
 	
 	public List<RecipeDto> selectByTitle(String title);
 	
