@@ -15,7 +15,7 @@
 						<h6>레시피명</h6>
 					</th>
 					<td>
-						<b-form-input v-model="text" size="sm" placeholder="레시피명 입력"></b-form-input>
+						<b-form-input v-model="recipenm" size="sm" placeholder="레시피명 입력"></b-form-input>
 					</td>
 				</tr>
 				<tr>
@@ -23,7 +23,7 @@
 						<h6>주재료</h6>
 					</th>
 					<td>
-						<b-form-input list="my-list-id" size="sm" placeholder="필수재료 입력"></b-form-input>
+						<b-form-input v-model="mainirdnt" list="my-list-id" size="sm" placeholder="필수재료 입력"></b-form-input>
 						<datalist id="my-list-id">
 							<option v-for="(irdnt, index) in irdnts" :key="index">{{ irdnt }}</option>
 						</datalist>
@@ -34,7 +34,7 @@
 						<h6>부재료</h6>
 					</th>
 					<td>
-						<b-form-input list="my-list-id" size="sm" placeholder="선택재료 입력"></b-form-input>
+						<b-form-input v-model="subirdnt" list="my-list-id" size="sm" placeholder="선택재료 입력"></b-form-input>
 						<datalist id="my-list-id">
 							<option v-for="(irdnt, index) in irdnts" :key="index">{{ irdnt }}</option>
 						</datalist>
@@ -45,7 +45,7 @@
 						<h6>양념</h6>
 					</th>
 					<td>
-						<b-form-input list="my-list-id" size="sm" placeholder="선택재료 입력"></b-form-input>
+						<b-form-input v-model="seasoningirdnt" list="my-list-id" size="sm" placeholder="선택재료 입력"></b-form-input>
 						<datalist id="my-list-id">
 							<option v-for="(irdnt, index) in irdnts" :key="index">{{ irdnt }}</option>
 						</datalist>
@@ -58,6 +58,7 @@
 					</th>
 					<td>
 						<b-form-textarea
+							v-model="recipedc"
 							id="textarea-small"
 							size="sm"
 							placeholder="레시피에 대해 간단히 설명해주세요."
@@ -81,10 +82,10 @@
 				</tr>
 				<tr class="shortbox">
 					<td>
-    				<b-form-select v-model="selected" :options="categories" size="sm"></b-form-select>
+    				<b-form-select v-model="selectedcat" :options="categories" size="sm"></b-form-select>
 					</td>
 					<td>
-    				<b-form-select v-model="selected" :options="options" size="sm"></b-form-select>
+    				<b-form-select v-model="selectedty" :options="options" size="sm"></b-form-select>
 					</td>
 				</tr>
 				<tr>
@@ -97,10 +98,10 @@
 				</tr>
 				<tr>
 					<td>
-						<b-form-input v-model="text" size="sm" type="number" placeholder="숫자만 입력"></b-form-input>
+						<b-form-input v-model="time" size="sm" type="number" placeholder="숫자만 입력"></b-form-input>
 					</td>
 					<td>
-						<b-form-input v-model="text" size="sm" type="number" placeholder="숫자만 입력"></b-form-input>
+						<b-form-input v-model="kcal" size="sm" type="number" placeholder="숫자만 입력"></b-form-input>
 					</td>
 				</tr>
 				<tr>
@@ -113,7 +114,7 @@
 				</tr>
 				<tr>
 					<td>
-						<b-form-input v-model="text" size="sm" type="number" placeholder="숫자만 입력"></b-form-input>
+						<b-form-input v-model="person" size="sm" type="number" placeholder="숫자만 입력"></b-form-input>
 					</td>
 					<td>
     				<b-form-input v-on:change="flevel" v-model="level.value" type="range" min="1" max="3"></b-form-input>
@@ -124,7 +125,7 @@
 		</div>
 
 		<div class="user" style="margin-top:15px; margin-right:30px;">
-			<a href="addrecipedetail"><button class="button btn" style="width:180px; margin-bottom:30px;">레시피 상세 등록&nbsp;<i class="fa fa-arrow-right"></i></button></a>
+			<button class="button btn" @click="checkHandler" style="width:180px; margin-bottom:30px;">레시피 상세 등록&nbsp;<i class="fa fa-arrow-right"></i></button>
 		</div>
 	</div>
 </template>
@@ -143,9 +144,9 @@
 		recipedc: '',
 		selectedcat: '',
 		selectedty: '',
-		time: 0,
-		kcal: 0,
-		person: 1,
+		time : '',
+		kcal : '',
+		person : '',
 		//select 박스 정보
         irdnts: [],
         options: [
@@ -158,6 +159,7 @@
           { value: '찜', text: '찜' },
           { value: '나물/생채/샐러드', text: '나물/생채/샐러드' },
           { value: '밑반찬/김치', text: '밑반찬/김치' },
+          { value: '기타', text: '기타' },
         ],
         categories: [
           { value: null, text: '카테고리 선택' },
@@ -195,7 +197,6 @@
 			}
 		},
 		checkHandler: function() {
-			
 			let err = true;
 			let msg = '';
 			!this.recipenm && (msg = '레시피 이름을 입력해주세요', err = false);
@@ -213,7 +214,7 @@
 		},
 		saveHandler : function(){
 			http
-				.post("/recipes/add/recipe",{
+				.post("/recipes/add/recipe",{ // 레시피 기본정보 추가 완료
 					recipe: {
 						recipeNmKo: this.recipenm,
 						sumry: this.recipedc,
@@ -237,12 +238,14 @@
 						irdntTyNm: '양념'
 					}]
 				})
-                .then(({ data }) => {
-					this.sizes = Array.from(data);
-                })
-                .catch((error) => {
-                    console.dir(error);
-                });
+        .then(({ data }) => {
+					this.$store.dispatch('recipe/GET_RECIPE_ID', { payload: data }) // store 반영
+					alert("레시피 기본정보가 등록 완료되었습니다. 레시피 상세를 등록해주세요.");
+					this.$router.push('addrecipedetail');
+				})
+				.catch((error) => {
+						console.dir(error);
+				});
 		}
 	}
   }
@@ -296,5 +299,8 @@ select {
 }
 .shortbox select, input {
 	margin-bottom: 8px;
+}
+.user {
+	float: right;
 }
 </style>
