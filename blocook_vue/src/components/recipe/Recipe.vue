@@ -36,6 +36,7 @@
 								
 								<td v-for="(irdnt,irdnt_key) in irdnts" :key="irdnt_key" v-if="irdnt.irdntTyNm.indexOf('주재료')>-1" style="display:inline;" > 
 									{{irdnt.irdntNm}}
+									<span style="font-size:0.8em;">({{irdnt.irdntCpcty}})</span>
 								</td>
 							</tr>
 							<tr>
@@ -44,6 +45,7 @@
 								</th>
 								<td v-for="(irdnt,irdnt_key) in irdnts" :key="irdnt_key" v-if="irdnt.irdntTyNm.indexOf('부재료')>-1" style="display:inline;" >
 									{{irdnt.irdntNm}}
+									<span style="font-size:0.8em;">({{irdnt.irdntCpcty}})</span>
 								</td>
 							</tr>
 							<tr>
@@ -52,6 +54,7 @@
 								</th>
 								<td v-for="(irdnt,irdnt_key) in irdnts" :key="irdnt_key" v-if="irdnt.irdntTyNm.indexOf('양념')>-1" style="display:inline;" >
 									{{irdnt.irdntNm}}
+									<span style="font-size:0.8em;">({{irdnt.irdntCpcty}})</span>
 								</td>
 							</tr>
 						</tbody>
