@@ -1563,10 +1563,10 @@ h4.contact-title {
 /* =================================== */
 
 .logo_img img {
-    width: 140px;
-    height: 140px;
+    width: 120px;
+    height: 120px;
     margin-top: 110px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .logo_text h1 {
