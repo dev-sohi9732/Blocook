@@ -7,18 +7,14 @@
 				<option value="irdnt">재료</option>
 			</select>
 			<form v-if="selected=='irdnt'" class="s-form" >
-				<input v-model="query" list="my-list-id" size="sm" placeholder="검색어를 입력하세요" autofocus/>
-				<datalist id="my-list-id">
-					<option v-for="(irdnt, index) in irdnts" :key="index">{{ irdnt }}</option>
-				</datalist>
-				<button @click.prevent="searchirdnt" ><i class="fa fa-search" ></i></button>
+                <multiselect style="width:280px; margin-top:1px;" v-model="multi" tag-placeholder="해당 재료를 사용하는 레시피가 없습니다." placeholder="검색어를 입력해주세요." :options="irdnts" :multiple="true" :taggable="true"></multiselect>
+				<button  @click.prevent="searchirdnt" style="width:60px;"><i class="fa fa-search" ></i></button>
 			</form>
 			<form  v-else class="s-form">
-				<input type="text" v-model="query" placeholder="검색어를 입력하세요" autofocus>
+				<input class="title-input" type="text" v-model="query" placeholder="검색어를 입력하세요" autofocus>
 				<button @click.prevent="searchtitle" ><i class="fa fa-search" ></i></button>
 			</form>
 		</div>
-
 		<div style="margin-top:15px;">
 			<h2>Today's Recipe&nbsp;</h2>
 			<img class="recipebook" src="@/assets/img/recipeicon.png">
@@ -149,9 +145,12 @@
 
 <script>
 import http from "@/util/http-common.js";
+import Multiselect from 'vue-multiselect'
 
 export default {
-  components: {},
+  components: {
+    Multiselect
+  },
   props: [],
   data() {
     return {
@@ -161,6 +160,7 @@ export default {
 	  irdnts: [],
 	  slide: 0,
 	  sliding: null,
+	  multi: [],
     };
   },
   created() {
@@ -210,10 +210,13 @@ export default {
   },
   methods: {
     searchtitle() {
-        this.$router.push("/search?title=" + this.query );
+		if (this.query== "")
+			alert("검색어를 입력해주세요.");
+		else
+        	this.$router.push("/search?title=" + this.query );
 	},
 	searchirdnt() {
-        this.$router.push("/search?irdnt=" + this.query );
+        this.$router.push("/search?irdnt=" + this.multi );
 	},
 	onSlideStart(slide) {
 		this.sliding = true
@@ -223,7 +226,14 @@ export default {
 	},
 	onSubmit() {
 	  	console.log(eeeee)
-    },
+	},
+	// addTag (newTag) {
+    //   const tag = {
+    //     newTag
+    //   }
+    //   this.irdnts.push(tag)
+    //   this.multi.push(tag)
+    // },
   },
 }
 </script>
@@ -233,6 +243,13 @@ h2 {
 	vertical-align: middle;
 	font-weight:bolder; 
 	display:inline;
+}
+.multiselect {
+	border: 4px solid rgb(241, 196, 15);
+	margin:0px;
+}
+.searchbar button {
+    width: 48px;
 }
 .carousel-item img {
 	width:25px;
