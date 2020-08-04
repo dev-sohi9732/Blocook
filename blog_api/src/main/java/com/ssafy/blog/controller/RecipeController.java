@@ -180,7 +180,7 @@ public class RecipeController {
 	
 	@ApiOperation(value = "레시피 기본정보, 재료 등록하기", response = Integer.class)
 	@PostMapping(value = "/add/recipe")
-	public ResponseEntity<Integer> addRecipeDetail(@RequestBody String params) throws Exception {
+	public ResponseEntity<String> addRecipeDetail(@RequestBody String params) throws Exception {
 		
 		ObjectMapper objectMapper = new ObjectMapper();
 		
@@ -195,7 +195,7 @@ public class RecipeController {
 		System.out.println(recipe);
 		recipe.setRecipeId(recipeId);
 		recipeService.writeRecipe(recipe);
-		int result = recipeId;
+		String result = Integer.toString(recipeId);
 		
 		//레시피 재료 등록
 		JsonNode irdntsNode = objectMapper.readTree(params).findPath("irdnts");
@@ -210,7 +210,7 @@ public class RecipeController {
 			recipeService.writeIrdnt(irdntList.get(i-1));
 		}
 		
-		return new ResponseEntity<Integer>(result, HttpStatus.OK);
+		return new ResponseEntity<String>(result, HttpStatus.OK);
 	}
 	
 	@ApiOperation(value = "레시피 과정 등록하기", response = String.class)
