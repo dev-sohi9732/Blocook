@@ -48,7 +48,7 @@ public class UserController {
 	@Autowired
 	private JavaMailSender mailSender;
 
-	@ApiOperation(value = "유저 아이디와 패스워드로 로그인을 시도하고, 성공시 세션에 userDto로 정보를 저장한다.", response = UserDto.class)
+	@ApiOperation(value = "�쑀�� �븘�씠�뵒�� �뙣�뒪�썙�뱶濡� 濡쒓렇�씤�쓣 �떆�룄�븯怨�, �꽦怨듭떆 �꽭�뀡�뿉 userDto濡� �젙蹂대�� ���옣�븳�떎.", response = UserDto.class)
 	@PostMapping(value = "/login")
 	public ResponseEntity<UserDto> login(@RequestBody UserDto user) throws Exception {
 		Map<String, String> loginMap = new HashMap<String, String>();
@@ -56,8 +56,8 @@ public class UserController {
 		loginMap.put("password", user.getPassword());
 		UserDto userDto = userService.login(loginMap);
 
-		// 회원 가입 인증 여부 확인은 프론트단에서 처리
-//		boolean isValid = userService.checkValid(user.getEmail()).charAt(0) == 'y' ? true : false; // 회원가입 인증 여부
+		// �쉶�썝 媛��엯 �씤利� �뿬遺� �솗�씤�� �봽濡좏듃�떒�뿉�꽌 泥섎━
+//		boolean isValid = userService.checkValid(user.getEmail()).charAt(0) == 'y' ? true : false; // �쉶�썝媛��엯 �씤利� �뿬遺�
 
 		if (userDto == null) {
 			return new ResponseEntity<UserDto>(userDto, HttpStatus.NOT_FOUND);
@@ -67,26 +67,26 @@ public class UserController {
 		return new ResponseEntity<UserDto>(userDto, HttpStatus.OK);
 	}
 
-	@ApiOperation(value = "사용자의 정보를 받아 회원 가입한다.", response = String.class)
+	@ApiOperation(value = "�궗�슜�옄�쓽 �젙蹂대�� 諛쏆븘 �쉶�썝 媛��엯�븳�떎.", response = String.class)
 	@PostMapping(value = "/signup")
 	public ResponseEntity<String> join(@RequestBody UserDto dto) throws Exception {
 		System.out.println(dto);
-		// 아이디 및 이메일 중복 확인
+		// �븘�씠�뵒 諛� �씠硫붿씪 以묐났 �솗�씤
 		Map<String, String> dupCheckMap = new HashMap<String, String>();
 		dupCheckMap.put("nickname", dto.getNickname());
 		dupCheckMap.put("email", dto.getEmail());
 		System.out.println(dto);
-		if (userService.dupCheck(dupCheckMap) > 0) { // 중복되는 경우 실패
+		if (userService.dupCheck(dupCheckMap) > 0) { // 以묐났�릺�뒗 寃쎌슦 �떎�뙣
 			return new ResponseEntity<String>(FAIL, HttpStatus.OK);
 		}
-		if (userService.join(dto) == 0) { // 정상적으로 삽입하지 못한 경우 실패
+		if (userService.join(dto) == 0) { // �젙�긽�쟻�쑝濡� �궫�엯�븯吏� 紐삵븳 寃쎌슦 �떎�뙣
 			return new ResponseEntity<String>(FAIL, HttpStatus.OK);
 		}
 		System.out.println("success");
 		return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
 	}
 
-	@ApiOperation(value = "사용자의 nickname과 email 정보가 일치할 때만 비밀번호를 반환한다.", response = String.class)
+	@ApiOperation(value = "�궗�슜�옄�쓽 nickname怨� email �젙蹂닿� �씪移섑븷 �븣留� 鍮꾨�踰덊샇瑜� 諛섑솚�븳�떎.", response = String.class)
 	@GetMapping(value = "/findpw/{findnickname}/{findemail}")
 	public ResponseEntity<String> findPw(@PathVariable String findnickname, @PathVariable String findemail) throws Exception {
 
@@ -103,7 +103,7 @@ public class UserController {
 
 	}
 	
-	@ApiOperation(value = "사용자의 nickname과 password 정보가 일치할 때만 이메일을 반환한다.", response = String.class)
+	@ApiOperation(value = "�궗�슜�옄�쓽 nickname怨� password �젙蹂닿� �씪移섑븷 �븣留� �씠硫붿씪�쓣 諛섑솚�븳�떎.", response = String.class)
 	@GetMapping(value = "/findemail/{findnickname}/{findpassword}")
 	public ResponseEntity<String> findEmail(@PathVariable String findnickname, @PathVariable String findpassword) throws Exception {
 
@@ -120,7 +120,7 @@ public class UserController {
 
 	}
 
-	@ApiOperation(value = " 사용자 이메일로 사용자 정보를 가져온다.", response = String.class)
+	@ApiOperation(value = " �궗�슜�옄 �씠硫붿씪濡� �궗�슜�옄 �젙蹂대�� 媛��졇�삩�떎.", response = String.class)
 	@GetMapping(value = "/userinfo/{useremail}")
 	public ResponseEntity<UserDto> update(@PathVariable String useremail) throws Exception {
 		UserDto user = userService.searchByEmail(useremail);
@@ -128,22 +128,22 @@ public class UserController {
 		return new ResponseEntity<UserDto>(user, HttpStatus.OK);
 	}
 	
-	@ApiOperation(value = " 닉네임 중복을 확인한다.", response = String.class)
+	@ApiOperation(value = " �땳�꽕�엫 以묐났�쓣 �솗�씤�븳�떎.", response = String.class)
 	@GetMapping(value = "/update/{nickname}")
 	public ResponseEntity<String> checkNickname(@PathVariable String nickname) throws Exception {
-		// 아이디 및 이메일 중복 확인
+		// �븘�씠�뵒 諛� �씠硫붿씪 以묐났 �솗�씤
 		Map<String, String> dupCheckMap = new HashMap<String, String>();
 		dupCheckMap.put("nickname", nickname);
 		dupCheckMap.put("email", "");
 		System.out.println("=======nickname: "+nickname);
-		if (userService.dupCheck(dupCheckMap) > 0) { // 중복되는 경우 실패
+		if (userService.dupCheck(dupCheckMap) > 0) { // 以묐났�릺�뒗 寃쎌슦 �떎�뙣
 			return new ResponseEntity<String>(FAIL, HttpStatus.OK);
 		}
 		
 		return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
 	}
 	
-	@ApiOperation(value = " 사용자 정보를 수정한다.", response = String.class)
+	@ApiOperation(value = " �궗�슜�옄 �젙蹂대�� �닔�젙�븳�떎.", response = String.class)
 	@PutMapping(value = "/update")
 	public ResponseEntity<String> update(@RequestBody UserDto dto) throws Exception {
 		int total = userService.update(dto);
@@ -154,7 +154,7 @@ public class UserController {
 		return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
 	}
 
-	@ApiOperation(value = "사용자의 아이디값을 받아 DB에 일치하는 회원 정보를 삭제한다.", response = String.class)
+	@ApiOperation(value = "�궗�슜�옄�쓽 �븘�씠�뵒媛믪쓣 諛쏆븘 DB�뿉 �씪移섑븯�뒗 �쉶�썝 �젙蹂대�� �궘�젣�븳�떎.", response = String.class)
 	@DeleteMapping(value = "/delete/{uid}")
 	public ResponseEntity<String> delete(@PathVariable String uid) throws Exception {
 		int total = userService.delete(uid);
@@ -167,7 +167,7 @@ public class UserController {
 
 	}
 
-	@ApiOperation(value = "회원가입 인증 이메일을 전송합니다.", response = String.class)
+	@ApiOperation(value = "�쉶�썝媛��엯 �씤利� �씠硫붿씪�쓣 �쟾�넚�빀�땲�떎.", response = String.class)
 	@GetMapping(value = "/validation/send/{email}")
 	public ResponseEntity<String> sendEmailAction(@PathVariable String email) throws Exception {
 		System.out.println(email);
@@ -175,8 +175,8 @@ public class UserController {
 			MimeMessage msg = mailSender.createMimeMessage();
 			MimeMessageHelper messageHelper = new MimeMessageHelper(msg, true, "UTF-8");
 
-			messageHelper.setSubject("[Chan's Devlog] 회원가입 인증 이메일입니다.");
-			messageHelper.setText(new StringBuilder().append("아래 링크에 접속하여 인증을 진행해주세요!").append("\n")
+			messageHelper.setSubject("[Chan's Devlog] �쉶�썝媛��엯 �씤利� �씠硫붿씪�엯�땲�떎.");
+			messageHelper.setText(new StringBuilder().append("�븘�옒 留곹겕�뿉 �젒�냽�븯�뿬 �씤利앹쓣 吏꾪뻾�빐二쇱꽭�슂!").append("\n")
 					.append("http://localhost:9999/account/validation/confirm/").append(email).toString());
 			messageHelper.setTo(email);
 			msg.setRecipients(MimeMessage.RecipientType.TO, InternetAddress.parse(email));
@@ -189,7 +189,7 @@ public class UserController {
 		return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
 	}
 
-	@ApiOperation(value = "회원가입 인증을 진행합니다.", response = String.class)
+	@ApiOperation(value = "�쉶�썝媛��엯 �씤利앹쓣 吏꾪뻾�빀�땲�떎.", response = String.class)
 	@GetMapping(value = "/validation/confirm/{email}")
 	public void confirmValidation(@PathVariable String email, HttpServletResponse httpServletResponse)
 			throws Exception {
@@ -203,7 +203,7 @@ public class UserController {
 		httpServletResponse.sendRedirect("http://localhost:8080/user/validation/success");
 	}
 
-	@ApiOperation(value = "해당 이메일 계정에 이미지를 업로드합니다.", response = String.class)
+	@ApiOperation(value = "�빐�떦 �씠硫붿씪 怨꾩젙�뿉 �씠誘몄�瑜� �뾽濡쒕뱶�빀�땲�떎.", response = String.class)
 	@PostMapping(value = "/upload/{email}")
 	public ResponseEntity<UserDto> fileUpload(@PathVariable String email, @RequestPart MultipartFile files) {
 		
@@ -226,4 +226,5 @@ public class UserController {
 			return new ResponseEntity<String>(e.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+
 }

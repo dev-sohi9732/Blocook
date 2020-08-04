@@ -14,10 +14,20 @@
 		order by recipe_id
 	</select>
 
-	<select id="selectByIrdnts" parameterType="String" resultType="com.ssafy.blog.dto.RecipeDto">
-		SELECT * 
-		FROM recipe 
-		WHERE irdnts LIKE #{title}
+	<select id="selectByIrdnts" resultType="com.ssafy.blog.dto.RecipeDto">
+		select r.RECIPE_ID, r.RECIPE_NM_KO, r.SUMRY, r.NATION_CODE, r.NATION_NM,
+		       r.TY_CODE, r.TY_NM, r.COOKING_TIME, r.CALORIE, r.QNT, 
+		       r.LEVEL_NM, r.IRDNT_CODE, r.PC_NM, r.IMG_URL
+		from recipe as r
+		inner join (select *, count(recipe_id) as coun
+									from recipe_irdnt
+									where IRDNT_NM in 
+									<foreach collection="array" item="irdnt" open="(" close=")" separator=",">
+									#{irdnt}
+									</foreach>
+									group by recipe_id
+									order by coun desc) as i
+		on r.recipe_id = i.recipe_id;
 	</select>
 	
 	<select id="selectByTitle" parameterType="String" resultType="com.ssafy.blog.dto.RecipeDto">

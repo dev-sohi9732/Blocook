@@ -37,7 +37,7 @@ public class RecipeController {
 	@Autowired
 	private RecipeService recipeService;
 
-	@ApiOperation(value = "콤마로 구분된 재료 리스트 문자열을 받아 해당 재료가 포함된 모든 레시피들을 반환한다.", response = List.class)
+	@ApiOperation(value = "모든 레시피들을 반환한다.", response = List.class)
 	@GetMapping(value = "/search/all")
 	public ResponseEntity<List<RecipeDto>> searchAll() throws Exception {
 		List<RecipeDto> recipes = recipeService.searchAll();
@@ -45,7 +45,7 @@ public class RecipeController {
 		return new ResponseEntity<List<RecipeDto>>(recipes, HttpStatus.OK);
 	}
 	
-	@ApiOperation(value = "콤마로 구분된 재료 리스트 문자열을 받아 해당 재료가 포함된 모든 레시피들을 반환한다.", response = List.class)
+	@ApiOperation(value = "nationCode에 맞는 레시피들을 반환한다.", response = List.class)
 	@GetMapping(value = "/search/nation/{nationCode}")
 	public ResponseEntity<List<RecipeDto>> searchByNationCode(@PathVariable String nationCode) throws Exception {
 		List<RecipeDto> recipes = recipeService.searchByNationCode(nationCode);

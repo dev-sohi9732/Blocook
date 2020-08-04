@@ -32,14 +32,12 @@ public class RecipeServiceImpl implements RecipeService{
 	@Override
 	public List<RecipeDto> searchByIrdnts(String irdntStr) throws Exception {
 		// irdntStr 은  "재료1, 재료2, 재료3" 과 같은 형태
-		// 어떻게 검색조건을 쿼리로 짤 수 있을까...
-		// 재료1,재료2,재료3 => LIKE '%재료1%재료2%재로3%' (재료1,재료2,재료3 문자열을 모두 포함하는 것만 필터링)
-		StringBuilder sb = new StringBuilder("%");
-		for(String word : URLDecoder.decode(irdntStr, "UTF-8").split(",")) {
-			sb.append(word.trim()).append("%");
+		String[] irdntsArr = URLDecoder.decode(irdntStr, "UTF-8").split(",");
+		for (String i : irdntsArr) {
+			System.out.print(i+" ");			
 		}
-		System.out.println(sb.toString());
-		return recipeMapper.selectByIrdnts(sb.toString());
+		System.out.println();
+		return recipeMapper.selectByIrdnts(irdntsArr);
 	}
 
 	@Override
