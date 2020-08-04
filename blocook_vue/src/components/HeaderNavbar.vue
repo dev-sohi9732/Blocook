@@ -46,12 +46,23 @@
             </b-container>
             
             <transition name="slide">
-            <ul class="list" v-if="isDropped">
-              <li><router-link to="/" style="color:black; font-weight: bold;">Home</router-link></li>
-              <li><router-link to="/category" style="color:black; font-weight: bold;">레시피</router-link></li>
-              <li><router-link to="/worldcup" style="color:black; font-weight: bold;">메뉴 월드컵</router-link></li>
-              <li><router-link to="/community" style="color:black; font-weight: bold;">요리톡 조리톡</router-link></li>
-            </ul>
+            <div v-if="this.$store.state.user.authorized">
+              <ul class="list" v-if="isDropped">
+                <li><router-link to="/" style="color:black; font-weight: bold;">Home</router-link></li>
+                <li><router-link to="/mypage" style="color:black; font-weight: bold;">마이페이지</router-link></li>
+                <li><router-link to="/category" style="color:black; font-weight: bold;">레시피</router-link></li>
+                <li><router-link to="/worldcup" style="color:black; font-weight: bold;">메뉴 월드컵</router-link></li>
+                <li><router-link to="/community" style="color:black; font-weight: bold;">요리톡 조리톡</router-link></li>
+              </ul>
+            </div>
+            <div v-else>
+              <ul class="list" v-if="isDropped">
+                <li><router-link to="/" style="color:black; font-weight: bold;">Home</router-link></li>
+                <li><router-link to="/category" style="color:black; font-weight: bold;">레시피</router-link></li>
+                <li><router-link to="/worldcup" style="color:black; font-weight: bold;">메뉴 월드컵</router-link></li>
+                <li><router-link to="/community" style="color:black; font-weight: bold;">요리톡 조리톡</router-link></li>
+              </ul>
+            </div>
             </transition>
             <!-- Menu End -->
           </nav>
