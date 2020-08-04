@@ -11,7 +11,12 @@
 				<datalist id="my-list-id">
 					<option v-for="(irdnt, index) in irdnts" :key="index">{{ irdnt }}</option>
 				</datalist>
-				<button @click.prevent="searchirdnt" ><i class="fa fa-search" ></i></button>
+				<button @click.prevent="appendmulti" style="font-weight:bold"><p>추가</p></button>
+				<br>
+				<input id="multiinput" style="margin-left:62px; height:30px; border: 2px solid gray;" v-model="multi">
+				<button @click.prevent="deletemulti" style="font-weight:bold;margin-left:-30px; height:32px; width:28px; background-color:gray;">X</button>
+                <button  @click.prevent="searchirdnt" style="width:48px; margin-left:2px;"><i class="fa fa-search" ></i></button>
+				
 			</form>
 			<form  v-else class="s-form">
 				<input type="text" v-model="query" placeholder="검색어를 입력하세요" autofocus>
@@ -61,24 +66,38 @@ export default {
         selected:'',
         recipes: [],
         irdnts: [],
-        query:''
+        query:'',
+        multi:'',
       }
     },
   methods: {
+    appendmulti: function () {
+		if (this.query== "")
+			alert("검색어를 입력해주세요.");
+		else
+			this.multi += this.query + ","
+			this.query = ''
+    },
+    deletemulti() {
+		this.multi = ''
+	},
     searchtitle() {
-        this.$router.push("/search?title=" + this.query ).catch(()=>{});
-        
-        const params = new URL(document.location).searchParams;
-        http.get(`/recipes/search/title/${params.get('title')}`)
-            .then(response => {
-            this.recipes = response.data
-            })
-            .catch(error => {
-            console.log(error)
-            })
+        if (this.query== "")
+			alert("검색어를 입력해주세요.");
+		else
+            this.$router.push("/search?title=" + this.query ).catch(()=>{});
+            
+            const params = new URL(document.location).searchParams;
+            http.get(`/recipes/search/title/${params.get('title')}`)
+                .then(response => {
+                this.recipes = response.data
+                })
+                .catch(error => {
+                console.log(error)
+                })
 	},
 	searchirdnt() {
-        this.$router.push("/search?irdnt=" + this.query ).catch(()=>{});
+        this.$router.push("/search?irdnt=" + this.multi ).catch(()=>{});
         const params = new URL(document.location).searchParams;
         http.get(`/recipes/search/irdnts/${params.get('irdnt')}`)
             .then(response => {
@@ -132,6 +151,9 @@ export default {
 	border: 4px solid rgb(40, 167, 69);
 	background-color:white;
 	font-weight:bolder;
+}
+.searchbar button {
+    width: 48px;
 }
 .foodimg img {
 	width: 120px;

@@ -11,7 +11,12 @@
 				<datalist id="my-list-id">
 					<option v-for="(irdnt, index) in irdnts" :key="index">{{ irdnt }}</option>
 				</datalist>
-				<button @click.prevent="searchirdnt" ><i class="fa fa-search" ></i></button>
+				<button @click.prevent="appendmulti" style="font-weight:bold"><p>추가</p></button>
+				<br>
+				<input id="multiinput" style="margin-left:62px; height:30px; border: 2px solid gray;" v-model="multi">
+				<button @click.prevent="deletemulti" style="font-weight:bold;margin-left:-30px; height:32px; width:28px; background-color:gray;">X</button>
+                <button  @click.prevent="searchirdnt" style="width:48px; margin-left:2px;"><i class="fa fa-search" ></i></button>
+				
 			</form>
 			<form  v-else class="s-form">
 				<input type="text" v-model="query" placeholder="검색어를 입력하세요" autofocus>
@@ -161,6 +166,7 @@ export default {
 	  irdnts: [],
 	  slide: 0,
 	  sliding: null,
+	  multi: '',
     };
   },
   created() {
@@ -209,11 +215,17 @@ export default {
   watch: {
   },
   methods: {
+	deletemulti() {
+		this.multi = ''
+	},
     searchtitle() {
-        this.$router.push("/search?title=" + this.query );
+		if (this.query== "")
+			alert("검색어를 입력해주세요.");
+		else
+        	this.$router.push("/search?title=" + this.query );
 	},
 	searchirdnt() {
-        this.$router.push("/search?irdnt=" + this.query );
+        this.$router.push("/search?irdnt=" + this.multi );
 	},
 	onSlideStart(slide) {
 		this.sliding = true
@@ -223,7 +235,14 @@ export default {
 	},
 	onSubmit() {
 	  	console.log(eeeee)
-    },
+	},
+	appendmulti: function () {
+		if (this.query== "")
+			alert("검색어를 입력해주세요.");
+		else
+			this.multi += this.query + ","
+			this.query = ''
+	}
   },
 }
 </script>
@@ -233,6 +252,9 @@ h2 {
 	vertical-align: middle;
 	font-weight:bolder; 
 	display:inline;
+}
+.searchbar button {
+    width: 48px;
 }
 .carousel-item img {
 	width:25px;
