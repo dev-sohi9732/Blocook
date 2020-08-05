@@ -16,6 +16,7 @@ public class RecipeDto {
 	private int pcNm;			// 가격
 	private String imgUrl;		// 레시피 이미지 URL
 	private String detUrl;		// 상세 페이지 URL
+	private String userUid;		// user ID
 	public int getRecipeId() {
 		return recipeId;
 	}
@@ -106,12 +107,19 @@ public class RecipeDto {
 	public void setDetUrl(String detUrl) {
 		this.detUrl = detUrl;
 	}
+	public String getUserUid() {
+		return userUid;
+	}
+	public void setUserUid(String userUid) {
+		this.userUid = userUid;
+	}
 	@Override
 	public String toString() {
 		return "RecipeDto [recipeId=" + recipeId + ", recipeNmKo=" + recipeNmKo + ", sumry=" + sumry + ", nationCode="
 				+ nationCode + ", nationNm=" + nationNm + ", tyCode=" + tyCode + ", tyNm=" + tyNm + ", cookingTime="
 				+ cookingTime + ", calorie=" + calorie + ", qnt=" + qnt + ", levelNm=" + levelNm + ", irdntCode="
-				+ irdntCode + ", pcNm=" + pcNm + ", imgUrl=" + imgUrl + ", detUrl=" + detUrl + "]";
+				+ irdntCode + ", pcNm=" + pcNm + ", imgUrl=" + imgUrl + ", detUrl=" + detUrl + ", userUid=" + userUid
+				+ "]";
 	}
 	
 }

@@ -91,7 +91,7 @@ export default {
 				password: this.password
 			})
 			.then(({ data }) => { // 로그인 성공
-				// console.log(data)
+				console.log(data)
 				this.$store.dispatch('user/LOGIN', { payload: data }) // store 반영
 				// if (data.valid === 'false') { // 회원가입 이메일 인증이 안된 경우
 				// 	alert('회원가입 이메일 인증을 먼저 진행해주세요.')

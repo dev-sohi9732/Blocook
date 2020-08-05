@@ -1,11 +1,11 @@
 <template>
 	<center>
 		<div class="user">
-			<a href="addrecipe">
+			<router-link to="addrecipe">
 				<button class="button btn" style="width: 82%">
 					<i class="fa fa-spoon">&nbsp;새 레시피 작성</i>
 				</button>
-			</a>
+			</router-link>
 		</div>
 
 		<div class="container" style="width: 90%">
