@@ -51,13 +51,6 @@
                       </button>  
                         <h3 style="margin-right:40px;"> 퓨전</h3>
                     </div>
-
-                    <!-- show==true이면 나타남 -->
-                    <select class="sorting" v-if="show">
-                        <option value="see">조회순</option>
-                        <option value="calorie">칼로리순</option>
-                        <option value="like">좋아요순</option>
-                    </select>
                     <CategoryArea :recipes="recipes" />
                 </div>
             </div>
@@ -77,7 +70,6 @@ export default {
    data() {
     return {
       recipes: [],
-      show: false,
     };
   },
   methods: {
@@ -96,7 +88,6 @@ export default {
         .then(response => {
           this.recipes = response.data
           // this.$router.push('/categoryresult')
-          this.show = true; // 정렬 select 보이게
         })
         .catch(error => {
           console.log(error)
