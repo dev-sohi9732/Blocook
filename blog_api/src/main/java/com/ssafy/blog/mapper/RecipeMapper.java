@@ -41,4 +41,6 @@ public interface RecipeMapper {
 	public int addIrdnt(IrdntDto dto);
 	
 	public int selectMaxId();
+	
+	public int selectMaxIrdntSn();
 }

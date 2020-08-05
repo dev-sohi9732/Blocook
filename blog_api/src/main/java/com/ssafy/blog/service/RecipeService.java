@@ -41,4 +41,5 @@ public interface RecipeService {
 	
 	public int searchMaxId() throws Exception;
 	
+	public int searchMaxIrdntSn() throws Exception;
 }

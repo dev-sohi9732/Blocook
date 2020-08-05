@@ -185,7 +185,7 @@ public class RecipeController {
 		ObjectMapper objectMapper = new ObjectMapper();
 		
 		//새로 등록할 레시피 id
-		int recipeId = recipeService.searchMaxId()+1;
+		int recipeId = recipeService.searchMaxId() + 1;
 //		System.out.println("===========recipeId : "+recipeId);
 		
 		//레시피 기본 정보 등록
@@ -203,10 +203,13 @@ public class RecipeController {
 		List<IrdntDto> irdntList = objectMapper.readValue(irdntsNode.toString(), collectionTypeI);
 		System.out.println(irdntList);
 		IrdntDto irdnt;
+		int irdntSn = 0; //새로 등록할 재료 id(irdnt_sn)
 		for(int i = 1; i <= irdntList.size(); i++) {
 			//레시피 id 셋팅
 			irdnt = irdntList.get(i-1);
 			irdnt.setRecipeId(recipeId);
+			irdntSn = recipeService.searchMaxIrdntSn() + 1;
+			irdnt.setIrdntSn(irdntSn);
 			recipeService.writeIrdnt(irdntList.get(i-1));
 		}
 		

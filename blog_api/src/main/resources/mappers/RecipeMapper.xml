@@ -79,6 +79,10 @@
 		FROM recipe;
 	</select>
 	
+	<select id="selectMaxIrdntSn" resultType="Integer">
+		SELECT max(irdnt_sn) 
+		FROM recipe_irdnt;
+	</select>
 </mapper>
 
 

@@ -40,11 +40,11 @@
                     <button class="btn" @click="addMainIrdnt()"><i class="fa fa-plus" style="color:blue;"></i></button>
                   </td>
                 </tr>
-                <tr v-for="(mainirdnt, index) in arr_mainirdnt" :key="index">
+                <tr v-for="(mainirdnt, i) in arr_mainirdnt" :key="i">
                   <td></td>
                   <td colspan="3">
                     <p style="margin-bottom:8px;">
-                      <i class="fa fa-minus" @click="rmMainIrdnt(index)" style="color:red;"></i>
+                      <i class="fa fa-minus" @click="rmMainIrdnt(i)" style="color:red;"></i>
                       &nbsp;{{ mainirdnt.mainirdnt_nm }}&nbsp;{{ mainirdnt.mainirdnt_vol }}
                     </p>
                   </td>
@@ -66,11 +66,11 @@
                     <button class="btn" @click="addSubIrdnt()"><i class="fa fa-plus" style="color:blue;"></i></button>
                   </td>
                 </tr>
-                <tr v-for="(subirdnt, index) in arr_subirdnt" :key="index">
+                <tr v-for="(subirdnt, i) in arr_subirdnt" :key="`A-${i}`">
                   <td></td>
                   <td colspan="3">
                     <p style="margin-bottom:8px;">
-                      <i class="fa fa-minus" @click="rmSubIrdnt(index)" style="color:red;"></i>
+                      <i class="fa fa-minus" @click="rmSubIrdnt(`A-${i}`)" style="color:red;"></i>
                       &nbsp;{{ subirdnt.subirdnt_nm }}&nbsp;{{ subirdnt.subirdnt_vol }}
                     </p>
                   </td>
@@ -92,11 +92,11 @@
                     <button class="btn" @click="addSeasoningIrdnt()"><i class="fa fa-plus" style="color:blue;"></i></button>
                   </td>
                 </tr>
-                <tr v-for="(seasoningirdnt, index) in arr_seasoningirdnt" :key="index">
+                <tr v-for="(seasoningirdnt, i) in arr_seasoningirdnt" :key="`B-${i}`">
                   <td></td>
                   <td colspan="3">
                     <p style="margin-bottom:8px;">
-                      <i class="fa fa-minus" @click="rmSeasoningIrdnt(index)" style="color:red;"></i>
+                      <i class="fa fa-minus" @click="rmSeasoningIrdnt(`B-${i}`)" style="color:red;"></i>
                       &nbsp;{{ seasoningirdnt.seasoningirdnt_nm }}&nbsp;{{ seasoningirdnt.seasoningirdnt_vol }}
                     </p>
                   </td>
@@ -260,6 +260,7 @@ export default {
       arr_mainirdnt: [],
       arr_subirdnt: [],
       arr_seasoningirdnt: [],
+      all_irdnts: [],
 
       //select 박스 정보
       irdnts: [],
@@ -395,6 +396,32 @@ export default {
 			}
     },
     saveGibonHandler() {
+      for(var i = 0; i < this.arr_mainirdnt.length; i++) {
+        this.all_irdnts.push({
+          irdntNm: this.arr_mainirdnt[i].mainirdnt_nm,
+          irdntCpcty: this.arr_mainirdnt[i].mainirdnt_vol,
+          irdntTyCode: 3060001,
+          irdntTyNm: '주재료'
+        });
+      }
+      for(var i = 0; i < this.arr_subirdnt.length; i++) {
+        this.all_irdnts.push({
+          irdntNm: this.arr_subirdnt[i].subirdnt_nm,
+          irdntCpcty: this.arr_subirdnt[i].subirdnt_vol,
+          irdntTyCode: 3060002,
+          irdntTyNm: '부재료'
+        });
+      }
+      for(var i = 0; i < this.arr_seasoningirdnt.length; i++) {
+        this.all_irdnts.push({
+          irdntNm: this.arr_seasoningirdnt[i].seasoningirdnt_nm,
+          irdntCpcty: this.arr_seasoningirdnt[i].seasoningirdnt_vol,
+          irdntTyCode: 3060001,
+          irdntTyNm: '양념'
+        });
+      }
+      console.log(this.all_irdnts);
+      
       http
       .post("/recipes/add/recipe",{ // 레시피 기본 정보 등록
         recipe: {
@@ -407,18 +434,7 @@ export default {
           qnt: this.person,
           levelNm: this.level.text
         },
-        irdnts:[{
-          irdntNm: this.mainirdnt,
-          irdntTyNm: '주재료'
-        },
-        {
-          irdntNm: this.subirdnt,
-          irdntTyNm: '부재료'
-        },
-        {
-          irdntNm: this.seasoningirdnt,
-          irdntTyNm: '양념'
-        }]
+        irdnts: this.all_irdnts
       })
       .then(({ data }) => {
         this.addRecipeId = data;
