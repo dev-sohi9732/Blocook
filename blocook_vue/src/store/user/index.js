@@ -8,6 +8,7 @@ Vue.use(Vuex)
 export default {
   namespaced: true,
   state: {
+    uid: '',
     nickname: '', // 닉네임
     email: '', // 이메일
     info: '',  // 자기소개
@@ -23,8 +24,9 @@ export default {
   actions: {
     // 로그인 성공 후 db 저장된 사용자 정보로 갱신
     LOGIN({ commit, dispatch, rootState }, { payload }) {
-      const { nickname, email, info } = { nickname: payload.nickname, email: payload.email, info: payload.info }
+      const { uid, nickname, email, info } = { uid: payload.uid, nickname: payload.nickname, email: payload.email, info: payload.info }
       commit('SET_STATE', {
+        uid,
         nickname,
         email,
         info,
@@ -35,8 +37,9 @@ export default {
     //   console.log('LOGIN SUCCESS! => authorized: ' + rootState.user.authorized)
     },
     UPDATE({ commit, dispatch, rootState }, { payload }) {
-      const { nickname, email, info, password } = { nickname: payload.nickname, email: payload.email, info: payload.info, password: payload.password, }
+      const { uid, nickname, email, info, password } = { uid: payload.uid, nickname: payload.nickname, email: payload.email, info: payload.info, password: payload.password, }
       commit('SET_STATE', {
+        uid,
         nickname,
         email,
         info,
@@ -45,10 +48,11 @@ export default {
     },
     LOGOUT({ commit, rootState }) {
         commit('SET_STATE', {
-            nickname: '',
-            email: '',
-            info: '',
-            authorized: false,
+          uid: '',
+          nickname: '',
+          email: '',
+          info: '',
+          authorized: false,
         })
         // router.push('/')
     },

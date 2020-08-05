@@ -19,6 +19,8 @@ public interface RecipeService {
 	
 	public List<RecipeDto> searchByTitle(String title) throws Exception;
 	
+	public List<RecipeDto> searchByUid(String userUid) throws Exception;
+	
 	public RecipeDto getRecipeDetail(String recipeId);
 	
 	public List<CookingDto> searchCookingsByRecipe(String recipeId);
