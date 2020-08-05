@@ -81,6 +81,19 @@ public class RecipeController {
 		return new ResponseEntity<List<RecipeDto>>(result, HttpStatus.OK);
 	}
 	
+	@ApiOperation(value = "사용자 아이디(UID)를 받아 해당 사용자가 등록한 모든 레시피들을 반환한다.", response = List.class)
+	@PostMapping(value = "/search/userUid")
+	public ResponseEntity<List<RecipeDto>> searchByUid(@RequestBody String userUid) throws Exception {
+		
+		List<RecipeDto> result = recipeService.searchByUid(userUid);
+		
+		if (result == null) {
+			return new ResponseEntity<List<RecipeDto>>(result, HttpStatus.NOT_FOUND);
+		}
+		
+		return new ResponseEntity<List<RecipeDto>>(result, HttpStatus.OK);
+	}
+	
 	@ApiOperation(value = "레시피 ID에 해당하는 레시피 정보를 반환한다.", response = RecipeDto.class)
 	@GetMapping(value = "/{recipeId}")
 	public ResponseEntity<RecipeDto> getRecipeDetail(@PathVariable String recipeId) throws Exception {

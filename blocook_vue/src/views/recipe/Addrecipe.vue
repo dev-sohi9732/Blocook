@@ -432,7 +432,8 @@ export default {
           cookingTime: this.time,
           calorie: this.kcal,
           qnt: this.person,
-          levelNm: this.level.text
+          levelNm: this.level.text,
+          userUid: this.$store.state.user.uid
         },
         irdnts: this.all_irdnts
       })

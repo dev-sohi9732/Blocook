@@ -20,6 +20,8 @@ public interface RecipeMapper {
 	
 	public List<RecipeDto> selectByTitle(String title);
 	
+	public List<RecipeDto> selectByUid(String userUid);
+	
 	public RecipeDto selectRecipeById(String recipeId);
 	
 	public List<CookingDto> selectCookingById(String recipeId);

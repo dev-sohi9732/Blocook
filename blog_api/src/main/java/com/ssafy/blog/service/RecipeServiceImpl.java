@@ -47,6 +47,12 @@ public class RecipeServiceImpl implements RecipeService{
 	}
 
 	@Override
+	public List<RecipeDto> searchByUid(String userUid) throws Exception {
+		System.out.println(URLDecoder.decode(userUid, "UTF-8"));
+		return recipeMapper.selectByUid(URLDecoder.decode(userUid, "UTF-8"));
+	}
+
+	@Override
 	public RecipeDto getRecipeDetail(String recipeId) {
 		return recipeMapper.selectRecipeById(recipeId);
 	}
