@@ -33,11 +33,6 @@ Vue.use(VueRouter)
     component: () => import('../views/recipe/Addrecipe.vue')
   },
   {
-    path: '/addrecipedetail',
-    name: 'Addrecipedetail',
-    component: () => import('../views/recipe/Addrecipedetail.vue')
-  },
-  {
     path: '/category',
     name: 'Category',
     component: () => import('../views/recipe/Category.vue')

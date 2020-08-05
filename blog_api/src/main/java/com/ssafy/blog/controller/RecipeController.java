@@ -45,7 +45,7 @@ public class RecipeController {
 		return new ResponseEntity<List<RecipeDto>>(recipes, HttpStatus.OK);
 	}
 	
-	@ApiOperation(value = "nationCode에 맞는 레시피들을 반환한다.", response = List.class)
+	@ApiOperation(value = "콤마로 구분된 재료 리스트 문자열을 받아 해당 국가 카테고리의 모든 레시피들을 반환한다.", response = List.class)
 	@GetMapping(value = "/search/nation/{nationCode}")
 	public ResponseEntity<List<RecipeDto>> searchByNationCode(@PathVariable String nationCode) throws Exception {
 		List<RecipeDto> recipes = recipeService.searchByNationCode(nationCode);
@@ -178,15 +178,14 @@ public class RecipeController {
 		return new ResponseEntity<Integer>(result, HttpStatus.OK);
 	}
 	
-	@ApiOperation(value = "레시피 기본정보, 재료 등록하기", response = String.class)
+	@ApiOperation(value = "레시피 기본정보, 재료 등록하기", response = Integer.class)
 	@PostMapping(value = "/add/recipe")
 	public ResponseEntity<String> addRecipeDetail(@RequestBody String params) throws Exception {
 		
-		ObjectMapper objectMapper =new ObjectMapper();
-		String result = "true";
+		ObjectMapper objectMapper = new ObjectMapper();
 		
 		//새로 등록할 레시피 id
-		int recipeId = recipeService.searchMaxId()+1;
+		int recipeId = recipeService.searchMaxId() + 1;
 //		System.out.println("===========recipeId : "+recipeId);
 		
 		//레시피 기본 정보 등록
@@ -196,6 +195,7 @@ public class RecipeController {
 		System.out.println(recipe);
 		recipe.setRecipeId(recipeId);
 		recipeService.writeRecipe(recipe);
+		String result = Integer.toString(recipeId);
 		
 		//레시피 재료 등록
 		JsonNode irdntsNode = objectMapper.readTree(params).findPath("irdnts");
@@ -203,10 +203,13 @@ public class RecipeController {
 		List<IrdntDto> irdntList = objectMapper.readValue(irdntsNode.toString(), collectionTypeI);
 		System.out.println(irdntList);
 		IrdntDto irdnt;
+		int irdntSn = 0; //새로 등록할 재료 id(irdnt_sn)
 		for(int i = 1; i <= irdntList.size(); i++) {
 			//레시피 id 셋팅
 			irdnt = irdntList.get(i-1);
 			irdnt.setRecipeId(recipeId);
+			irdntSn = recipeService.searchMaxIrdntSn() + 1;
+			irdnt.setIrdntSn(irdntSn);
 			recipeService.writeIrdnt(irdntList.get(i-1));
 		}
 		
@@ -217,7 +220,7 @@ public class RecipeController {
 	@PostMapping(value = "/add/cookings")
 	public ResponseEntity<String> addRecipeCookings(@RequestBody String params) throws Exception {
 		
-		ObjectMapper objectMapper =new ObjectMapper();
+		ObjectMapper objectMapper = new ObjectMapper();
 		String result = "true";
 		
 		//새로 등록할 레시피 id

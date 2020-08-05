@@ -101,4 +101,9 @@ public class RecipeServiceImpl implements RecipeService{
 		return recipeMapper.selectMaxId();
 	}
 	
+	@Override
+	public int searchMaxIrdntSn() throws Exception {
+		return recipeMapper.selectMaxIrdntSn();
+	}
+	
 }
