@@ -13,7 +13,7 @@
 				<div class="col-6" v-for="myRecipe in myRecipes" :key="myRecipe.recipeId">
 					<div class="card">
 						<div class="foodimg">
-							<img src="@/assets/img/logo.png" class="card-img-top" alt="...">
+							<img :src="myRecipe.imgUrl" class="card-img-top" alt="...">
 						</div>
 						<div class="card-body" style="padding:5px;">
 							<h5 class="card-title" style="margin-bottom:3px;">{{ myRecipe.recipeNmKo }}</h5>
