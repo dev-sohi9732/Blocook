@@ -36,6 +36,12 @@
 		WHERE recipe_nm_ko LIKE CONCAT('%', #{title}, '%')
 	</select>
 	
+	<select id="selectByUid" parameterType="String" resultType="com.ssafy.blog.dto.RecipeDto">
+		SELECT * 
+		FROM recipe 
+		WHERE user_uid = #{userUid}
+	</select>
+	
 	<select id="selectRecipeById" parameterType="String" resultType="com.ssafy.blog.dto.RecipeDto">
 		SELECT * FROM recipe WHERE recipe_id = #{recipeId}
 	</select>
