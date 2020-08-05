@@ -40,10 +40,8 @@ img {
     width: 100%;
 }
 .card {
-	height: 290px;
 }
 .card-body {
-	height: 200px;
 	/* display: inline-block;   */
 	/* // inline-block으로 설정 필요 */
 }
