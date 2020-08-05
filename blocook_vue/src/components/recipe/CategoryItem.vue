@@ -5,6 +5,7 @@
       <img :src="imgUrl" class="card-img-top" alt="recipe_img" style="height:100px;width:100%; width:150px;">
       <div class="card-body">
         <p class="card-title" style="font-weight:bold;">{{ recipe.recipeNmKo }}</p>
+        <i class="fa fa-apple" style="font-size:0.8rem; margin-right: 10px;">&nbsp; {{recipe.calorie}}kcal </i>
         <p class="card-text" >{{ recipe.sumry}}</p>
         <router-link :to="'recipe?Id=' +recipe.recipeId" class="btn" style="width:150px; background-color:#B3D662;">레시피&nbsp;<img style="margin-top:0px;width:25px; height: 25px;" src="@/assets/img/recipeicon.png"></router-link>
       </div>
@@ -32,7 +33,7 @@ export default {
 
 <style>
 img {
-	margin-top: 10px;
+	margin-top: 2px;
 	width: 100px;
 	height: 100px;
 }
@@ -40,17 +41,15 @@ img {
     width: 100%;
 }
 .card {
-	height: 290px;
 }
 .card-body {
-	height: 200px;
 	/* display: inline-block;   */
 	/* // inline-block으로 설정 필요 */
 }
 .card-text {
 	height: 80px;
   width: 140px;
-  margin-bottom: 10px;
+  font-size:0.8rem;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	display: -webkit-box;
@@ -60,6 +59,8 @@ img {
 }
 .card-title {
   height: 20px;
+  font-size:0.9rem;
+  margin-bottom:0px;
   background-image: url("../../assets/img/highlight.png");
 	background-size: 85%;
 	background-repeat: no-repeat;
