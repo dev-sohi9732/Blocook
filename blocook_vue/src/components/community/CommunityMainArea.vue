@@ -26,7 +26,7 @@
 			</select>
 
 			<b-dropdown id="dropdown-right" right text="내 포스트" variant="success" class="writing" no-caret>
-				<b-dropdown-item href="#" style="text-align:center">새 글 쓰기</b-dropdown-item>
+				<b-dropdown-item href="/post" style="text-align:center">새 글 쓰기</b-dropdown-item>
 				<b-dropdown-item href="/mypost" style="text-align:center">내가 쓴 글</b-dropdown-item>
 			</b-dropdown>
 		</div>
