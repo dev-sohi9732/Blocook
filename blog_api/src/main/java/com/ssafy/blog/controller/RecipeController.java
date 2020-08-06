@@ -191,6 +191,24 @@ public class RecipeController {
 		return new ResponseEntity<Integer>(result, HttpStatus.OK);
 	}
 	
+	@ApiOperation(value = "좋아요 누른 레시피인지 판단", response = String.class)
+	@PostMapping(value = "/isbookmarked")
+	public ResponseEntity<String> isBookmarkedRecipe(@RequestBody Map<String,String> params) throws Exception {
+		
+		int result = 0;
+		try {
+			result = recipeService.isBookmarkedRecipe(params); // uid와 recipeId가 들어 있는 map
+		} catch (Exception e) {
+			System.out.println(e.getMessage()); // 중복 키 등 제약조건 예외 처리
+		}
+		
+		if (result == 0) {
+			return new ResponseEntity<String>(FAIL, HttpStatus.NOT_FOUND);
+		}
+		
+		return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+	}
+	
 	@ApiOperation(value = "레시피 기본정보, 재료 등록하기", response = Integer.class)
 	@PostMapping(value = "/add/recipe")
 	public ResponseEntity<String> addRecipeDetail(@RequestBody String params) throws Exception {

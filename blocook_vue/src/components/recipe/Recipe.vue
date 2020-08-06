@@ -15,11 +15,22 @@
 
 				<div class="carousel-item active">
 					<center class="menu">
-					<img class="d-block" :src="imgUrl" alt="Second slide">
+						<img class="d-block" :src="imgUrl" alt="Second slide">
+					</center>
+
+					<center class="menu" v-if="this.$store.state.user.authorized == true">
+						<button class="btn" style="color:red;font-weight:bold;" @click="addBookmark()" v-if="like == false">
+							Like<i class="fa fa-heart-o"></i>
+						</button>
+						<button class="btn" style="color:red;font-weight:bold;" @click="rmBookmark()" v-else>
+							Like<i class="fa fa-heart"></i>
+						</button>
 					</center>
 
 					<div class="container">
-						<h6 style="margin-bottom: 10px;">{{recipe.nationNm}} > {{recipe.tyNm}}</h6>
+						<h6 style="margin-bottom: 10px;">{{recipe.nationNm}} > {{recipe.tyNm}} &nbsp;
+							<span><i class="fa fa-heart" style="color:red;font-weight:bold;"></i> {{ this.bookmarkCnt }}</span>
+						</h6>
 						<h6 style="color: rgb(228, 108, 28);">
 							<i class="fa fa-user" style="margin-right: 10px;">&nbsp;{{recipe.qnt}}인분 </i>
 							<i class="fa fa-clock-o" style="margin-right: 10px;">&nbsp; {{recipe.cookingTime}}분 </i>
@@ -120,14 +131,28 @@ export default {
 		title: "recipe page",
 		recipe: [],
 		irdnts: [],
-		cookings: []
+		cookings: [],
+		bookmarkCnt: 0,
+		like: false,
 		};
 	},
 	created() {
 		const params = new URL(document.location).searchParams;
 		http.get(`/recipes/${params.get('Id')}`)
 			.then(response => {
-			this.recipe = response.data
+				this.recipe = response.data
+				if(this.$store.state.user.authorized == true) {
+					http.post(`/recipes/isbookmarked`, {
+						"recipeId": this.recipe.recipeId,
+						"uid": this.$store.state.user.uid
+					})
+					.then(response => {
+						this.like = true;
+					})
+					.catch(error => {
+						console.log(error)
+					})
+				}
 			})
 			.catch(error => {
 			console.log(error)
@@ -146,7 +171,44 @@ export default {
 		.catch(err => {
 			console.log(err)
 		})
+		http.get(`/recipes/${params.get('Id')}/bookmark-count`)
+		.then(res => {
+			this.bookmarkCnt = res.data
+		})
+		.catch(err => {
+			console.log(err)
+		})
 	},
+	methods: {
+		addBookmark() { // 좋아요 누름
+			http
+			.post(`/recipes/bookmark`, {
+				"recipeId": this.recipe.recipeId,
+				"uid": this.$store.state.user.uid
+			})
+			.then(({ data }) => {
+				this.like = true;
+			})
+			.catch((error) => {
+				alert('처리 실패하였습니다.')
+				console.log(error)
+			})
+		},
+		rmBookmark() { // 좋아요 취소
+			http
+			.delete(`/recipes/unbookmark`, {
+				"recipeId": this.recipe.recipeId,
+				"uid": this.$store.state.user.uid
+			})
+			.then(({ data }) => {
+				this.like = false;
+			})
+			.catch((error) => {
+				alert('처리 실패하였습니다.')
+				console.log(error)
+			})
+		}
+	}
 }
 </script>
 <style scoped>

@@ -88,6 +88,11 @@ public class RecipeServiceImpl implements RecipeService{
 	}
 
 	@Override
+	public int isBookmarkedRecipe(Map<String, String> map) throws Exception {
+		return recipeMapper.isBookmarkedRecipe(map);
+	}
+
+	@Override
 	public int writeRecipe(RecipeDto recipe) throws Exception {
 		return recipeMapper.addRecipe(recipe);
 	}

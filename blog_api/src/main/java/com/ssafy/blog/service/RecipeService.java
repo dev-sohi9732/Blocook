@@ -35,6 +35,8 @@ public interface RecipeService {
 	
 	public int getBookmarkCount(String recipeId);
 	
+	public int isBookmarkedRecipe(Map<String, String> map) throws Exception;
+	
 	public int writeRecipe(RecipeDto recipe) throws Exception;
 	
 	public int writeCooking(CookingDto cooking) throws Exception;

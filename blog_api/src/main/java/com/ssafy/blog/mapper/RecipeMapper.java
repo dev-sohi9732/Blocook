@@ -36,6 +36,8 @@ public interface RecipeMapper {
 	
 	public int selectBookmarkCount(String recipeId);
 	
+	public int isBookmarkedRecipe(Map<String, String> map) throws Exception;
+	
 	public int addRecipe(RecipeDto dto);
 	
 	public int addCooking(CookingDto dto);

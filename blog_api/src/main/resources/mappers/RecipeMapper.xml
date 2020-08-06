@@ -75,6 +75,12 @@
 		WHERE recipe_id = #{recipeId};
 	</select>
 	
+	<select id="isBookmarkedRecipe" resultType="Integer">
+		SELECT COUNT(*) 
+		FROM recipe_bookmark
+		WHERE recipe_id = #{recipeId} AND uid = #{uid};
+	</select>
+	
 	<insert id="addRecipe">
 		INSERT INTO recipe ( recipe_id, recipe_nm_ko, sumry, nation_code, nation_nm, ty_code, ty_nm, cooking_time, calorie, qnt, level_nm, irdnt_code, img_url, det_url, user_uid)
 		VALUES ( #{recipeId}, #{recipeNmKo}, #{sumry}, #{nationCode}, #{nationNm}, #{tyCode}, #{tyNm}, #{cookingTime}, #{calorie}, #{qnt}, #{levelNm}, #{irdntCode}, #{imgUrl}, #{detUrl}, #{userUid});
