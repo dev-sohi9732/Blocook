@@ -126,7 +126,8 @@ export default {
 	searchirdnt() {
         this.$router.push("/search?irdnt=" + this.multi ).catch(()=>{});
         const params = new URL(document.location).searchParams;
-        http.get(`/recipes/search/irdnts/${params.get('irdnt')}`)
+        var query = encodeURIComponent(params.get('irdnt'));
+        http.get(`/recipes/search/irdnts/${query}`)
             .then(response => {
             this.recipes = response.data
             })
@@ -156,7 +157,8 @@ export default {
                 console.log(error)
                 })
         } else if(irdntsParam != null){
-            http.get(`/recipes/search/irdnts/${params.get('irdnt')}`)
+            var query = encodeURIComponent(params.get('irdnt'));
+            http.get(`/recipes/search/irdnts/${query}`)
                 .then(response => {
                 this.recipes = response.data
                 })
