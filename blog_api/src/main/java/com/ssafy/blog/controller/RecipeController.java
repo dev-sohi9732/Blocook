@@ -36,7 +36,7 @@ public class RecipeController {
 
 	@Autowired
 	private RecipeService recipeService;
-
+	
 	@ApiOperation(value = "모든 레시피들을 반환한다.", response = List.class)
 	@GetMapping(value = "/search/all")
 	public ResponseEntity<List<RecipeDto>> searchAll() throws Exception {
@@ -165,9 +165,9 @@ public class RecipeController {
 	}
 	
 	@ApiOperation(value = "레시피 즐겨찾기 해제", response = String.class)
-	@DeleteMapping(value = "/unbookmark")
-	public ResponseEntity<String> unBookmarkRecipe(@RequestBody Map<String,String> params) throws Exception {
-		
+	@DeleteMapping(value = "/unbookmark/{uid}/{recipeId}")
+	public ResponseEntity<String> unBookmarkRecipe(@PathVariable Map<String, String> params) throws Exception {
+
 		int result = 0;
 		try {
 			result = recipeService.unBookmarkRecipe(params); // uid와 recipeId가 들어 있는 map
