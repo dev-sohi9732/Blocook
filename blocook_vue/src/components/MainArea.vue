@@ -27,12 +27,14 @@
 						<div class="container">
 							<div class="row">
 								<div class="col-6" style="padding:0px;">
-									<div class="card" style=" width: 160px;">
+									<div class="card" id="mcard" style=" width: 160px;">
 										<center class="foodimg">
 											<img :src="recipes[0].imgUrl" class="card-img-top" alt="..." style="width:140px;">
 										</center>
 										<div class="card-body" style="padding:5px;">
 											<h5 class="card-title" style="margin-bottom:3px;">{{ recipes[0].recipeNmKo }}</h5>
+											<i class="fa fa-apple" style="font-size:0.8rem; margin-right: 10px;">&nbsp; {{recipes[0].calorie}}kcal </i>
+											<span style="font-size:0.8rem;"><i class="fa fa-heart" style="color:red;font-weight:bold;"></i>&nbsp; {{ likeCnt[0] }}</span>
 											<p class="card-text">{{ recipes[0].sumry }}</p>
 											<center>
 												<router-link :to="'recipe?Id=' +recipes[0].recipeId" class="btn" style="width:150px; background-color:#B3D662;">레시피&nbsp;<img style="width:25px; height: 25px;" src="@/assets/img/recipeicon.png"></router-link>
@@ -41,12 +43,14 @@
 									</div>
 								</div>
 								<div class="col-6" style="padding:0px;">
-									<div class="card" style="width: 160px;">
+									<div class="card" id="mcard" style="width: 160px;">
 										<center class="foodimg">
 											<img :src="recipes[1].imgUrl" class="card-img-top" alt="..." style="width:140px;">
 										</center>
 										<div class="card-body" style="padding:5px;">
 											<h5 class="card-title" style="margin-bottom:3px;">{{ recipes[1].recipeNmKo }}</h5>
+											<i class="fa fa-apple" style="font-size:0.8rem; margin-right: 10px;">&nbsp; {{recipes[1].calorie}}kcal </i>
+											<span style="font-size:0.8rem;"><i class="fa fa-heart" style="color:red;font-weight:bold;"></i>&nbsp; {{ likeCnt[1] }}</span>
 											<p class="card-text">{{ recipes[1].sumry }}</p>
 											<center>
 												<router-link :to="'recipe?Id=' +recipes[1].recipeId" class="btn" style="width:150px; background-color:#B3D662;">레시피&nbsp;<img style="width:25px; height: 25px;" src="@/assets/img/recipeicon.png"></router-link>
@@ -63,12 +67,14 @@
 						<div class="container">
 							<div class="row">
 								<div class="col-6" style="padding:0px;">
-									<div class="card" style=" width: 160px;">
+									<div class="card"  id="mcard" style=" width: 160px;">
 										<center class="foodimg">
 											<img :src="recipes[2].imgUrl" class="card-img-top" alt="..." style="width:140px;">
 										</center>
 										<div class="card-body" style="padding:5px;">
 											<h5 class="card-title" style="margin-bottom:3px;">{{ recipes[2].recipeNmKo }}</h5>
+											<i class="fa fa-apple" style="font-size:0.8rem; margin-right: 10px;">&nbsp; {{recipes[2].calorie}}kcal </i>
+											<span style="font-size:0.8rem;"><i class="fa fa-heart" style="color:red;font-weight:bold;"></i>&nbsp; {{ likeCnt[2] }}</span>
 											<p class="card-text">{{ recipes[2].sumry }}</p>
 											<center>
 												<router-link :to="'recipe?Id=' +recipes[2].recipeId" class="btn" style="width:150px; background-color:#B3D662;">레시피&nbsp;<img style="width:25px; height: 25px;" src="@/assets/img/recipeicon.png"></router-link>
@@ -77,12 +83,14 @@
 									</div>
 								</div>
 								<div class="col-6" style="padding:0px;">
-									<div class="card" style="width: 160px;">
+									<div class="card" id="mcard" style="width: 160px;">
 										<center class="foodimg">
 											<img :src="recipes[3].imgUrl" class="card-img-top" alt="..." style="width:140px;">
 										</center>
 										<div class="card-body" style="padding:5px;">
 											<h5 class="card-title" style="margin-bottom:3px;">{{ recipes[3].recipeNmKo }}</h5>
+											<i class="fa fa-apple" style="font-size:0.8rem; margin-right: 10px;">&nbsp; {{recipes[3].calorie}}kcal </i>
+											<span style="font-size:0.8rem;"><i class="fa fa-heart" style="color:red;font-weight:bold;"></i>&nbsp; {{ likeCnt[3] }}</span>
 											<p class="card-text">{{ recipes[3].sumry }}</p>
 											<center>
 												<router-link :to="'recipe?Id=' +recipes[3].recipeId" class="btn" style="width:150px; background-color:#B3D662;">레시피&nbsp;<img style="width:25px; height: 25px;" src="@/assets/img/recipeicon.png"></router-link>
@@ -99,12 +107,14 @@
 						<div class="container">
 							<div class="row">
 								<div class="col-6" style="padding:0px;">
-									<div class="card" style=" width: 160px;">
+									<div class="card" id="mcard" style=" width: 160px;">
 										<center class="foodimg">
 											<img :src="recipes[4].imgUrl" class="card-img-top" alt="..." style="width:140px;">
 										</center>
 										<div class="card-body" style="padding:5px;">
 											<h5 class="card-title" style="margin-bottom:3px;">{{ recipes[4].recipeNmKo }}</h5>
+											<i class="fa fa-apple" style="font-size:0.8rem; margin-right: 10px;">&nbsp; {{recipes[4].calorie}}kcal </i>
+											<span style="font-size:0.8rem;"><i class="fa fa-heart" style="color:red;font-weight:bold;"></i>&nbsp; {{ likeCnt[4] }}</span>
 											<p class="card-text">{{ recipes[4].sumry }}</p>
 											<center>
 												<router-link :to="'recipe?Id=' +recipes[4].recipeId" class="btn" style="width:150px; background-color:#B3D662;">레시피&nbsp;<img style="width:25px; height: 25px;" src="@/assets/img/recipeicon.png"></router-link>
@@ -113,12 +123,14 @@
 									</div>
 								</div>
 								<div class="col-6" style="padding:0px;">
-									<div class="card" style="width: 160px;">
+									<div class="card" id="mcard" style="width: 160px;">
 										<center class="foodimg">
 											<img :src="recipes[5].imgUrl" class="card-img-top" alt="..." style="width:140px;">
 										</center>
 										<div class="card-body" style="padding:5px;">
 											<h5 class="card-title" style="margin-bottom:3px;">{{ recipes[5].recipeNmKo }}</h5>
+											<i class="fa fa-apple" style="font-size:0.8rem; margin-right: 10px;">&nbsp; {{recipes[5].calorie}}kcal </i>
+											<span style="font-size:0.8rem;"><i class="fa fa-heart" style="color:red;font-weight:bold;"></i>&nbsp; {{ likeCnt[5] }}</span>
 											<p class="card-text">{{ recipes[5].sumry }}</p>
 											<center>
 												<router-link :to="'recipe?Id=' +recipes[5].recipeId" class="btn" style="width:150px; background-color:#B3D662;">레시피&nbsp;<img style="width:25px; height: 25px;" src="@/assets/img/recipeicon.png"></router-link>
@@ -161,6 +173,7 @@ export default {
 	  slide: 0,
 	  sliding: null,
 	  multi: [],
+	  likeCnt: [],
     };
   },
   created() {
@@ -195,7 +208,16 @@ export default {
 
     http.get('recipes/search/irdnts/소금')
     .then(({ data }) => {
-      this.recipes = data;
+	  this.recipes = data;
+	  for (var i=0; i<this.recipes.length; i++ ) {
+	    http.get(`/recipes/${this.recipes[i].recipeId}/bookmark-count`)
+			.then((res) => {
+				this.likeCnt.push(res.data)
+			})
+			.catch((error) => {
+				console.dir(error);
+			});
+	}
     })
     .catch((error) => {
         alert('검색 결과 요청에 실패하였습니다.')
@@ -261,6 +283,9 @@ h2 {
 }
 .card {
 	height: 306px;
+}
+#mcard {
+	height: 330px;
 }
 .card-body {
 	height: 200px;
