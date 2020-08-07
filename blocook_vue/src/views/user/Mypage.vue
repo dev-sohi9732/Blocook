@@ -29,7 +29,9 @@
                 </div>
                 <div class="col-lg-12">
                     <center>
-                      <button class="likerecipe" @click="showBookmark()" style="background-color:rgb(255, 172, 179)">
+                      <!-- <button class="likerecipe" @click="showBookmark()" style="background-color:rgb(255, 172, 179)">
+                       -->
+                      <button class="likerecipe" style="background-color:rgb(255, 172, 179)">
                         좋아요<i class="fa fa-heart" style="color:red;"></i>표시한 레시피
                       </button>
                     </center>
