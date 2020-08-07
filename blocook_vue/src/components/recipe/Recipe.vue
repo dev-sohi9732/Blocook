@@ -142,15 +142,20 @@ export default {
 			.then(response => {
 				this.recipe = response.data
 				if(this.$store.state.user.authorized == true) {
-					http.post(`/recipes/isbookmarked`, {
+					http.post('/recipes/isbookmarked', {
 						"recipeId": this.recipe.recipeId,
 						"uid": this.$store.state.user.uid
 					})
 					.then(response => {
-						this.like = true;
+						console.log();
+						if(response.data == "success"){
+							this.like = true;
+						} else {
+							this.like = false;
+						}
 					})
 					.catch(error => {
-						console.log(error)
+						console.log(error);
 					})
 				}
 			})
@@ -178,17 +183,6 @@ export default {
 		.catch(err => {
 			console.log(err)
 		})
-
-		// http.post('/recipes/tts', {
-		// 	content: '손질해주세요',
-		// 	recipeId: '1'
-		// })
-		// .then(res => {
-		// 	console.log(res.data);
-		// })
-		// .catch(err => {
-		// 	console.log(err)
-		// })
 	},
 	methods: {
 		addBookmark() { // 좋아요 누름
