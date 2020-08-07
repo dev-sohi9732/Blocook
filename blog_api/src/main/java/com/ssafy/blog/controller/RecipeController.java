@@ -203,7 +203,7 @@ public class RecipeController {
 		}
 		
 		if (result == 0) {
-			return new ResponseEntity<String>(FAIL, HttpStatus.NOT_FOUND);
+			return new ResponseEntity<String>(FAIL, HttpStatus.OK);
 		}
 		
 		return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
