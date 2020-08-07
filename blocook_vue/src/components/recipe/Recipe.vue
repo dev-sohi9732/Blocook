@@ -178,6 +178,17 @@ export default {
 		.catch(err => {
 			console.log(err)
 		})
+
+		// http.post('/recipes/tts', {
+		// 	content: '손질해주세요',
+		// 	recipeId: '1'
+		// })
+		// .then(res => {
+		// 	console.log(res.data);
+		// })
+		// .catch(err => {
+		// 	console.log(err)
+		// })
 	},
 	methods: {
 		addBookmark() { // 좋아요 누름
@@ -196,10 +207,7 @@ export default {
 		},
 		rmBookmark() { // 좋아요 취소
 			http
-			.delete(`/recipes/unbookmark`, {
-				"recipeId": this.recipe.recipeId,
-				"uid": this.$store.state.user.uid
-			})
+			.delete(`/recipes/unbookmark/${this.$store.state.user.uid}/${this.recipe.recipeId}`)
 			.then(({ data }) => {
 				this.like = false;
 			})
