@@ -8,6 +8,7 @@
 	<mappers>
 		<mapper resource="mappers/UserMapper.xml" />
 		<mapper resource="mappers/RecipeMapper.xml" />
+		<mapper resource="mappers/PostMapper.xml" />
 	</mappers>
 </configuration>
 
