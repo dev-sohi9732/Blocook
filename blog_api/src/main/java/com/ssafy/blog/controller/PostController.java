@@ -53,9 +53,9 @@ public class PostController {
 		return new ResponseEntity<List<PostDto>>(result, HttpStatus.OK);
 	}
 	
-	@ApiOperation(value = "사용자 아이디(UID)로 받아 해당 사용자가 등록한 모든 레시피들을 반환한다.", response = List.class)
-	@PostMapping(value = "/search/uid")
-	public ResponseEntity<List<PostDto>> searchByUid(@RequestBody String uid) throws Exception {
+	@ApiOperation(value = "사용자 아이디(UID)로 받아 해당 사용자가 등록한 모든 포스트들을 반환한다.", response = List.class)
+	@GetMapping(value = "/search/uid/{uid}")
+	public ResponseEntity<List<PostDto>> searchByUid(@PathVariable String uid) throws Exception {
 		List<PostDto> result = postService.searchByUid(uid);
 		
 		if (result == null) {
@@ -65,11 +65,23 @@ public class PostController {
 		return new ResponseEntity<List<PostDto>>(result, HttpStatus.OK);
 	}
 	
-	@ApiOperation(value = "레시피 ID에 해당하는 레시피 정보를 반환한다.", response = PostDto.class)
-	@GetMapping(value = "/{postId}")
-	public ResponseEntity<PostDto> getPostDetail(@PathVariable String postId) throws Exception {
+	@ApiOperation(value = "닉네임으로 포스트 검색", response = List.class)
+	@GetMapping(value = "/search/nickname/{nickname}")
+	public ResponseEntity<List<PostDto>> searchByNickname(@PathVariable String nickname) throws Exception {
+		List<PostDto> result = postService.searchByNickname(nickname);
 		
-		PostDto result = postService.getPostDetail(postId);
+		if (result == null) {
+			return new ResponseEntity<List<PostDto>>(result, HttpStatus.NOT_FOUND);
+		}
+		
+		return new ResponseEntity<List<PostDto>>(result, HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "포스트 ID에 해당하는 포스트 정보를 반환한다.", response = PostDto.class)
+	@GetMapping(value = "/{id}")
+	public ResponseEntity<PostDto> getPostDetail(@PathVariable String id) throws Exception {
+		
+		PostDto result = postService.getPostDetail(id);
 		
 		if (result == null) {
 			return new ResponseEntity<PostDto>(result, HttpStatus.NOT_FOUND);
@@ -97,12 +109,12 @@ public class PostController {
 	}
 	
 	@ApiOperation(value = " 포스트 즐겨찾기 해제", response = String.class)
-	@DeleteMapping(value = "/unbookmark/{uid}/{postId}")
+	@DeleteMapping(value = "/unbookmark/{uid}/{id}")
 	public ResponseEntity<String> unBookmarkRecipe(@PathVariable Map<String, String> params) throws Exception {
 
 		int result = 0;
 		try {
-			result = postService.unBookmarkPost(params); // uid와 postId가 들어 있는 map
+			result = postService.unBookmarkPost(params); // uid와 id(post)가 들어 있는 map
 		} catch (Exception e) {
 			System.out.println(e.getMessage()); // 예외 처리
 		}
@@ -155,9 +167,9 @@ public class PostController {
 	}
 
 	@ApiOperation(value = "포스트 아이디를 받아 삭제", response = String.class)
-	@DeleteMapping(value = "/delete/{postid}")
-	public ResponseEntity<String> delete(@PathVariable String postid) throws Exception {
-		int total = postService.delete(postid);
+	@DeleteMapping(value = "/delete/{id}")
+	public ResponseEntity<String> delete(@PathVariable String id) throws Exception {
+		int total = postService.delete(id);
 
 		if (total == 0) {
 			return new ResponseEntity<String>(FAIL, HttpStatus.OK);

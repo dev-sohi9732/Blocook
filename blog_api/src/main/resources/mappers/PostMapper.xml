@@ -19,40 +19,46 @@
 		WHERE uid = #{userUid}
 	</select>
 	
+	<select id="selectByNickname" parameterType="String" resultType="com.ssafy.blog.dto.PostDto">
+		SELECT * 
+		FROM post 
+		WHERE nickname LIKE CONCAT('%', #{nickname}, '%')
+	</select>
+	
 	<select id="selectPostById" parameterType="String" resultType="com.ssafy.blog.dto.PostDto">
-		SELECT * FROM post WHERE id = #{postId}
+		SELECT * FROM post WHERE id = #{id}
 	</select>
 	
 	<insert id="bookmarkPost">
 		INSERT INTO post_bookmark ( post_id, uid )
-		VALUES ( #{postId}, #{uid} );
+		VALUES ( #{id}, #{uid} );
 	</insert>
 	
 	<delete id="unBookmarkPost">
 		DELETE 
 		FROM post_bookmark
-		WHERE post_id = #{postId} AND uid = #{uid};
+		WHERE post_id = #{id} AND uid = #{uid};
 	</delete>
 	
 	<select id="isBookmarkedPost" resultType="Integer">
 		SELECT COUNT(*) 
 		FROM post_bookmark
-		WHERE post_id = #{postId} AND uid = #{uid};
+		WHERE post_id = #{id} AND uid = #{uid};
 	</select>
 	
 	<insert id="addPost">
-		INSERT INTO post (uid, recipe_id, title, content)
-		VALUES (#{uid}, #{recipe_id}, #{title}, #{content});
+		INSERT INTO post (uid, recipe_id, title, content, nickname)
+		VALUES (#{uid}, #{recipe_id}, #{title}, #{content}, #{nickname});
 	</insert>
 	
 	<update id="update"	>
 		update post 
 		set title = #{title}, content = #{content}
-		where id = #{postId}
+		where id = #{id}
 	</update>
 	
 	<delete id="delete" parameterType="map">
-		delete from post where id = #{postId}
+		delete from post where id = #{id}
 	</delete>
 
 </mapper>

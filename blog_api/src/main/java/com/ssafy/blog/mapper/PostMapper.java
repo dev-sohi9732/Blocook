@@ -15,7 +15,9 @@ public interface PostMapper {
 	
 	public List<PostDto> selectByUid(String userUid);
 	
-	public PostDto selectPostById(String postId);
+	public List<PostDto> selectByNickname(String nickname);
+	
+	public PostDto selectPostById(String id);
 	
 	public int bookmarkPost(Map<String, String> map) throws Exception;
 	
@@ -27,5 +29,5 @@ public interface PostMapper {
 	
 	public int update(PostDto dto);
 	
-	public int delete(String postId);
+	public int delete(String id);
 }

@@ -5,9 +5,10 @@ import java.time.LocalDateTime;
 public class CommentDto {
 	public int id;
 	public int uid;
-	public int post_id;
+	public int postId;
 	public String content;
 	public LocalDateTime create_date;
+	public String nickname;
 	
 	public int getId() {
 		return id;
@@ -21,11 +22,12 @@ public class CommentDto {
 	public void setUid(int uid) {
 		this.uid = uid;
 	}
-	public int getPost_id() {
-		return post_id;
+	
+	public int getPostId() {
+		return postId;
 	}
-	public void setPost_id(int post_id) {
-		this.post_id = post_id;
+	public void setPostId(int postId) {
+		this.postId = postId;
 	}
 	public String getContent() {
 		return content;
@@ -39,11 +41,18 @@ public class CommentDto {
 	public void setCreate_date(LocalDateTime create_date) {
 		this.create_date = create_date;
 	}
-	
+	public String getNickname() {
+		return nickname;
+	}
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
 	@Override
 	public String toString() {
-		return "CommentDto [id=" + id + ", uid=" + uid + ", post_id=" + post_id + ", content=" + content
-				+ ", create_date=" + create_date + "]";
+		return "CommentDto [id=" + id + ", uid=" + uid + ", postId=" + postId + ", content=" + content
+				+ ", create_date=" + create_date + ", nickname=" + nickname + "]";
 	}
+	
+	
 	
 }
