@@ -117,4 +117,9 @@ public class RecipeServiceImpl implements RecipeService{
 		return recipeMapper.selectMaxIrdntSn();
 	}
 	
+	@Override
+	public List<RecipeDto> searchMybookmarkedRecipe(String userUid) throws Exception {
+		return recipeMapper.mybookmarkedrecipe(URLDecoder.decode(userUid, "UTF-8"));
+	}
+	
 }

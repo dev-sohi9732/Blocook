@@ -105,6 +105,11 @@
 		SELECT max(irdnt_sn) 
 		FROM recipe_irdnt;
 	</select>
+	
+	<select id="mybookmarkedrecipe" parameterType="String" resultType="com.ssafy.blog.dto.RecipeDto">
+		select * from recipe where recipe_id in ( 
+		select recipe_id from recipe_bookmark where uid = #{uid});
+	</select>
 </mapper>
 
 
