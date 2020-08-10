@@ -47,4 +47,6 @@ public interface RecipeMapper {
 	public int selectMaxId();
 	
 	public int selectMaxIrdntSn();
+	
+	public List<RecipeDto> mybookmarkedrecipe(String userUid);
 }

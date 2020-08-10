@@ -284,4 +284,17 @@ public class RecipeController {
 		return new ResponseEntity<List>(irdnts, HttpStatus.OK);
 	}
 	
+	@ApiOperation(value = "사용자 아이디(UID)를 받아 해당 사용자가 좋아요한 모든 레시피들을 반환한다.", response = List.class)
+	@PostMapping(value = "/myBookmark/userUid")
+	public ResponseEntity<List<RecipeDto>> searchMybookmarkedRecipe(@RequestBody String userUid) throws Exception {
+		
+		List<RecipeDto> result = recipeService.searchMybookmarkedRecipe(userUid);
+		
+		if (result == null) {
+			return new ResponseEntity<List<RecipeDto>>(result, HttpStatus.NOT_FOUND);
+		}
+		
+		return new ResponseEntity<List<RecipeDto>>(result, HttpStatus.OK);
+	}
+	
 }

@@ -29,9 +29,7 @@
                 </div>
                 <div class="col-lg-12">
                     <center>
-                      <!-- <button class="likerecipe" @click="showBookmark()" style="background-color:rgb(255, 172, 179)">
-                       -->
-                      <button class="likerecipe" style="background-color:rgb(255, 172, 179)">
+                      <button class="likerecipe" @click="showBookmark()" style="background-color:rgb(255, 172, 179)">
                         좋아요<i class="fa fa-heart" style="color:red;"></i>표시한 레시피
                       </button>
                     </center>
@@ -59,6 +57,12 @@ export default {
       title: "My page",
       like: false,
     };
+  },
+  created() {
+    if(this.$store.state.user.nickname == "") {
+      alert("로그인이 필요합니다.");
+      this.$router.push("/login");
+    }
   },
   methods: {
 		moveToAddRecipe() {
