@@ -32,10 +32,16 @@ public class PostServiceImpl implements PostService {
 		System.out.println(URLDecoder.decode(userUid, "UTF-8"));
 		return postMapper.selectByUid(URLDecoder.decode(userUid, "UTF-8"));
 	}
+	
+	@Override
+	public List<PostDto> searchByNickname(String nickname) throws Exception {
+		System.out.println(URLDecoder.decode(nickname, "UTF-8"));
+		return postMapper.selectByNickname(URLDecoder.decode(nickname, "UTF-8"));
+	}
 
 	@Override
-	public PostDto getPostDetail(String postId) {
-		return postMapper.selectPostById(postId);
+	public PostDto getPostDetail(String id) {
+		return postMapper.selectPostById(id);
 	}
 
 	@Override
@@ -64,8 +70,8 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public int delete(String postId) throws Exception {
-		return postMapper.delete(postId);
+	public int delete(String id) throws Exception {
+		return postMapper.delete(id);
 	}
 
 }

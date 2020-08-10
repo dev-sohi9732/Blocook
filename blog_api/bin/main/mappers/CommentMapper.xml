@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.ssafy.blog.mapper.CommentMapper">
+	
+	<select id="selectByPostId" parameterType="String" resultType="com.ssafy.blog.dto.CommentDto">
+		SELECT * 
+		FROM comment 
+		WHERE post_id = #{postId}
+	</select>
+	
+	<select id="selectByUid" parameterType="String" resultType="com.ssafy.blog.dto.CommentDto">
+		SELECT * 
+		FROM comment 
+		WHERE uid = #{userUid}
+	</select>
+	
+	<insert id="addComment">
+		INSERT INTO comment (uid, post_id, content, nickname)
+		VALUES (#{uid}, #{postId}, #{content}, #{nickname});
+	</insert>
+	
+	<update id="update"	>
+		update comment
+		set content = #{content}
+		where id = #{id}
+	</update>
+	
+	<delete id="delete" parameterType="map">
+		delete from comment where id = #{id}
+	</delete>
+
+</mapper>

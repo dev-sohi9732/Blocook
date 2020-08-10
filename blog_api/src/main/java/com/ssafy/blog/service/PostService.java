@@ -12,7 +12,9 @@ public interface PostService {
 	
 	public List<PostDto> searchByUid(String userUid) throws Exception;
 	
-	public PostDto getPostDetail(String postId);
+	public List<PostDto> searchByNickname(String nickname) throws Exception;
+	
+	public PostDto getPostDetail(String id);
 	
 	public int bookmarkPost(Map<String, String> map) throws Exception;
 	
@@ -24,5 +26,5 @@ public interface PostService {
 	
 	public int update(PostDto dto) throws Exception;
 	
-	public int delete(String postId) throws Exception;
+	public int delete(String id) throws Exception;
 }

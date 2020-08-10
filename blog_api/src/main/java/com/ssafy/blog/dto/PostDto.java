@@ -4,18 +4,20 @@ import java.time.LocalDateTime;
 
 public class PostDto {
 
-	private int postId;
+	private int id;
 	private int uid;
 	private int recipe_id;
 	private String title;
 	private String content;
 	private int view_cnt;
 	private LocalDateTime createDate;
-	public int getPostId() {
-		return postId;
+	private String nickname;
+	
+	public int getId() {
+		return id;
 	}
 	public void setPostId(int id) {
-		this.postId = id;
+		this.id = id;
 	}
 	public int getUid() {
 		return uid;
@@ -53,10 +55,18 @@ public class PostDto {
 	public void setCreateDate(LocalDateTime createDate) {
 		this.createDate = createDate;
 	}
+	
+	public String getNickname() {
+		return nickname;
+	}
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
 	@Override
 	public String toString() {
-		return "PostDto [postId=" + postId + ", uid=" + uid + ", recipe_id=" + recipe_id + ", title=" + title + ", content="
-				+ content + ", view_cnt=" + view_cnt + ", createDate=" + createDate + "]";
+		return "PostDto [id=" + id + ", uid=" + uid + ", recipe_id=" + recipe_id + ", title=" + title + ", content="
+				+ content + ", view_cnt=" + view_cnt + ", createDate=" + createDate + ", nickname=" + nickname + "]";
 	}
+	
 
 }
