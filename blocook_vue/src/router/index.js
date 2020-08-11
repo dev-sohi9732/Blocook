@@ -38,6 +38,11 @@ Vue.use(VueRouter)
     component: () => import('../views/recipe/Addrecipe.vue')
   },
   {
+    path: '/editrecipe',
+    name: 'Editrecipe',
+    component: () => import('../views/recipe/Editrecipe.vue')
+  },
+  {
     path: '/category',
     name: 'Category',
     component: () => import('../views/recipe/Category.vue')

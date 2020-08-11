@@ -48,4 +48,10 @@ public interface RecipeService {
 	public int searchMaxIrdntSn() throws Exception;
 	
 	public List<RecipeDto> searchMybookmarkedRecipe(String userUid) throws Exception;
+	
+	public int deleteRecipe(String recipeId) throws Exception;
+	
+	public int deleteRecipeCooking(String recipeId) throws Exception;
+	
+	public int deleteRecipeIrdnt(String recipeId) throws Exception;
 }

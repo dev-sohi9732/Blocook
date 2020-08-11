@@ -72,36 +72,37 @@
 						</table>
 					</div>
 				</div>
-					<div class="carousel-item" v-for="(cooking,cooking_key) in cookings" :key="cooking_key">
-						<div style="margin-bottom: 20px;">
-							<center class="menu">
-								<h5 style="margin-top: 20px;">Step{{cooking.cookingNo}}</h5>
-								<br>
-								<div v-if="cooking.streStepImageUrl.length < 5">
-									<img src="@/assets/img/addimage.jpg">
-								</div>
-								<div v-else>
-									<img :src="cooking.streStepImageUrl">
-								</div>
-							</center>
-							<div class="container inputbox">
-								<table>
-								<tbody>
-									<tr>
-										<td>
-											{{cooking.cookingDc}}
-										</td>
-									</tr>
-									<tr>
-										<td v-if="cooking.stepTip.length >3">
-											Tip!! {{cooking.stepTip}}
-										</td>
-									</tr>
-								</tbody>
-								</table>
+					
+				<div class="carousel-item" v-for="(cooking,cooking_key) in cookings" :key="cooking_key">
+					<div style="margin-bottom: 20px;">
+						<center class="menu">
+							<h5 style="margin-top: 20px;">Step {{ cookings.indexOf(cooking) + 1 }}</h5>
+							<br>
+							<div v-if="cooking.streStepImageUrl.length < 5">
+								<img src="@/assets/img/addimage.jpg">
 							</div>
+							<div v-else>
+								<img :src="cooking.streStepImageUrl">
+							</div>
+						</center>
+						<div class="container inputbox">
+							<table>
+							<tbody>
+								<tr>
+									<td>
+										{{cooking.cookingDc}}
+									</td>
+								</tr>
+								<tr>
+									<td v-if="cooking.stepTip.length >3">
+										Tip!! {{cooking.stepTip}}
+									</td>
+								</tr>
+							</tbody>
+							</table>
 						</div>
 					</div>
+				</div>
 				
 			</div>
 

@@ -121,5 +121,20 @@ public class RecipeServiceImpl implements RecipeService{
 	public List<RecipeDto> searchMybookmarkedRecipe(String userUid) throws Exception {
 		return recipeMapper.mybookmarkedrecipe(URLDecoder.decode(userUid, "UTF-8"));
 	}
+
+	@Override
+	public int deleteRecipe(String recipeId) throws Exception {
+		return recipeMapper.deleteRecipe(recipeId);
+	};
+
+	@Override
+	public int deleteRecipeCooking(String recipeId) throws Exception {
+		return recipeMapper.deleteRecipeCooking(recipeId);
+	};
+
+	@Override
+	public int deleteRecipeIrdnt(String recipeId) throws Exception {
+		return recipeMapper.deleteRecipeIrdnt(recipeId);
+	};
 	
 }
