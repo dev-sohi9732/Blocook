@@ -36,7 +36,8 @@
 				<tbody>
 				<tr v-for="(post, index) in articles" :key="index + '_items'" >
 					<td>
-						<div class="title">{{post.title}}</div>
+						<!-- :to="'detailpost?Id=' +post.id" -->
+						<router-link :to="'detailpost?Id=' +post.id">{{post.title}}</router-link>
 						<div class="info"><span>{{post.nickname}}</span>&emsp;<span>{{post.createDate}}</span></div>
 					</td>
 					<td class="heart">
