@@ -26,120 +26,22 @@
 			</select>
 
 			<b-dropdown id="dropdown-right" right text="내 포스트" variant="success" class="writing" no-caret>
-				<b-dropdown-item href="/post" style="text-align:center">새 글 쓰기</b-dropdown-item>
-				<b-dropdown-item href="/mypost" style="text-align:center">내가 쓴 글</b-dropdown-item>
+				<b-dropdown-item @click="moveToNewPost()" style="text-align:center">새 글 쓰기</b-dropdown-item>
+				<b-dropdown-item @click="moveToMyPost()" style="text-align:center">내가 쓴 글</b-dropdown-item>
 			</b-dropdown>
 		</div>
 
 		<div class="posts">
 			<table>
 				<tbody>
-				<tr>
+				<tr v-for="(post, index) in articles" :key="index + '_items'" >
 					<td>
-						<div class="title">더운 여름, 수박 화채로 시원하게 보내기! 내 레시피를 참고해!</div>
-						<div class="info"><span>ssafy123</span>&emsp;<span>2020.7.15 13:45</span></div>
+						<!-- :to="'detailpost?Id=' +post.id" -->
+						<router-link :to="'detailpost?Id=' +post.id">{{post.title}}</router-link>
+						<div class="info"><span>{{post.nickname}}</span>&emsp;<span>{{post.createDate}}</span></div>
 					</td>
 					<td class="heart">
-						<div><i class="fa fa-eye"></i>&nbsp;50</div>
-						<div><i class="fa fa-heart" style="color:red;"></i>&nbsp;15</div>
-						<div><i class="fa fa-comment-o"></i>&nbsp;4</div>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<div class="title">맛있게 김치찌개 끓이는 법!</div>
-						<div class="info"><span>ssafy456</span>&emsp;<span>2020.7.10 17:35</span></div>
-					</td>
-					<td class="heart">
-						<div><i class="fa fa-eye"></i>&nbsp;50</div>
-						<div><i class="fa fa-heart" style="color:red;"></i>&nbsp;15</div>
-						<div><i class="fa fa-comment-o"></i>&nbsp;4</div>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<div class="title">더운 여름, 수박 화채로 시원하게 보내기! 내 레시피를 참고해!</div>
-						<div class="info"><span>ssafy123</span>&emsp;<span>2020.7.15 13:45</span></div>
-					</td>
-					<td class="heart">
-						<div><i class="fa fa-eye"></i>&nbsp;50</div>
-						<div><i class="fa fa-heart" style="color:red;"></i>&nbsp;15</div>
-						<div><i class="fa fa-comment-o"></i>&nbsp;4</div>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<div class="title">맛있게 김치찌개 끓이는 법!</div>
-						<div class="info"><span>ssafy456</span>&emsp;<span>2020.7.10 17:35</span></div>
-					</td>
-					<td class="heart">
-						<div><i class="fa fa-eye"></i>&nbsp;50</div>
-						<div><i class="fa fa-heart" style="color:red;"></i>&nbsp;15</div>
-						<div><i class="fa fa-comment-o"></i>&nbsp;4</div>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<div class="title">더운 여름, 수박 화채로 시원하게 보내기! 내 레시피를 참고해!</div>
-						<div class="info"><span>ssafy123</span>&emsp;<span>2020.7.15 13:45</span></div>
-					</td>
-					<td class="heart">
-						<div><i class="fa fa-eye"></i>&nbsp;50</div>
-						<div><i class="fa fa-heart" style="color:red;"></i>&nbsp;15</div>
-						<div><i class="fa fa-comment-o"></i>&nbsp;4</div>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<div class="title">맛있게 김치찌개 끓이는 법!</div>
-						<div class="info"><span>ssafy456</span>&emsp;<span>2020.7.10 17:35</span></div>
-					</td>
-					<td class="heart">
-						<div><i class="fa fa-eye"></i>&nbsp;50</div>
-						<div><i class="fa fa-heart" style="color:red;"></i>&nbsp;15</div>
-						<div><i class="fa fa-comment-o"></i>&nbsp;4</div>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<div class="title">더운 여름, 수박 화채로 시원하게 보내기! 내 레시피를 참고해!</div>
-						<div class="info"><span>ssafy123</span>&emsp;<span>2020.7.15 13:45</span></div>
-					</td>
-					<td class="heart">
-						<div><i class="fa fa-eye"></i>&nbsp;50</div>
-						<div><i class="fa fa-heart" style="color:red;"></i>&nbsp;15</div>
-						<div><i class="fa fa-comment-o"></i>&nbsp;4</div>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<div class="title">맛있게 김치찌개 끓이는 법!</div>
-						<div class="info"><span>ssafy456</span>&emsp;<span>2020.7.10 17:35</span></div>
-					</td>
-					<td class="heart">
-						<div><i class="fa fa-eye"></i>&nbsp;50</div>
-						<div><i class="fa fa-heart" style="color:red;"></i>&nbsp;15</div>
-						<div><i class="fa fa-comment-o"></i>&nbsp;4</div>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<div class="title">더운 여름, 수박 화채로 시원하게 보내기! 내 레시피를 참고해!</div>
-						<div class="info"><span>ssafy123</span>&emsp;<span>2020.7.15 13:45</span></div>
-					</td>
-					<td class="heart">
-						<div><i class="fa fa-eye"></i>&nbsp;50</div>
-						<div><i class="fa fa-heart" style="color:red;"></i>&nbsp;15</div>
-						<div><i class="fa fa-comment-o"></i>&nbsp;4</div>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<div class="title">맛있게 김치찌개 끓이는 법!</div>
-						<div class="info"><span>ssafy456</span>&emsp;<span>2020.7.10 17:35</span></div>
-					</td>
-					<td class="heart">
-						<div><i class="fa fa-eye"></i>&nbsp;50</div>
+						<div><i class="fa fa-eye"></i>&nbsp;{{post.view_cnt}}</div>
 						<div><i class="fa fa-heart" style="color:red;"></i>&nbsp;15</div>
 						<div><i class="fa fa-comment-o"></i>&nbsp;4</div>
 					</td>
@@ -151,7 +53,30 @@
 </template>
 
 <script>
+import http from "@/util/http-common.js";
 export default {
+	data() {
+	  return {
+		articles: []
+	  }
+	},
+	methods: {
+		moveToNewPost() {
+			this.$router.push('/post')
+		},
+		moveToMyPost() {
+			this.$router.push('/mypost')
+		},
+	},
+	created() {
+		http.get('/posts/search/all')
+			.then(res => {
+				this.articles = res.data
+			})
+			.catch(err => {
+				console.log("error!!!")
+			})
+	}
 }
 </script>
 
