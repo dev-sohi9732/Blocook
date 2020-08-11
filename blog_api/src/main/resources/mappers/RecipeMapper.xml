@@ -110,6 +110,24 @@
 		select * from recipe where recipe_id in ( 
 		select recipe_id from recipe_bookmark where uid = #{uid});
 	</select>
+	
+	<delete id="deleteRecipe" parameterType="String">
+		DELETE 
+		FROM recipe
+		WHERE recipe_id = #{recipeId};
+	</delete>
+	
+	<delete id="deleteRecipeCooking" parameterType="String">
+		DELETE 
+		FROM recipe_cooking
+		WHERE recipe_id = #{recipeId};
+	</delete>
+	
+	<delete id="deleteRecipeIrdnt" parameterType="String">
+		DELETE 
+		FROM recipe_irdnt
+		WHERE recipe_id = #{recipeId};
+	</delete>
 </mapper>
 
 

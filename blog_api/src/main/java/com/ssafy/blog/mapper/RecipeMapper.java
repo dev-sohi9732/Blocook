@@ -49,4 +49,10 @@ public interface RecipeMapper {
 	public int selectMaxIrdntSn();
 	
 	public List<RecipeDto> mybookmarkedrecipe(String userUid);
+	
+	public int deleteRecipe(String recipeId);
+	
+	public int deleteRecipeCooking(String recipeId);
+	
+	public int deleteRecipeIrdnt(String recipeId);
 }

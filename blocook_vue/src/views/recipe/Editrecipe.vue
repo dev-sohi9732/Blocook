@@ -42,7 +42,7 @@
                 </tr>
                 <tr v-for="(mainirdnt, i) in arr_mainirdnt" :key="i">
                   <td></td>
-                  <td colspan="3">
+                  <td colspan="3" style="text-align: left;">
                     <p style="margin-bottom:8px;">
                       <i class="fa fa-minus" @click="rmMainIrdnt(i)" style="color:red;"></i>
                       &nbsp;{{ mainirdnt.mainirdnt_nm }}&nbsp;{{ mainirdnt.mainirdnt_vol }}
@@ -68,7 +68,7 @@
                 </tr>
                 <tr v-for="(subirdnt, i) in arr_subirdnt" :key="`A-${i}`">
                   <td></td>
-                  <td colspan="3">
+                  <td colspan="3" style="text-align: left;">
                     <p style="margin-bottom:8px;">
                       <i class="fa fa-minus" @click="rmSubIrdnt(`A-${i}`)" style="color:red;"></i>
                       &nbsp;{{ subirdnt.subirdnt_nm }}&nbsp;{{ subirdnt.subirdnt_vol }}
@@ -94,7 +94,7 @@
                 </tr>
                 <tr v-for="(seasoningirdnt, i) in arr_seasoningirdnt" :key="`B-${i}`">
                   <td></td>
-                  <td colspan="3">
+                  <td colspan="3" style="text-align: left;">
                     <p style="margin-bottom:8px;">
                       <i class="fa fa-minus" @click="rmSeasoningIrdnt(`B-${i}`)" style="color:red;"></i>
                       &nbsp;{{ seasoningirdnt.seasoningirdnt_nm }}&nbsp;{{ seasoningirdnt.seasoningirdnt_vol }}
@@ -182,7 +182,7 @@
             <div class="step" v-for="step in steps" v-bind:key="step.cookingNo">
               <center class="menu">
                 <h5>STEP {{ steps.indexOf(step) + 1 }}</h5>
-                <img src="@/assets/img/addimage.jpg">
+                <img :src="step.img">
                 <div>
                   <button class="button btn" style="width:180px;">과정 사진 등록&nbsp;<i class="fa fa-camera"></i></button>
                 </div>
@@ -208,8 +208,8 @@
                 </tbody>
                 </table>
               </div>
-              <!-- v-if="step.timerYN == 'Y'" -->
-              <div class="container" style="margin-top:10px;" v-if="step.timerYN == 'Y'">
+
+              <div class="container" style="margin-top:10px;" v-if="timershow">
                 <div class="timer-container">
                   <img src="@/assets/img/stopwatch.png" id="stopwatch">
                   <table>
@@ -227,14 +227,14 @@
               <div class="minusbutton">
                 <button @click="removestep(step)" id="minusbtn" class="button btn" v-if="minus"><i class="fa fa-minus"></i></button>
               </div>
-
-              <div class="timerbutton">
-                <button @click="addtimer(steps.indexOf(step))" id="plusbtn" class="button btn" style="background-color:rgb(150, 111, 193);"><i class="fa fa-clock-o"></i></button>
-              </div>
             </div>
 
             <div class="addbutton">
               <button @click="addstep()" id="plusbtn" class="button btn"><i class="fa fa-plus"></i></button>
+            </div>
+
+            <div class="timerbutton">
+              <button @click="addtimer()" id="plusbtn" class="button btn"><i class="fa fa-clock-o"></i></button>
             </div>
           </b-card-text>
 				</b-tab>
@@ -243,7 +243,7 @@
 
     <div class="user">
 			<button class="button btn" @click="checkHandler()" style="width:190px; margin-bottom:30px; background-color:rgb(241, 196, 15);">
-        <i class="fa fa-check"></i>&nbsp;레시피 등록 완료
+        <i class="fa fa-check"></i>&nbsp;레시피 수정 완료
       </button>
 		</div>
   </div>
@@ -255,14 +255,15 @@ import http from "@/util/http-common.js";
 export default {
   data() {
     return {
-      title: "addrecipe page",
-      minus: false,
-      steps: [
-        {cookingNo: 1, cookingDc: "", timerYN:"N", timerTime:0}
-      ],
-      addRecipeId: '',
+      title: "editrecipe page",
+      minus: true,
+      steps: [],
+      timers: [],
+      timershow: false,
+      editRecipeId: '',
 
-      //form 정보
+			//form 정보
+			recipeImg: '@/assets/img/addimage.jpg',
       recipenm: '',
       mainirdnt: '',
       mainirdnt_amount: '',
@@ -315,7 +316,7 @@ export default {
     }
   },
   created(){
-		//재료 데이터 가져오기
+		// 재료 데이터 가져오기
 		http
 		.post("/recipes/get/irdnts")
 		.then(({ data }) => {
@@ -324,6 +325,47 @@ export default {
 		.catch((error) => {
 			console.dir(error);
 		});
+		// 기존 레시피 정보 가져오기
+		const params = new URL(document.location).searchParams;
+		http.get(`/recipes/${params.get('Id')}`)
+			.then(response => {
+				this.editRecipeId = response.data.recipeId;
+				this.recipeImg = response.data.imgUrl;
+				this.recipenm = response.data.recipeNmKo;
+				this.recipedc = response.data.sumry;
+				this.selectedcat = response.data.nationNm;
+				this.selectedty = response.data.tyNm;
+				this.time = response.data.cookingTime;
+				this.kcal = response.data.calorie;
+				this.person = response.data.qnt;
+				if(response.data.levelNm == "초보환영") this.level.value = 1;
+				else if(response.data.levelNm == "보통") this.level.value = 2;
+				else if(response.data.levelNm == "어려움") this.level.value = 3;
+				this.level.text = response.data.levelNm;
+			})
+			.catch(error => {
+			console.log(error)
+			})
+		http.get(`/recipes/${params.get('Id')}/irdnts`)
+			.then(res => {
+				for(var i = 0; i < res.data.length; i++) {
+					if(res.data[i].irdntTyCode == 3060001) this.arr_mainirdnt.push({mainirdnt_nm:res.data[i].irdntNm, mainirdnt_vol:res.data[i].irdntCpcty});
+					else if(res.data[i].irdntTyCode == 3060002) this.arr_subirdnt.push({subirdnt_nm:res.data[i].irdntNm, subirdnt_vol:res.data[i].irdntCpcty});
+					else if(res.data[i].irdntTyCode == 3060003) this.arr_seasoningirdnt.push({seasoningirdnt_nm:res.data[i].irdntNm, seasoningirdnt_vol:res.data[i].irdntCpcty});
+				}
+			})
+			.catch(err => {
+			console.log(err)
+			})
+		http.get(`/recipes/${params.get('Id')}/cookings`)
+		.then(res => {
+			for(var i = 0; i < res.data.length; i++) {
+				this.steps.push({cookingNo: res.data[i].cookingNo, cookingDc: res.data[i].cookingDc, streStepImageUrl: res.data[i].streStepImageUrl});
+			}
+		})
+		.catch(err => {
+			console.log(err)
+		})
 	},
 	methods: {
     addMainIrdnt() {
@@ -386,16 +428,16 @@ export default {
 				this.level.text = '어려움';
 			}
 		},
-    addtimer(timerstep) {
-      if(this.steps[timerstep].timerYN == "N") this.steps[timerstep].timerYN = "Y";
-      else if(this.steps[timerstep].timerYN == "Y") this.steps[timerstep].timerYN = "N";
+    addtimer() {
+			this.timers.push({cookingNo:this.steps.length, time:0});
+			this.timershow = !this.timershow;
 		},
     addstep() {
-			this.steps.push({cookingNo:this.steps.length + 1, cookingDc:"", timerYN:"N", timerTime:0});
+			this.steps.push({cookingNo:this.steps.length + 1, cookingDc:""});
 			this.minus = true;
 		},
 		removestep(rmstep) {
-			this.steps.splice(this.steps.indexOf(this.steps.length), 1);
+			this.steps.splice(this.steps.indexOf(rmstep), 1);
 			if(this.steps.length == 1) this.minus = false;
 		},
     checkHandler() {
@@ -409,17 +451,26 @@ export default {
 			!this.recipenm && (msg = '레시피 이름을 입력해주세요', err = false);
 			err && this.arr_mainirdnt.length == 0 && ((msg = '주재료를 입력해주세요'), (err = false));
 			err && this.arr_subirdnt.length == 0 && ((msg = '부재료를 입력해주세요'), (err = false));
-			err && this.arr_seasoningirdnt.length == 0 && ((msg = '양념 재료를 입력해주세요'), (err = false));
 			err && !this.recipedc && ((msg = '레시피 설명을 입력해주세요'), (err = false));
 			err && !this.selectedcat && ((msg = '카테고리를 선택해주세요'), (err = false));
       err && !this.selectedty && ((msg = '종류를 선택해주세요'), (err = false));
 
 			if (!err) alert(msg);
 			else {
-				this.saveGibonHandler();
+				this.deleteGibonHandler(this.editRecipeId);
 			}
-    },
-    saveGibonHandler() {
+		},
+		deleteGibonHandler(delRecipeId) {
+			http
+      .delete(`/recipes/delete/recipe/${delRecipeId}`) // 레시피 삭제
+      .then(({ data }) => {
+				this.updateGibonHandler();
+      })
+      .catch((error) => {
+          console.dir(error);
+      });
+		},
+    updateGibonHandler() {
       for(var i = 0; i < this.arr_mainirdnt.length; i++) {
         this.all_irdnts.push({
           irdntNm: this.arr_mainirdnt[i].mainirdnt_nm,
@@ -447,8 +498,9 @@ export default {
       console.log(this.all_irdnts);
       
       http
-      .post("/recipes/add/recipe",{ // 레시피 기본 정보 등록
+      .post("/recipes/update/recipe",{ // 레시피 기본 정보 수정
         recipe: {
+					recipeId: this.editRecipeId,
           recipeNmKo: this.recipenm,
           sumry: this.recipedc,
           nationNm: this.selectedcat,
@@ -462,22 +514,24 @@ export default {
         irdnts: this.all_irdnts
       })
       .then(({ data }) => {
-        this.addRecipeId = data;
-        this.saveCookingHandler(this.addRecipeId);
+        this.updateCookingHandler(this.editRecipeId);
       })
       .catch((error) => {
           console.dir(error);
       });
     },
-    saveCookingHandler(recipeId) {
+    updateCookingHandler(recipeId) {
+			for(var i = 0; i < this.steps.length; i++) {
+				this.steps[i].cookingNo = i + 1;
+			}
       http
-      .post("/recipes/add/cookings",{ // 레시피 상세 정보 등록
+      .post("/recipes/update/cookings",{ // 레시피 상세 정보 수정
         recipeId: recipeId,
         cookings: this.steps
       })
       .then(({ data }) => {
-        alert("레시피가 등록 완료되었습니다.");
-        this.$router.push('myrecipe');
+        alert("레시피가 수정되었습니다.");
+        this.$router.push('recipe?Id='+recipeId);
       })
       .catch((error) => {
           console.dir(error);
@@ -560,20 +614,18 @@ select {
   float: left;
 }
 .timerbutton {
-  margin: 0px 30px 0px 30px;
-  float: none;
+  margin: 0px 22px 0px 10px;
+  float: right;
 }
 #plusbtn {
 	border-radius: 50%;
 	width:40px;
 	margin-right: 5px;
-  float: none;
 }
 #minusbtn {
 	background-color: rgb(255, 93, 72); 
 	border-radius: 50%;
 	width:40px;
-  float: none;
 }
 .minusbutton {
 	margin: 10px 30px 0px 30px;

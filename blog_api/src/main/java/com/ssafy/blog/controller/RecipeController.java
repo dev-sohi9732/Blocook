@@ -209,6 +209,68 @@ public class RecipeController {
 		return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
 	}
 	
+	@ApiOperation(value = "레시피 기본정보, 재료 수정하기", response = Integer.class)
+	@PostMapping(value = "/update/recipe")
+	public ResponseEntity<String> updateRecipeDetail(@RequestBody String params) throws Exception {
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		
+		//레시피 기본 정보 등록
+		JsonNode recipeNode = objectMapper.readTree(params).findPath("recipe");
+		System.out.println(recipeNode.toString());
+		RecipeDto recipe = objectMapper.readValue(recipeNode.toString(), RecipeDto.class);
+		System.out.println(recipe);
+		recipeService.writeRecipe(recipe);
+		String result = Integer.toString(recipe.getRecipeId());
+		
+		//레시피 재료 등록
+		JsonNode irdntsNode = objectMapper.readTree(params).findPath("irdnts");
+		CollectionType collectionTypeI = objectMapper.getTypeFactory().constructCollectionType(List.class, IrdntDto.class);
+		List<IrdntDto> irdntList = objectMapper.readValue(irdntsNode.toString(), collectionTypeI);
+		System.out.println(irdntList);
+		IrdntDto irdnt;
+		int irdntSn = 0; //새로 등록할 재료 id(irdnt_sn)
+		for(int i = 1; i <= irdntList.size(); i++) {
+			//레시피 id 셋팅
+			irdnt = irdntList.get(i-1);
+			irdnt.setRecipeId(recipe.getRecipeId());
+			irdntSn = recipeService.searchMaxIrdntSn() + 1;
+			irdnt.setIrdntSn(irdntSn);
+			recipeService.writeIrdnt(irdntList.get(i-1));
+		}
+		
+		return new ResponseEntity<String>(result, HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "레시피 과정 수정하기", response = String.class)
+	@PostMapping(value = "/update/cookings")
+	public ResponseEntity<String> updateRecipeCookings(@RequestBody String params) throws Exception {
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		String result = "true";
+		
+		//새로 등록할 레시피 id
+		JsonNode recipeIdNode = objectMapper.readTree(params).findPath("recipeId");
+		int recipeId = objectMapper.readValue(recipeIdNode.toString(), Integer.class);
+		System.out.println("===========recipeId : "+recipeId);
+		
+		//레시피 과정 등록
+		JsonNode cookingsNode = objectMapper.readTree(params).findPath("cookings");
+		CollectionType collectionTypeC = objectMapper.getTypeFactory().constructCollectionType(List.class, CookingDto.class);
+		List<CookingDto> cookingList = objectMapper.readValue(cookingsNode.toString(), collectionTypeC);
+		System.out.println(cookingList);
+		CookingDto cooking;
+		for(int i = 1; i <= cookingList.size(); i++) {
+			//필요하면 과정 번호 넣는거 추가
+			//레시피 id 셋팅
+			cooking = cookingList.get(i-1);
+			cooking.setRecipeId(recipeId);
+			recipeService.writeCooking(cookingList.get(i-1));
+		}
+		
+		return new ResponseEntity<String>(result, HttpStatus.OK);
+	}
+	
 	@ApiOperation(value = "레시피 기본정보, 재료 등록하기", response = Integer.class)
 	@PostMapping(value = "/add/recipe")
 	public ResponseEntity<String> addRecipeDetail(@RequestBody String params) throws Exception {
@@ -295,6 +357,28 @@ public class RecipeController {
 		}
 		
 		return new ResponseEntity<List<RecipeDto>>(result, HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "레시피 삭제", response = String.class)
+	@DeleteMapping(value = "/delete/recipe/{recipeId}")
+	public ResponseEntity<String> deleteRecipe(@PathVariable String recipeId) throws Exception {
+		
+		int recipe_result = 0;
+		int cooking_result = 0;
+		int irdnt_result = 0;
+		
+		try {
+			recipe_result = recipeService.deleteRecipe(recipeId);
+			cooking_result = recipeService.deleteRecipeCooking(recipeId);
+			irdnt_result = recipeService.deleteRecipeIrdnt(recipeId);
+		} catch(Exception e) {
+			System.out.println(e.getMessage());
+		}
+		
+		if(recipe_result == 0) return new ResponseEntity<String>(FAIL, HttpStatus.NOT_FOUND);
+		else if(cooking_result == 0) return new ResponseEntity<String>(FAIL, HttpStatus.NOT_FOUND);
+		else if(irdnt_result == 0) return new ResponseEntity<String>(FAIL, HttpStatus.NOT_FOUND);
+		else return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
 	}
 	
 }
