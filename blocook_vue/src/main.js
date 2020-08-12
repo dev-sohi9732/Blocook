@@ -19,6 +19,9 @@ import { faUserSecret } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import * as TastyBurgerButton from 'vue-tasty-burgers';
 
+import VueSpeech from 'vue-speech'
+Vue.use(VueSpeech)
+
 Vue.use(Antd);
 Vue.use(BootstrapVue);
 Vue.use(TastyBurgerButton);
