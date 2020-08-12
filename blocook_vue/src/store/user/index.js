@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import router from '@/router'
 import http from '@/util/http-common.js'
-
+import createPersistedState from 'vuex-persistedstate';
 Vue.use(Vuex)
 
 export default {
@@ -60,4 +60,7 @@ export default {
   getters: {
     user: state => state,
   },
+  plugins: [
+    createPersistedState()
+  ]
 }
