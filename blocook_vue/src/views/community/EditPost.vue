@@ -1,15 +1,15 @@
 <template>
 <div style="margin-top:90px;">
     <center>
-    <h2>NEW Post</h2>
+    <h2>Edit Post</h2>
     <hr>
     </center>
   <form>
     <span style="color:rgba(0,0,0,.600); margin-left:5px; font-size:1.5rem; font-weight:bold;">Title: </span>
-    <input v-model="title" style="width:250px; border-radius:4px; border:3px rgba(0,0,0,.125) solid; margin-bottom:5px;" placeholder="제목을 입력해주세요.">
-    <ckeditor v-model="editorData" :config="editorConfig"></ckeditor>
+    <input v-model="Epost.title"  style="width:250px; border-radius:4px; border:3px rgba(0,0,0,.125) solid; margin-bottom:5px;" placeholder="제목을 입력해주세요.">
+    <ckeditor v-model="Epost.content" :config="editorConfig"></ckeditor>
     <center>
-        <button @click.prevent="Posting()" class="successpost" style="margin-top:10px;">완료</button>
+        <button @click.prevent="Editing()" class="successpost" style="margin-top:10px;">수정완료</button>
     </center>
   </form>
 </div>
@@ -22,6 +22,7 @@ export default {
     return {
         title: null,
         content: null,
+        Epost:[],
         editorData: '',
         editorConfig: {
             toolbarGroups: [
@@ -46,21 +47,33 @@ export default {
     }
   },
   methods: {
-      Posting() {
-          http.post('/posts/write', {
-            "uid": this.$store.state.user.uid,
-            "nickname": this.$store.state.user.nickname,
-            "title" : this.title,
-            "content" : this.editorData
-          })
-          .then(res => {
-            console.log(res.data)
-            alert("글이 등록 완료되었습니다.");
-            this.$router.push('/community').catch(()=>{});
-          })
-          .catch(err => console.log('err!!'))
+      Editing() {
+          let post = {
+              id : this.Epost.id,
+              title : this.Epost.title,
+              content : this.Epost.content 
+          };
+          http
+            .put('/posts/update', post)
+            .then(res => {
+                console.log(res);
+                console.log(res.data)
+                alert("글이 수정 완료되었습니다.");
+                this.$router.push('/community');
+            })
+            .catch(err => console.log('err!!'))
       }
   },
+  created() {
+      const params = new URL(document.location).searchParams;
+      http.get(`/posts/${params.get('Id')}`)
+      .then(res => {
+          console.log(res.data)
+          this.Epost = res.data
+      })
+      .catch(err => console.log('errrr'))
+  },
+  
   mounted() {
   }
 }

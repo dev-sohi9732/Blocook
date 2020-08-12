@@ -27,6 +27,11 @@ Vue.use(VueRouter)
     component: () => import('../views/community/Post.vue')
   },
   {
+    path: '/editpost',
+    name: 'EditPost',
+    component: () => import('../views/community/EditPost.vue')
+  },
+  {
     path: '/detailpost',
     name: 'DetailPost',
     component: () => import('../views/community/DetailPost.vue')
