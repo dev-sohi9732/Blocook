@@ -115,6 +115,9 @@
 				<span class="sr-only">Next</span>
 			</a>
 		</div>
+
+		<button class="button btn" @click="record">음성인식</button>
+		<button class="button btn" @click="recordresult">인식결과</button>
 	</div>
 </template>
 <script>
@@ -129,12 +132,14 @@ export default {
 	},
 	data() {
 		return {
-		title: "recipe page",
-		recipe: [],
-		irdnts: [],
-		cookings: [],
-		bookmarkCnt: 0,
-		like: false,
+			title: "recipe page",
+			recipe: [],
+			irdnts: [],
+			cookings: [],
+			bookmarkCnt: 0,
+			like: false,
+
+			say: ""
 		};
 	},
 	created() {
@@ -210,6 +215,20 @@ export default {
 				alert('처리 실패하였습니다.')
 				console.log(error)
 			})
+		},
+		record() {
+			var speechRecognition = new webkitSpeechRecognition();
+			speechRecognition.onresult = function(event) {
+				console.log(event.results[0][0].transcript);
+				console.log(typeof(event.results[0][0].transcript));
+				this.say = event.results[0][0].transcript;
+			};
+			speechRecognition.start();
+		},
+		recordresult() {
+			alert(this.say);
+			console.log(typeof(this.say));
+			console.log(this.say);
 		}
 	}
 }
