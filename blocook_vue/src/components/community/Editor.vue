@@ -7,9 +7,9 @@
   <form>
     <span style="color:rgba(0,0,0,.600); margin-left:5px; font-size:1.5rem; font-weight:bold;">Title: </span>
     <input v-model="title" style="width:250px; border-radius:4px; border:3px rgba(0,0,0,.125) solid; margin-bottom:5px;" placeholder="제목을 입력해주세요.">
-    <textarea v-model="content" style="" id="summernote" name="editordata"></textarea>
+    <ckeditor v-model="editorData" :config="editorConfig"></ckeditor>
     <center>
-        <button @click="Posting" class="successpost" style="margin-top:10px;">완료</button>
+        <button @click.prevent="Posting()" class="successpost" style="margin-top:10px;">완료</button>
     </center>
   </form>
 </div>
@@ -22,45 +22,46 @@ export default {
     return {
         title: null,
         content: null,
-    };
+        editorData: '',
+        editorConfig: {
+            toolbarGroups: [
+              { name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
+              { name: 'clipboard', groups: [ 'clipboard', 'undo' ] },
+              { name: 'editing', groups: [ 'find', 'selection', 'spellchecker', 'editing' ] },
+              { name: 'forms', groups: [ 'forms' ] },
+              { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
+              { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi', 'paragraph' ] },
+              { name: 'links', groups: [ 'links' ] },
+              { name: 'insert', groups: [ 'insert' ] },
+              '/',
+              { name: 'styles', groups: [ 'styles' ] },
+              { name: 'colors', groups: [ 'colors' ] },
+              { name: 'tools', groups: [ 'tools' ] },
+              { name: 'others', groups: [ 'others' ] },
+              { name: 'about', groups: [ 'about' ] }
+            ],
+            removeButtons : 'Flash,Iframe,PageBreak,Source,Save,Templates,NewPage,Print,Preview,Cut,Copy,Paste,PasteText,PasteFromWord,Undo,Redo,Find,Replace,SelectAll,Scayt,Form,HiddenField,ImageButton,Button,Select,Textarea,TextField,Checkbox,Radio,Subscript,Superscript,CopyFormatting,RemoveFormat,CreateDiv,Language,BidiRtl,BidiLtr,Link,Anchor,Unlink,Maximize,ShowBlocks,Blockquote,Outdent,Indent,About'
+
+      }
+    }
   },
   methods: {
       Posting() {
-          // var editordata = $('textarea[name="editordata"]').html($('#summernote').code());
-          // this.content = editordata
-          // editordata=$('.summernote').summernote('code');
-          // this.content ='act=save&content='+editordata
           http.post('/posts/write', {
             "uid": this.$store.state.user.uid,
             "nickname": this.$store.state.user.nickname,
             "title" : this.title,
-            "content" : this.content
+            "content" : this.editorData
           })
-          // $('textarea[name="editordata"]').html($('#summernote').code());
-          // .val($('#summernote').summernote('code'))
           .then(res => {
             console.log(res.data)
             alert("글이 등록 완료되었습니다.");
-            this.$router.push('/community')
+            this.$router.push('/community').catch(()=>{});
           })
           .catch(err => console.log('err!!'))
       }
   },
   mounted() {
-    
-    $('#summernote').summernote({
-        placeholder: '내용을 입력해주세요.',
-        tabsize: 2,
-        minHeight: 250,
-        lang:'ko-KR',
-        toolbar: [
-            ['color', ['color']],
-            ['style',['style']],
-            ['para', ['paragraph']],
-            ['font', ['bold', 'underline', 'clear']],
-            ['insert', ['picture']],
-        ]
-    });
   }
 }
 </script>

@@ -18,7 +18,8 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { faUserSecret } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import * as TastyBurgerButton from 'vue-tasty-burgers';
-
+import CKEditor from 'ckeditor4-vue';
+Vue.use(CKEditor);
 Vue.use(Antd);
 Vue.use(BootstrapVue);
 Vue.use(TastyBurgerButton);
