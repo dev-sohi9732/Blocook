@@ -33,7 +33,7 @@ public class CommentController {
 	@Autowired
 	private CommentService commentService;
 	
-	@ApiOperation(value = "포스트 아이디로 포스트들 검색", response = List.class)
+	@ApiOperation(value = "포스트 아이디로 댓글들 검색", response = List.class)
 	@GetMapping(value = "/search/postid/{postId}")
 	public ResponseEntity<List<CommentDto>> searchByPostId(@PathVariable String postId) throws Exception {
 		List<CommentDto> result = commentService.searchByPostId(postId);
