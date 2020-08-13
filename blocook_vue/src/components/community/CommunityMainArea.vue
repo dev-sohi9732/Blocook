@@ -1,18 +1,25 @@
 <template>
 	<center class="area">
 		<div class="community">
-			<select>
+			<select v-model="selected">
 				<!-- v-model="option" -->
 				<!-- v-on:change="filter" -->
+				<option disabled value="">선택</option>
 				<option value="title">제목</option>
-				<option value="content">내용</option>
+				<!-- <option value="content">내용</option> -->
 				<option value="writer">작성자</option>
 			</select>
-			<form class="s-form">
-				<input type="text">
-				<!-- v-model="search" -->
-				<!-- v-on:keyup="filter" -->
-				<button><i class="fa fa-search"></i></button>
+			<!-- <form v-if="selected=='content'" class="s-form">
+				<input v-model="query" class="title-input" type="text">
+				<button @click.prevent="searchcontent()"><i class="fa fa-search"></i></button>
+			</form> -->
+			<form v-if="selected=='writer'" class="s-form">
+				<input v-model="query" class="title-input" type="text">
+				<button @click.prevent="searchwriter()"><i class="fa fa-search"></i></button>
+			</form>
+			<form v-else class="s-form">
+				<input v-model="query" class="title-input" type="text">
+				<button @click.prevent="searchposttitle()"><i class="fa fa-search"></i></button>
 			</form>
 		</div>
 
@@ -49,6 +56,7 @@
 			</tbody>
 			</table>
 		</div>
+		<a style="display:scroll;position:fixed;bottom:12px;right:12px;" href="#" title="맨 위로"><img style="width:45px; height:45px; opacity: 0.5;" src="@/../src/assets/img/top.png"></a> 
 	</center>
 </template>
 
@@ -57,7 +65,9 @@ import http from "@/util/http-common.js";
 export default {
 	data() {
 	  return {
-		articles: []
+		selected: '',
+		articles: [],
+		query:''
 	  }
 	},
 	methods: {
@@ -66,6 +76,36 @@ export default {
 		},
 		moveToMyPost() {
 			this.$router.push('/mypost')
+		},
+		searchposttitle() {
+			if (this.query== "")
+				alert("검색어를 입력해주세요.");
+			else
+				this.$router.push("/community?title=" + this.query ).catch(()=>{});
+				
+				const params = new URL(document.location).searchParams;
+				http.get(`/posts/search/title/${params.get('title')}`)
+					.then(response => {
+					this.articles = response.data
+					})
+					.catch(error => {
+					console.log(error)
+					})
+		},
+		searchwriter() {
+			if (this.query== "")
+				alert("검색어를 입력해주세요.");
+			else
+				this.$router.push("/community?writer=" + this.query ).catch(()=>{});
+				
+				const params = new URL(document.location).searchParams;
+				http.get(`/posts/search/nickname/${params.get('writer')}`)
+					.then(response => {
+					this.articles = response.data
+					})
+					.catch(error => {
+					console.log(error)
+					})
 		},
 	},
 	created() {
@@ -132,4 +172,5 @@ td {
 .area {
 	margin-top: 10px;
 }
+
 </style>
