@@ -80,6 +80,7 @@
                 </div>
             </div>
         </div>
+        <a style="display:scroll;position:fixed;bottom:12px;right:12px;" href="#" title="맨 위로"><img style="width:45px; height:45px; opacity: 0.5;" src="@/../src/assets/img/top.png"></a> 
     </center>
 </template>
 
