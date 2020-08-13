@@ -7,7 +7,7 @@ public class CommentDto {
 	public int uid;
 	public int postId;
 	public String content;
-	public LocalDateTime create_date;
+	public LocalDateTime createDate;
 	public String nickname;
 	
 	public int getId() {
@@ -35,11 +35,12 @@ public class CommentDto {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public LocalDateTime getCreate_date() {
-		return create_date;
+	
+	public LocalDateTime getCreateDate() {
+		return createDate;
 	}
-	public void setCreate_date(LocalDateTime create_date) {
-		this.create_date = create_date;
+	public void setCreateDate(LocalDateTime createDate) {
+		this.createDate = createDate;
 	}
 	public String getNickname() {
 		return nickname;
@@ -49,10 +50,8 @@ public class CommentDto {
 	}
 	@Override
 	public String toString() {
-		return "CommentDto [id=" + id + ", uid=" + uid + ", postId=" + postId + ", content=" + content
-				+ ", create_date=" + create_date + ", nickname=" + nickname + "]";
+		return "CommentDto [id=" + id + ", uid=" + uid + ", postId=" + postId + ", content=" + content + ", createDate="
+				+ createDate + ", nickname=" + nickname + "]";
 	}
-	
-	
 	
 }
