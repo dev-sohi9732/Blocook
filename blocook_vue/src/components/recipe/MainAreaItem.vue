@@ -36,6 +36,11 @@ export default {
 				console.dir(error);
 			});
     },
+    computed : {
+        imgUrl() {
+            return this.recipe.imgUrl
+        },
+    },
 }
 </script>
 

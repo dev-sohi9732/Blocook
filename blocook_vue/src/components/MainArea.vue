@@ -20,7 +20,7 @@
 			<img class="recipebook" src="@/assets/img/recipeicon.png">
 		</div>
 		<div id="carouselExampleInterval" class="carousel slide" data-ride="carousel">
-			<div class="carousel-inner">
+			<div  v-if="recipes.length" class="carousel-inner">
 				<div class="carousel-item active" data-interval="10000">
 					<center>
 						<div class="container">
@@ -181,6 +181,7 @@ export default {
 	  sliding: null,
 	  multi: [],
 	  likeCnt: [],
+
     };
   },
   created() {
@@ -214,15 +215,20 @@ export default {
 		});
 
     http.get('/recipes/search/irdnts/소금')
-    .then((response) => {
-	  this.recipes = response.data;
+    .then(({data}) => {
+	  this.recipes = data;
     })
     .catch((error) => {
         alert('검색 결과 요청에 실패하였습니다.')
         console.log(error)
     })  
   },
-  mounted() {
+  computed : {
+        imgUrl() {
+            return this.recipe.imgUrl
+        },
+	},
+  updated() {
   },
   watch: {
   },
