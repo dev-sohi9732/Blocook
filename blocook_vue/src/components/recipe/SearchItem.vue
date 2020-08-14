@@ -1,13 +1,13 @@
 <template>
-    <div class="card" style=" width: 160px;">
+    <div class="card" id="scard" style=" width: 160px;">
         <center class="foodimg">
-            <img :src="recipe.imgUrl" class="card-img-top" alt="..." style="width:140px;">
+            <img :src="recipe.imgUrl" id="scard_img" class="card-img-top" alt="..." style="width:140px;">
         </center>
-        <div class="card-body" style="padding:5px;">
-            <h5 class="card-title" style="margin-bottom:0px;">{{ recipe.recipeNmKo }}</h5>
+        <div class="card-body" id="scard_body" style="padding:5px;">
+            <h5 class="card-title" id="scard_title" style="margin-bottom:0px;">{{ recipe.recipeNmKo }}</h5>
             <i class="fa fa-apple" style="font-size:0.8rem; margin-right: 10px;">&nbsp; {{recipe.calorie}}kcal </i>
             <span style="font-size:0.8rem;"><i class="fa fa-heart" style="color:red;font-weight:bold;"></i>&nbsp; {{ likeCnt }}</span>
-            <p class="card-text">{{ recipe.sumry }}</p>
+            <p class="card-text" id="scard_text">{{ recipe.sumry }}</p>
             <center class="recipebook">
                 <router-link :to="'recipe?Id=' +recipe.recipeId" class="btn" style="width:150px; background-color:#B3D662;">레시피&nbsp;<img src="@/assets/img/recipeicon.png"></router-link>
             </center>
@@ -57,25 +57,24 @@ export default {
 	width: 120px;
 	height: 120px;
 }
-.card {
+#scard {
 	height: 296px;
 	margin-bottom: 9px;
 }
-.card-body {
+#scard_body {
 	/* height: 200px; */
 	/* display: inline-block;   */
 	/* // inline-block으로 설정 필요 */
 }
-.card-title {
+#scard_title {
   height: 22px;
   background-image: url("../../assets/img/highlight.png");
 	background-size: 85%;
 	background-repeat: no-repeat;
 }
-.card-text {
+#scard_text {
 	height: 80px;
 	width: 140px;
-	
 	overflow: hidden;
 	text-overflow: ellipsis;
 	display: -webkit-box;
