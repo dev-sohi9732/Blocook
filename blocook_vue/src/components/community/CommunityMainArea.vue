@@ -24,9 +24,10 @@
 		</div>
 
 		<div>
-			<select class="sorting">
+			<select v-model="sorting" class="sorting">
 				<!-- v-model="option" -->
 				<!-- v-on:change="filter" -->
+				<!-- <option disabled value="">순서</option> -->
 				<option value="new">최신순</option>
 				<option value="see">조회순</option>
 				<option value="like">좋아요순</option>
@@ -40,20 +41,42 @@
 
 		<div class="posts">
 			<table>
-				<tbody>
-				<tr v-for="(post, index) in articles" :key="index + '_items'" >
-					<td>
-						<!-- :to="'detailpost?Id=' +post.id" -->
-						<router-link :to="'detailpost?Id=' +post.id">{{post.title}}</router-link>
-						<div class="info"><span>{{post.nickname}}</span>&emsp;<span>{{post.createDate}}</span></div>
-					</td>
-					<td class="heart">
-						<div><i class="fa fa-eye"></i>&nbsp;{{post.view_cnt}}</div>
-						<div><i class="fa fa-heart" style="color:red;"></i>&nbsp;15</div>
-						<div><i class="fa fa-comment-o"></i>&nbsp;4</div>
-					</td>
-				</tr>
-			</tbody>
+				<tbody v-if="sorting=='see'">
+					<tr v-for="(post, index) in articles" :key="index + '_items'" >
+						<td>
+							<!-- :to="'detailpost?Id=' +post.id" -->
+							<router-link :to="'detailpost?Id=' +post.id">{{post.title}}</router-link>
+							<div class="info"><span>{{post.nickname}}</span>&emsp;<span>{{post.createDate}}</span></div>
+						</td>
+						<td class="heart">
+							<CommunityItem :post="post"/>
+						</td>
+					</tr>
+				</tbody>
+				<tbody v-else-if="sorting=='like'">
+					<tr v-for="(post, index) in articles" :key="index + '_items'" >
+						<td>
+							<!-- :to="'detailpost?Id=' +post.id" -->
+							<router-link :to="'detailpost?Id=' +post.id">{{post.title}}</router-link>
+							<div class="info"><span>{{post.nickname}}</span>&emsp;<span>{{post.createDate}}</span></div>
+						</td>
+						<td class="heart">
+							<CommunityItem :post="post"/>
+						</td>
+					</tr>
+				</tbody>
+				<tbody v-else>
+					<tr v-for="(post, index) in newPosts" :key="index + '_items'" >
+						<td>
+							<!-- :to="'detailpost?Id=' +post.id" -->
+							<router-link :to="'detailpost?Id=' +post.id">{{post.title}}</router-link>
+							<div class="info"><span>{{post.nickname}}</span>&emsp;<span>{{post.createDate}}</span></div>
+						</td>
+						<td class="heart">
+							<CommunityItem :post="post"/>
+						</td>
+					</tr>
+				</tbody>
 			</table>
 		</div>
 		<a style="display:scroll;position:fixed;bottom:12px;right:12px;" href="#" title="맨 위로"><img style="width:45px; height:45px; opacity: 0.5;" src="@/../src/assets/img/top.png"></a> 
@@ -62,14 +85,21 @@
 
 <script>
 import http from "@/util/http-common.js";
+import CommunityItem from "@/components/community/CommunityItem.vue"
+import VueLodash from 'vue-lodash'
+import lodash from 'lodash'
 export default {
 	data() {
 	  return {
 		selected: '',
 		articles: [],
-		query:''
+		query:'',
+		sorting:'new',
 	  }
 	},
+	components: {
+        CommunityItem,
+    },
 	methods: {
 		moveToNewPost() {
 			this.$router.push('/post')
@@ -116,6 +146,11 @@ export default {
 			.catch(err => {
 				console.log("error!!!")
 			})
+	},
+	computed: {
+		newPosts() {
+			return _.orderBy(this.articles, 'createDate','desc')
+		}
 	}
 }
 </script>
