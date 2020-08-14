@@ -31,11 +31,7 @@
 						<table>
 						<tbody>
 							<tr v-for="(comment, index) in comments" :key="index + '_comments'">
-								<td>
-									<router-link :to="'detailpost?Id=' +comment.postId" class="title">{{ comment.content}}</router-link>
-									<p style="font-weight:bold;font-size:0.8rem;color:gray;">댓글을 쓴 포스트 제목</p>
-									<div class="info"><span>{{comment.createDate}}</span></div>
-								</td>
+								<MyPostCommentItem :comment="comment" />
 							</tr>
 						</tbody>
 						</table>
@@ -49,14 +45,17 @@
 
 <script>
 import http from "@/util/http-common.js";
+import MyPostCommentItem from "@/components/community/MyPostCommentItem.vue"
 export default {
 	data() {
 		return {
 			posts: [],
 			comments: [],
 			article: [],
-			commentpost: [],
 		}
+	},
+	components: {
+		MyPostCommentItem
 	},
 	methods: {
 		moveToNewPost() {
@@ -74,20 +73,19 @@ export default {
 		http.get(`/comments/search/uid/${this.$store.state.user.uid}`)
 			.then(res => {
 				this.comments = res.data
-				for (var i=0 ;i<this.comments.length; i++ ) {
-					http.get(`posts/${this.comments[i].postId}`)
-					.then(res => {
-						this.commentpost.push(res.data)
-					})
-					.catch(err => {
-						console.log("error!!!")
-			})
-		}
+				// for (var i=0 ;i<this.comments.length; i++ ) {
+				// 	http.get(`posts/${this.comments[i].postId}`)
+				// 	.then(res => {
+				// 		this.commentpost.push(res.data.title)
+				// 	})
+				// 	.catch(err => {
+				// 		console.log("error!!!")
+		// 	})
+		// }
 			})
 			.catch(err => {
 				console.log("error!!!")
 			})
-		console.log(this.commentpost)
 	},
 }
 </script>
