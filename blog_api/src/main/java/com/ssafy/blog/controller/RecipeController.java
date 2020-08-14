@@ -31,8 +31,6 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 @RequestMapping("/recipes")
 public class RecipeController {
-
-	private static final String baseDir = "C:" + File.separator + "Temp";
 	
 	private static final String SUCCESS = "success";
 	private static final String FAIL = "fail";

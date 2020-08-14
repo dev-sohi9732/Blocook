@@ -44,7 +44,6 @@
 								<th class="list">
 									<h6>주재료</h6>
 								</th>
-								
 								<td v-for="(irdnt,irdnt_key) in irdnts" :key="irdnt_key" v-if="irdnt.irdntTyNm.indexOf('주재료')>-1" style="display:inline;" > 
 									{{irdnt.irdntNm}}
 									<span style="font-size:0.8em;">({{irdnt.irdntCpcty}})</span>
@@ -78,10 +77,7 @@
 						<center class="menu">
 							<h5 style="margin-top: 20px;">Step {{ cookings.indexOf(cooking) + 1 }}</h5>
 							<br>
-							<div v-if="cooking.streStepImageUrl.length < 5">
-								<img src="@/assets/img/addimage.jpg">
-							</div>
-							<div v-else>
+							<div>
 								<img :src="cooking.streStepImageUrl">
 							</div>
 						</center>
@@ -91,11 +87,6 @@
 								<tr>
 									<td>
 										{{cooking.cookingDc}}
-									</td>
-								</tr>
-								<tr>
-									<td v-if="cooking.stepTip.length >3">
-										Tip!! {{cooking.stepTip}}
 									</td>
 								</tr>
 							</tbody>
@@ -166,14 +157,14 @@ export default {
 				}
 			})
 			.catch(error => {
-			console.log(error)
+				console.log(error)
 			})
 		http.get(`/recipes/${params.get('Id')}/irdnts`)
 			.then(res => {
-			this.irdnts = res.data
+				this.irdnts = res.data
 			})
 			.catch(err => {
-			console.log(err)
+				console.log(err)
 			})
 		http.get(`/recipes/${params.get('Id')}/cookings`)
 		.then(res => {
@@ -251,7 +242,7 @@ h1, h4, h5, h6 {
 	margin-bottom: 10px;
 }
 th {
-	width: 21%;
+	width: 22%;
 	text-align: left;
 	vertical-align: top;
 }

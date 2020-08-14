@@ -17,6 +17,7 @@
     "bootstrap-vue": "^2.16.0",
     "ckeditor4-vue": "^1.0.1",
     "core-js": "^3.6.5",
+    "firebase": "^7.18.0",
     "jquery": "^3.5.1",
     "lodash": "^4.17.19",
     "vue": "^2.6.11",
