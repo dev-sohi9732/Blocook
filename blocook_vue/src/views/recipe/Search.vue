@@ -19,9 +19,9 @@
             <select class="sorting" v-model="sorting">
               <!-- v-model="option" -->
               <!-- v-on:change="filter" -->
-              <option disabled value="">정렬방법</option>
-              <option value="calorie">칼로리순</option>
+              <!-- <option disabled value="">정렬방법</option> -->
               <option value="see">정확도순</option>
+              <option value="calorie">칼로리순</option>
               <option value="like">좋아요순</option>
             </select>
         </div>
@@ -29,83 +29,54 @@
             <div class="container" style="margin-top:40px;">
                 <div class="row" v-if="sorting=='see'">
                     <div v-for="(recipe, index) in recipes" :key="index + '_items'" class="col-6" style="padding:0px;">
-                        <div class="card" style=" width: 160px;">
-                            <center class="foodimg">
-                                <img :src="recipe.imgUrl" class="card-img-top" alt="..." style="width:140px;">
-                            </center>
-                            <div class="card-body" style="padding:5px;">
-                                <h5 class="card-title" style="margin-bottom:0px;">{{ recipe.recipeNmKo }}</h5>
-                                <i class="fa fa-apple" style="font-size:0.8rem; margin-right: 10px;">&nbsp; {{recipe.calorie}}kcal </i>
-                                <p class="card-text">{{ recipe.sumry }}</p>
-                                <center class="recipebook">
-                                    <router-link :to="'recipe?Id=' +recipe.recipeId" class="btn" style="width:150px; background-color:#B3D662;">레시피&nbsp;<img src="@/assets/img/recipeicon.png"></router-link>
-                                </center>
-                            </div>
-                        </div>
+                        <SearchItem :recipe="recipe" />
                     </div>
                 </div>
                 <div class="row" v-else-if="sorting=='calorie'">
                     <div v-for="(recipe, index) in sortcalories" :key="index + '_items'" class="col-6" style="padding:0px;">
-                        <div class="card" style=" width: 160px;">
-                            <center class="foodimg">
-                                <img :src="recipe.imgUrl" class="card-img-top" alt="..." style="width:140px;">
-                            </center>
-                            <div class="card-body" style="padding:5px;">
-                                <h5 class="card-title" style="margin-bottom:0px;">{{ recipe.recipeNmKo }}</h5>
-                                <i class="fa fa-apple" style="font-size:0.8rem; margin-right: 10px;">&nbsp; {{recipe.calorie}}kcal </i>
-                                <p class="card-text">{{ recipe.sumry }}</p>
-                                <center class="recipebook">
-                                    <router-link :to="'recipe?Id=' +recipe.recipeId" class="btn" style="width:150px; background-color:#B3D662;">레시피&nbsp;<img src="@/assets/img/recipeicon.png"></router-link>
-                                </center>
-                            </div>
-                        </div>
+                        <SearchItem :recipe="recipe" />
                     </div>
                 </div>
                 <div class="row" v-else>
                     <div v-for="(recipe, index) in recipes" :key="index + '_items'" class="col-6" style="padding:0px;">
-                        <div class="card" style=" width: 160px;">
-                            <center class="foodimg">
-                                <img :src="recipe.imgUrl" class="card-img-top" alt="..." style="width:140px;">
-                            </center>
-                            <div class="card-body" style="padding:5px;">
-                                <h5 class="card-title" style="margin-bottom:0px;">{{ recipe.recipeNmKo }}</h5>
-                                <i class="fa fa-apple" style="font-size:0.8rem; margin-right: 10px;">&nbsp; {{recipe.calorie}}kcal </i>
-                                <p class="card-text">{{ recipe.sumry }}</p>
-                                <center class="recipebook">
-                                    <router-link :to="'recipe?Id=' +recipe.recipeId" class="btn" style="width:150px; background-color:#B3D662;">레시피&nbsp;<img src="@/assets/img/recipeicon.png"></router-link>
-                                </center>
-                            </div>
-                        </div>
+                        <SearchItem :recipe="recipe" />
                     </div>
                 </div>
             </div>
         </div>
+        <a style="display:scroll;position:fixed;bottom:12px;right:12px;" href="#" title="맨 위로"><img style="width:45px; height:45px; opacity: 0.5;" src="@/../src/assets/img/top.png"></a> 
     </center>
 </template>
 
 <script>
 import http from "@/util/http-common.js";
 import Multiselect from 'vue-multiselect'
+import SearchItem from "@/components/recipe/SearchItem.vue"
 import VueLodash from 'vue-lodash'
 import lodash from 'lodash'
 export default {
   components: {
-    Multiselect
+    Multiselect,
+    SearchItem,
   },
   data() {
       return {
-        selected:'',
+        selected:'recipe_nm',
         recipes: [],
         irdnts: [],
         query:'',
         multi:[],
-        sorting:'',
+        sorting:'see',
       }
     },
   computed: {
     sortcalories: function () {
         return _.sortBy(this.recipes, 'calorie')
-    }
+    },
+    // sortlikes: function () {
+    //     return _.sortBy(this.recipes, 'likeCnt')
+    // }
+    
   },
   methods: {
     searchtitle() {
@@ -208,7 +179,7 @@ export default {
 	margin-bottom: 9px;
 }
 .card-body {
-	height: 200px;
+	/* height: 200px; */
 	/* display: inline-block;   */
 	/* // inline-block으로 설정 필요 */
 }

@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <select class="sorting" v-model="sorting">
-            <option disabled value="">정렬방법</option>
+            <!-- <option disabled value="">정렬방법</option> -->
             <option value="calorie">칼로리순</option>
             <option value="like">좋아요순</option>
         </select>
@@ -23,7 +23,7 @@ export default {
     data() {
       return {
         recipelist:[],
-        sorting:''
+        sorting:'calorie'
       }
     },
     components: {
