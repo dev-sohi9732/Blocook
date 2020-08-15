@@ -6,9 +6,15 @@
 				<b-tab title="레시피 기본 정보" active>
 					<b-card-text>
             <center class="menu">
-              <img src="@/assets/img/addimage.jpg">
+              <input type="file" @change="previewGibonImage" accept="image/*" style="width:223px;">
+              <img :src="gibonpicture.picture">
               <div>
-                <button class="button btn" style="width:190px;">대표 이미지 등록&nbsp;<i class="fa fa-camera"></i></button>
+                <p style="margin-top:15px;">Uploading : {{gibonpicture.uploadValue.toFixed() + "%"}}
+                  <progress :value="gibonpicture.uploadValue" max="100"></progress>
+                </p>
+                <button class="button btn" @click="onUploadGibon" style="width:185px;">
+                  대표 이미지 등록&nbsp;<i class="fa fa-camera"></i>
+                </button>
               </div>
             </center>
 
@@ -77,7 +83,7 @@
                 </tr>
                 <tr>
                   <th>
-                    <h6>양념</h6>
+                    <h6>양념</h6><h6 style="color:rgb(91, 183, 251);">(선택)</h6>
                   </th>
                   <td>
                     <b-form-input v-model="seasoningirdnt" list="my-list-id" size="sm" placeholder="양념"></b-form-input>
@@ -103,8 +109,7 @@
                 </tr>
                 <tr>
                   <th>
-                    <h6>레시피</h6>
-                    <h6>개요</h6>
+                    <h6>레시피</h6><h6>개요</h6>
                   </th>
                   <td colspan="3">
                     <b-form-textarea
@@ -123,52 +128,28 @@
               <table>
               <tbody>
                 <tr>
-                  <th>
-                    <h6 style="margin-bottom: 8px;">카테고리</h6>
-                  </th>
-                  <th>
-                    <h6 style="margin-bottom: 8px;">종류</h6>
-                  </th>
+                  <th><h6 style="margin-bottom: 8px;">카테고리</h6></th>
+                  <th><h6 style="margin-bottom: 8px;">종류</h6></th>
                 </tr>
                 <tr class="shortbox">
-                  <td>
-                    <b-form-select v-model="selectedcat" :options="categories" size="sm"></b-form-select>
-                  </td>
-                  <td>
-                    <b-form-select v-model="selectedty" :options="options" size="sm"></b-form-select>
-                  </td>
+                  <td><b-form-select v-model="selectedcat" :options="categories" size="sm"></b-form-select></td>
+                  <td><b-form-select v-model="selectedty" :options="options" size="sm"></b-form-select></td>
                 </tr>
                 <tr>
-                  <th>
-                    <h6 style="margin-bottom: 8px;">소요 시간(분)</h6>
-                  </th>
-                  <th>
-                    <h6 style="margin-bottom: 8px;">칼로리(kcal)</h6>
-                  </th>
+                  <th><h6 style="margin-bottom: 8px;">소요 시간(분)</h6></th>
+                  <th><h6 style="margin-bottom: 8px;">칼로리(kcal)</h6></th>
                 </tr>
                 <tr>
-                  <td>
-                    <b-form-input v-model="time" size="sm" type="number" min="0" placeholder="숫자만 입력"></b-form-input>
-                  </td>
-                  <td>
-                    <b-form-input v-model="kcal" size="sm" type="number" min="0" placeholder="숫자만 입력"></b-form-input>
-                  </td>
+                  <td><b-form-input v-model="time" size="sm" type="number" min="0" placeholder="숫자만 입력"></b-form-input></td>
+                  <td><b-form-input v-model="kcal" size="sm" type="number" min="0" placeholder="숫자만 입력"></b-form-input></td>
                 </tr>
                 <tr>
-                  <th>
-                    <h6 style="margin-bottom: 8px;">인분(명)</h6>
-                  </th>
-                  <th>
-                    <h6 style="margin-bottom: 8px;">난이도 : {{ level.text }}</h6>
-                  </th>
+                  <th><h6 style="margin-bottom: 8px;">인분(명)</h6></th>
+                  <th><h6 style="margin-bottom: 8px;">난이도 : {{ level.text }}</h6></th>
                 </tr>
                 <tr>
-                  <td>
-                    <b-form-input v-model="person" size="sm" type="number" min="0" placeholder="숫자만 입력"></b-form-input>
-                  </td>
-                  <td>
-                    <b-form-input v-on:change="flevel" v-model="level.value" type="range" min="1" max="3"></b-form-input>
-                  </td>
+                  <td><b-form-input v-model="person" size="sm" type="number" min="0" placeholder="숫자만 입력"></b-form-input></td>
+                  <td><b-form-input v-on:change="flevel" v-model="level.value" type="range" min="1" max="3"></b-form-input></td>
                 </tr>
               </tbody>
               </table>
@@ -182,9 +163,15 @@
             <div class="step" v-for="step in steps" v-bind:key="step.cookingNo">
               <center class="menu">
                 <h5>STEP {{ steps.indexOf(step) + 1 }}</h5>
-                <img src="@/assets/img/addimage.jpg">
+                <input type="file" @change="previewCookingImage($event, steps.indexOf(step))" accept="image/*" style="width:223px;margin-top:15px;">
+                <img :src="steps[steps.indexOf(step)].streStepImageUrl">
                 <div>
-                  <button class="button btn" style="width:180px;">과정 사진 등록&nbsp;<i class="fa fa-camera"></i></button>
+                  <p style="margin-top:15px;">Uploading : {{cookingpicture[steps.indexOf(step)].uploadValue.toFixed() + "%"}}
+                    <progress :value="cookingpicture[steps.indexOf(step)].uploadValue" max="100"></progress>
+                  </p>
+                  <button class="button btn" @click="onUploadCooking(steps.indexOf(step))" style="width:185px;">
+                    과정 이미지 등록&nbsp;<i class="fa fa-camera"></i>
+                  </button>
                 </div>
               </center>
 
@@ -251,14 +238,16 @@
 
 <script>
 import http from "@/util/http-common.js";
+import firebase from 'firebase';
 
 export default {
+  name: 'addrecipe',
   data() {
     return {
       title: "addrecipe page",
       minus: false,
       steps: [
-        {cookingNo: 1, cookingDc: "", timerYN:"N", timerTime:0}
+        {cookingNo: 1, cookingDc: "", streStepImageUrl: require('@/assets/img/addimage.jpg'), timerYN: "N", timerTime: 0}
       ],
       addRecipeId: '',
 
@@ -311,10 +300,16 @@ export default {
         { value: null, text: '단위' },
         { value: 'g', text: 'g' },
 		  ],
-		  level: { value: '2', text: '보통'},
+      level: { value: '2', text: '보통'},
+      
+      //image
+      gibonpicture: {picture: require('@/assets/img/addimage.jpg'), uploaded: false, imageData: null, uploadValue: 0},
+      cookingpicture: [
+        {uploaded: false, imageData: null, uploadValue: 0}
+      ],
     }
   },
-  created(){
+  created() {
 		//재료 데이터 가져오기
 		http
 		.post("/recipes/get/irdnts")
@@ -326,6 +321,40 @@ export default {
 		});
 	},
 	methods: {
+    previewGibonImage(event) {
+			this.gibonpicture.uploadValue = 0;
+			this.gibonpicture.imageData = event.target.files[0];
+    },
+    onUploadGibon() {
+			const storageRef = firebase.storage().ref(`${this.gibonpicture.imageData.name}`).put(this.gibonpicture.imageData);
+			storageRef.on(`state_changed`, snapshot => {
+					this.gibonpicture.uploadValue = (snapshot.bytesTransferred/snapshot.totalBytes) * 100;
+				}, error => {console.log(error.message)},
+				() => {this.gibonpicture.uploadValue = 100;
+					storageRef.snapshot.ref.getDownloadURL().then((url) => {
+            this.gibonpicture.picture = url;
+            this.gibonpicture.uploaded = true;
+					});
+				}
+			);
+    },
+    previewCookingImage(event, index) {
+			this.cookingpicture[index].uploadValue = 0;
+			this.cookingpicture[index].imageData = event.target.files[0];
+    },
+    onUploadCooking(index) {
+			const storageRef = firebase.storage().ref(`${this.cookingpicture[index].imageData.name}`).put(this.cookingpicture[index].imageData);
+			storageRef.on(`state_changed`, snapshot => {
+					this.cookingpicture[index].uploadValue = (snapshot.bytesTransferred/snapshot.totalBytes) * 100;
+				}, error => {console.log(error.message)},
+				() => {this.cookingpicture[index].uploadValue = 100;
+					storageRef.snapshot.ref.getDownloadURL().then((url) => {
+            this.steps[index].streStepImageUrl = url;
+            this.cookingpicture[index].uploaded = true;
+					});
+				}
+			);
+		},
     addMainIrdnt() {
       let err = true;
       let msg = '';
@@ -362,13 +391,11 @@ export default {
     },
     addSeasoningIrdnt() {
       let err = true;
-      let msg = '';
 
-      !this.seasoningirdnt && (msg = '양념을 입력해주세요', err = false);
-      err && !this.seasoningirdnt_amount && ((msg = '양념 양을 입력해주세요'), (err = false));
+      !this.seasoningirdnt && (err = false);
+      err && !this.seasoningirdnt_amount && (err = false);
 
-      if (!err) alert(msg);
-			else {
+			if(err) {
         this.arr_seasoningirdnt.push({seasoningirdnt_nm:this.seasoningirdnt, seasoningirdnt_vol:this.seasoningirdnt_amount});
         this.seasoningirdnt = "";
         this.seasoningirdnt_amount = "";
@@ -391,7 +418,8 @@ export default {
       else if(this.steps[timerstep].timerYN == "Y") this.steps[timerstep].timerYN = "N";
 		},
     addstep() {
-			this.steps.push({cookingNo:this.steps.length + 1, cookingDc:"", timerYN:"N", timerTime:0});
+      this.cookingpicture.push({uploaded: false, imageData: null, uploadValue: 0});
+			this.steps.push({cookingNo:this.steps.length + 1, cookingDc:"", streStepImageUrl: require('@/assets/img/addimage.jpg'), timerYN:"N", timerTime:0});
 			this.minus = true;
 		},
 		removestep(rmstep) {
@@ -403,16 +431,19 @@ export default {
       let msg = '';
       
       for(var i = 0; i < this.steps.length; i++) {
-				!this.steps[i].cookingDc  && (msg = '레시피 과정 정보를 입력해주세요', err = false);
+        !this.steps[i].cookingDc && (msg = '레시피 과정 정보를 입력해주세요.', err = false);
+        !this.cookingpicture[i].uploaded && (msg = '레시피 과정 이미지를 등록해주세요.', err = false);
       }
       
-			!this.recipenm && (msg = '레시피 이름을 입력해주세요', err = false);
-			err && this.arr_mainirdnt.length == 0 && ((msg = '주재료를 입력해주세요'), (err = false));
-			err && this.arr_subirdnt.length == 0 && ((msg = '부재료를 입력해주세요'), (err = false));
-			err && this.arr_seasoningirdnt.length == 0 && ((msg = '양념 재료를 입력해주세요'), (err = false));
-			err && !this.recipedc && ((msg = '레시피 설명을 입력해주세요'), (err = false));
-			err && !this.selectedcat && ((msg = '카테고리를 선택해주세요'), (err = false));
-      err && !this.selectedty && ((msg = '종류를 선택해주세요'), (err = false));
+			!this.recipenm && (msg = '레시피 이름을 입력해주세요.', err = false);
+			err && this.arr_mainirdnt.length == 0 && ((msg = '주재료를 입력해주세요.'), (err = false));
+      err && this.arr_subirdnt.length == 0 && ((msg = '부재료를 입력해주세요.'), (err = false));
+      //양념은 입력하지 않아도 됨
+			//err && this.arr_seasoningirdnt.length == 0 && ((msg = '양념 재료를 입력해주세요.'), (err = false));
+			err && !this.recipedc && ((msg = '레시피 설명을 입력해주세요.'), (err = false));
+			err && !this.selectedcat && ((msg = '카테고리를 선택해주세요.'), (err = false));
+      err && !this.selectedty && ((msg = '종류를 선택해주세요.'), (err = false));
+      err && !this.gibonpicture.uploaded && ((msg = '대표 이미지를 등록해주세요.'), (err = false));
 
 			if (!err) alert(msg);
 			else {
@@ -440,7 +471,7 @@ export default {
         this.all_irdnts.push({
           irdntNm: this.arr_seasoningirdnt[i].seasoningirdnt_nm,
           irdntCpcty: this.arr_seasoningirdnt[i].seasoningirdnt_vol,
-          irdntTyCode: 3060001,
+          irdntTyCode: 3060003,
           irdntTyNm: '양념'
         });
       }
@@ -457,7 +488,8 @@ export default {
           calorie: this.kcal,
           qnt: this.person,
           levelNm: this.level.text,
-          userUid: this.$store.state.user.uid
+          userUid: this.$store.state.user.uid,
+          imgUrl: this.gibonpicture.picture
         },
         irdnts: this.all_irdnts
       })
@@ -523,6 +555,7 @@ th {
 }
 .inputbox td {
 	vertical-align: top;
+  text-align: left;
 }
 td {
 	vertical-align: top;
@@ -588,5 +621,8 @@ select {
 #time {
   width: 50px;
   vertical-align: bottom;
+}
+#imginput {
+  margin-top:8px;
 }
 </style>

@@ -5,6 +5,7 @@
 	<select id="selectAllRecipes" resultType="com.ssafy.blog.dto.RecipeDto">
 		SELECT *
 		FROM recipe
+		ORDER BY recipe_id DESC
 	</select>
 
 	<select id="selectByNationCode" parameterType="String" resultType="com.ssafy.blog.dto.RecipeDto">
@@ -40,6 +41,7 @@
 		SELECT * 
 		FROM recipe 
 		WHERE user_uid = #{userUid}
+		ORDER BY recipe_id DESC
 	</select>
 	
 	<select id="selectRecipeById" parameterType="String" resultType="com.ssafy.blog.dto.RecipeDto">
