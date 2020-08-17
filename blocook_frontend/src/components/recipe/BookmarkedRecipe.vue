@@ -3,7 +3,7 @@
 		<div class="container" style="padding: 30px 25px 30px 25px;">
 			<div class="row">
 				<div class="col-6" v-for="recipe in myBookmarkedRecipes" :key="recipe.recipeId">
-					<div class="card" id="recipecard">
+					<div class="card" id="recipecard" style="font-family: 'Poor Story', cursive;">
 						<img class="card-img-top" :src="recipe.imgUrl" alt="Card image cap" style="padding: 0.2rem;width: 100%;height: 150px;">
 						<div class="card-body" style="padding: 0.5rem;">
 							<h5 class="card-title" style="margin-bottom: 0.5rem;">{{ recipe.recipeNmKo }}</h5>
@@ -46,6 +46,7 @@ export default {
 </script>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding:wght@400;700&family=Poor+Story&display=swap');
 #recipecard {
   margin-bottom: 15px;
 	text-align: center;

@@ -1,247 +1,264 @@
 <template>
-  <div class="mainview">
-    <b-card no-body>
-			<b-tabs pills card>
-				<!------------------------------------------------ 레시피 기본 정보 ------------------------------------------------>
-				<b-tab title="레시피 기본 정보" active>
-					<b-card-text>
-            <center class="menu">
-              <input type="file" @change="previewGibonImage" accept="image/*" style="width:223px;">
-              <img :src="gibonpicture.picture">
-              <div>
-                <p style="margin-top:15px;">Uploading : {{gibonpicture.uploadValue.toFixed() + "%"}}
-                  <progress :value="gibonpicture.uploadValue" max="100"></progress>
-                </p>
-                <button class="button btn" @click="onUploadGibon" style="width:185px;">
-                  대표 이미지 등록&nbsp;<i class="fa fa-camera"></i>
-                </button>
-              </div>
-            </center>
+    <div class="row justify-content-center">
+        <div class="col-lg-6" style="max-width:480px;padding-right: 20px;padding-left:20px;">
+            <!-- Tabs with icons -->
+            <tabs fill class="flex-column flex-md-row">
+                <card shadow slot-scope="{activeTabIndex}">
 
-            <div class="container inputbox">
-              <table>
-              <tbody>
-                <tr>
-                  <th>
-                    <h6>레시피명</h6>
-                  </th>
-                  <td colspan="3">
-                    <b-form-input v-model="recipenm" size="sm" placeholder="레시피명 입력"></b-form-input>
-                  </td>
-                </tr>
-                <tr>
-                  <th>
-                    <h6>주재료</h6>
-                  </th>
-                  <td>
-                    <b-form-input v-model="mainirdnt" list="my-list-id" size="sm" placeholder="필수재료"></b-form-input>
-                    <datalist id="my-list-id">
-                      <option v-for="(irdnt, index) in irdnts" :key="index">{{ irdnt }}</option>
-                    </datalist>
-                  </td>
-                  <td style="width:25%;">
-                    <b-form-input v-model="mainirdnt_amount" size="sm" placeholder="양(단위)"></b-form-input>
-                  </td>
-                  <td>
-                    <button class="btn" @click="addMainIrdnt()"><i class="fa fa-plus" style="color:blue;"></i></button>
-                  </td>
-                </tr>
-                <tr v-for="(mainirdnt, i) in arr_mainirdnt" :key="i">
-                  <td></td>
-                  <td colspan="3">
-                    <p style="margin-bottom:8px;">
-                      <i class="fa fa-minus" @click="rmMainIrdnt(i)" style="color:red;"></i>
-                      &nbsp;{{ mainirdnt.mainirdnt_nm }}&nbsp;{{ mainirdnt.mainirdnt_vol }}
-                    </p>
-                  </td>
-                </tr>
-                <tr>
-                  <th>
-                    <h6>부재료</h6>
-                  </th>
-                  <td>
-                    <b-form-input v-model="subirdnt" list="my-list-id" size="sm" placeholder="선택재료"></b-form-input>
-                    <datalist id="my-list-id">
-                      <option v-for="(irdnt, index) in irdnts" :key="index">{{ irdnt }}</option>
-                    </datalist>
-                  </td>
-                  <td>
-                    <b-form-input v-model="subirdnt_amount" size="sm" placeholder="양(단위)"></b-form-input>
-                  </td>
-                  <td>
-                    <button class="btn" @click="addSubIrdnt()"><i class="fa fa-plus" style="color:blue;"></i></button>
-                  </td>
-                </tr>
-                <tr v-for="(subirdnt, i) in arr_subirdnt" :key="`A-${i}`">
-                  <td></td>
-                  <td colspan="3">
-                    <p style="margin-bottom:8px;">
-                      <i class="fa fa-minus" @click="rmSubIrdnt(`A-${i}`)" style="color:red;"></i>
-                      &nbsp;{{ subirdnt.subirdnt_nm }}&nbsp;{{ subirdnt.subirdnt_vol }}
-                    </p>
-                  </td>
-                </tr>
-                <tr>
-                  <th>
-                    <h6>양념</h6><h6 style="color:rgb(91, 183, 251);">(선택)</h6>
-                  </th>
-                  <td>
-                    <b-form-input v-model="seasoningirdnt" list="my-list-id" size="sm" placeholder="양념"></b-form-input>
-                    <datalist id="my-list-id">
-                      <option v-for="(irdnt, index) in irdnts" :key="index">{{ irdnt }}</option>
-                    </datalist>
-                  </td>
-                  <td>
-                    <b-form-input v-model="seasoningirdnt_amount" size="sm" placeholder="양(단위)"></b-form-input>
-                  </td>
-                  <td>
-                    <button class="btn" @click="addSeasoningIrdnt()"><i class="fa fa-plus" style="color:blue;"></i></button>
-                  </td>
-                </tr>
-                <tr v-for="(seasoningirdnt, i) in arr_seasoningirdnt" :key="`B-${i}`">
-                  <td></td>
-                  <td colspan="3">
-                    <p style="margin-bottom:8px;">
-                      <i class="fa fa-minus" @click="rmSeasoningIrdnt(`B-${i}`)" style="color:red;"></i>
-                      &nbsp;{{ seasoningirdnt.seasoningirdnt_nm }}&nbsp;{{ seasoningirdnt.seasoningirdnt_vol }}
-                    </p>
-                  </td>
-                </tr>
-                <tr>
-                  <th>
-                    <h6>레시피</h6><h6>개요</h6>
-                  </th>
-                  <td colspan="3">
-                    <b-form-textarea
-                      v-model="recipedc"
-                      id="textarea-small"
-                      size="sm"
-                      placeholder="레시피에 대해 간단히 설명해주세요."
-                    ></b-form-textarea>
-                  </td>
-                </tr>
-              </tbody>
-              </table>
-            </div>
+                    <!------------------------------------------------ 레시피 기본 정보 ------------------------------------------------>
+                    <tab-pane key="tab1">
+                        <template slot="title">
+                            <i class="ni ni-book-bookmark mr-2"></i>레시피 기본 정보
+                        </template>
 
-            <div class="container selectbox">
-              <table>
-              <tbody>
-                <tr>
-                  <th><h6 style="margin-bottom: 8px;">카테고리</h6></th>
-                  <th><h6 style="margin-bottom: 8px;">종류</h6></th>
-                </tr>
-                <tr class="shortbox">
-                  <td><b-form-select v-model="selectedcat" :options="categories" size="sm"></b-form-select></td>
-                  <td><b-form-select v-model="selectedty" :options="options" size="sm"></b-form-select></td>
-                </tr>
-                <tr>
-                  <th><h6 style="margin-bottom: 8px;">소요 시간(분)</h6></th>
-                  <th><h6 style="margin-bottom: 8px;">칼로리(kcal)</h6></th>
-                </tr>
-                <tr>
-                  <td><b-form-input v-model="time" size="sm" type="number" min="0" placeholder="숫자만 입력"></b-form-input></td>
-                  <td><b-form-input v-model="kcal" size="sm" type="number" min="0" placeholder="숫자만 입력"></b-form-input></td>
-                </tr>
-                <tr>
-                  <th><h6 style="margin-bottom: 8px;">인분(명)</h6></th>
-                  <th><h6 style="margin-bottom: 8px;">난이도 : {{ level.text }}</h6></th>
-                </tr>
-                <tr>
-                  <td><b-form-input v-model="person" size="sm" type="number" min="0" placeholder="숫자만 입력"></b-form-input></td>
-                  <td><b-form-input v-on:change="flevel" v-model="level.value" type="range" min="1" max="3"></b-form-input></td>
-                </tr>
-              </tbody>
-              </table>
-            </div>
-          </b-card-text>
-				</b-tab>
+                        <!-- 이미지 업로드 -->
+                        <center class="menu">
+                          <input type="file" @change="previewGibonImage" accept="image/*" style="width:223px;">
+                          <img :src="gibonpicture.picture">
+                          <div>
+                            <p style="margin-top:15px;">Uploading : {{gibonpicture.uploadValue.toFixed() + "%"}}
+                              <progress :value="gibonpicture.uploadValue" max="100"></progress>
+                            </p>
+                            <button class="button btn" @click="onUploadGibon" style="width:185px;margin-top:0px;">
+                              대표 이미지 등록&nbsp;<i class="fa fa-camera"></i>
+                            </button>
+                          </div>
+                        </center>
 
-				<!------------------------------------------------ 레시피 과정 정보 ------------------------------------------------>
-				<b-tab title="레시피 과정 정보">
-					<b-card-text>
-            <div class="step" v-for="step in steps" v-bind:key="step.cookingNo">
-              <center class="menu">
-                <h5>STEP {{ steps.indexOf(step) + 1 }}</h5>
-                <input type="file" @change="previewCookingImage($event, steps.indexOf(step))" accept="image/*" style="width:223px;margin-top:15px;">
-                <img :src="steps[steps.indexOf(step)].streStepImageUrl">
-                <div>
-                  <p style="margin-top:15px;">Uploading : {{cookingpicture[steps.indexOf(step)].uploadValue.toFixed() + "%"}}
-                    <progress :value="cookingpicture[steps.indexOf(step)].uploadValue" max="100"></progress>
-                  </p>
-                  <button class="button btn" @click="onUploadCooking(steps.indexOf(step))" style="width:185px;">
-                    과정 이미지 등록&nbsp;<i class="fa fa-camera"></i>
-                  </button>
-                </div>
-              </center>
+                        <!-- 기본 정보 입력 -->
+                        <div class="container inputbox">
+                          <table>
+                          <tbody>
+                            <tr>
+                              <th>
+                                <h6>레시피명</h6>
+                              </th>
+                              <td colspan="3">
+                                <b-form-input v-model="recipenm" size="sm" placeholder="레시피명 입력"></b-form-input>
+                              </td>
+                            </tr>
+                            <tr>
+                              <th>
+                                <h6>주재료</h6>
+                              </th>
+                              <td>
+                                <b-form-input v-model="mainirdnt" list="my-list-id" size="sm" placeholder="필수재료"></b-form-input>
+                                <datalist id="my-list-id">
+                                  <option v-for="(irdnt, index) in irdnts" :key="index">{{ irdnt }}</option>
+                                </datalist>
+                              </td>
+                              <td style="width:25%;">
+                                <b-form-input v-model="mainirdnt_amount" size="sm" placeholder="양(단위)"></b-form-input>
+                              </td>
+                              <td>
+                                <button class="btn" @click="addMainIrdnt()"><i class="fa fa-plus" style="color:blue;"></i></button>
+                              </td>
+                            </tr>
+                            <tr v-for="(mainirdnt, i) in arr_mainirdnt" :key="i">
+                              <td></td>
+                              <td colspan="3">
+                                <p style="margin-bottom:8px;">
+                                  <i class="fa fa-minus" @click="rmMainIrdnt(i)" style="color:red;cursor:pointer;"></i>
+                                  &nbsp;{{ mainirdnt.mainirdnt_nm }}&nbsp;{{ mainirdnt.mainirdnt_vol }}
+                                </p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <th>
+                                <h6>부재료</h6>
+                              </th>
+                              <td>
+                                <b-form-input v-model="subirdnt" list="my-list-id" size="sm" placeholder="선택재료"></b-form-input>
+                                <datalist id="my-list-id">
+                                  <option v-for="(irdnt, index) in irdnts" :key="index">{{ irdnt }}</option>
+                                </datalist>
+                              </td>
+                              <td>
+                                <b-form-input v-model="subirdnt_amount" size="sm" placeholder="양(단위)"></b-form-input>
+                              </td>
+                              <td>
+                                <button class="btn" @click="addSubIrdnt()"><i class="fa fa-plus" style="color:blue;"></i></button>
+                              </td>
+                            </tr>
+                            <tr v-for="(subirdnt, i) in arr_subirdnt" :key="`A-${i}`">
+                              <td></td>
+                              <td colspan="3">
+                                <p style="margin-bottom:8px;">
+                                  <i class="fa fa-minus" @click="rmSubIrdnt(`A-${i}`)" style="color:red;cursor:pointer;"></i>
+                                  &nbsp;{{ subirdnt.subirdnt_nm }}&nbsp;{{ subirdnt.subirdnt_vol }}
+                                </p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <th>
+                                <h6>양념</h6><h6 style="color:rgb(91, 183, 251);">(선택)</h6>
+                              </th>
+                              <td>
+                                <b-form-input v-model="seasoningirdnt" list="my-list-id" size="sm" placeholder="양념"></b-form-input>
+                                <datalist id="my-list-id">
+                                  <option v-for="(irdnt, index) in irdnts" :key="index">{{ irdnt }}</option>
+                                </datalist>
+                              </td>
+                              <td>
+                                <b-form-input v-model="seasoningirdnt_amount" size="sm" placeholder="양(단위)"></b-form-input>
+                              </td>
+                              <td>
+                                <button class="btn" @click="addSeasoningIrdnt()"><i class="fa fa-plus" style="color:blue;"></i></button>
+                              </td>
+                            </tr>
+                            <tr v-for="(seasoningirdnt, i) in arr_seasoningirdnt" :key="`B-${i}`">
+                              <td></td>
+                              <td colspan="3">
+                                <p style="margin-bottom:8px;">
+                                  <i class="fa fa-minus" @click="rmSeasoningIrdnt(`B-${i}`)" style="color:red;cursor:pointer;"></i>
+                                  &nbsp;{{ seasoningirdnt.seasoningirdnt_nm }}&nbsp;{{ seasoningirdnt.seasoningirdnt_vol }}
+                                </p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <th>
+                                <h6>레시피</h6><h6>개요</h6>
+                              </th>
+                              <td colspan="3">
+                                <b-form-textarea
+                                  v-model="recipedc"
+                                  id="textarea-small"
+                                  size="sm"
+                                  placeholder="레시피에 대해 간단히 설명해주세요."
+                                ></b-form-textarea>
+                              </td>
+                            </tr>
+                          </tbody>
+                          </table>
+                        </div>
 
-              <div class="container inputbox">
-                <table>
-                <tbody>
-                  <tr>
-                    <th>
-                      <h6 style="margin-bottom:5px;">{{ steps.indexOf(step) + 1 }}단계 설명</h6>
-                    </th>
-                  </tr>
-                  <tr>
-                    <td>
-                      <b-form-textarea
-                        v-model="step.cookingDc"
-                        id="textarea"
-                        placeholder="레시피 상세 설명을 입력해주세요."
-                      ></b-form-textarea>
-                    </td>
-                  </tr>
-                </tbody>
-                </table>
-              </div>
-              <!-- v-if="step.timerYN == 'Y'" -->
-              <div class="container" style="margin-top:10px;" v-if="step.timerYN == 'Y'">
-                <div class="timer-container">
-                  <img src="@/assets/blocookImg/stopwatch.png" id="stopwatch">
-                  <table>
-                    <tr>
-                      <td id="time"><b-form-input size="sm" type="number" min="0" placeholder="시" style="width:50px;"></b-form-input></td>
-                      <td style="width:5px;vertical-align:middle;">:</td>
-                      <td id="time"><b-form-input size="sm" type="number" min="0" placeholder="분" style="width:50px;"></b-form-input></td>
-                      <td style="width:5px;vertical-align:middle;">:</td>
-                      <td id="time"><b-form-input size="sm" type="number" min="0" placeholder="초" style="width:50px;"></b-form-input></td>
-                    </tr>
-                  </table>
-                </div>
-              </div>
+                        <div class="container selectbox">
+                          <table>
+                          <tbody>
+                            <tr>
+                              <th><h6 style="margin-bottom: 8px;">카테고리</h6></th>
+                              <th><h6 style="margin-bottom: 8px;">종류</h6></th>
+                            </tr>
+                            <tr class="shortbox">
+                              <td><b-form-select v-model="selectedcat" :options="categories" size="sm"></b-form-select></td>
+                              <td><b-form-select v-model="selectedty" :options="options" size="sm"></b-form-select></td>
+                            </tr>
+                            <tr>
+                              <th><h6 style="margin-bottom: 8px;">소요 시간(분)</h6></th>
+                              <th><h6 style="margin-bottom: 8px;">칼로리(kcal)</h6></th>
+                            </tr>
+                            <tr>
+                              <td><b-form-input v-model="time" size="sm" type="number" min="0" placeholder="숫자만 입력"></b-form-input></td>
+                              <td><b-form-input v-model="kcal" size="sm" type="number" min="0" placeholder="숫자만 입력"></b-form-input></td>
+                            </tr>
+                            <tr>
+                              <th><h6 style="margin-bottom: 8px;">인분(명)</h6></th>
+                              <th><h6 style="margin-bottom: 8px;">난이도 : {{ level.text }}</h6></th>
+                            </tr>
+                            <tr>
+                              <td><b-form-input v-model="person" size="sm" type="number" min="0" placeholder="숫자만 입력"></b-form-input></td>
+                              <td><b-form-input v-on:change="flevel" v-model="level.value" type="range" min="1" max="3"></b-form-input></td>
+                            </tr>
+                          </tbody>
+                          </table>
+                        </div>
+                    </tab-pane>
 
-              <div class="minusbutton">
-                <button @click="removestep(step)" id="minusbtn" class="button btn" v-if="minus"><i class="fa fa-minus"></i></button>
-              </div>
+                    <!------------------------------------------------ 레시피 과정 정보 ------------------------------------------------>
+				            <tab-pane key="tab2">
+                        <template slot="title">
+                            <i class="ni ni-cart mr-2"></i>레시피 과정 정보
+                        </template>
 
-              <div class="timerbutton">
-                <button @click="addtimer(steps.indexOf(step))" id="plusbtn" class="button btn" style="background-color:rgb(150, 111, 193);"><i class="fa fa-clock-o"></i></button>
-              </div>
-            </div>
+                        <!-- 과정 정보 입력 -->
+                        <div class="step" v-for="step in steps" v-bind:key="step.cookingNo">
+                          <center class="menu">
+                            <h5>STEP {{ steps.indexOf(step) + 1 }}</h5>
+                            <input type="file" @change="previewCookingImage($event, steps.indexOf(step))" accept="image/*" style="width:223px;margin-top:15px;">
+                            <img :src="steps[steps.indexOf(step)].streStepImageUrl">
+                            <div>
+                              <p style="margin-top:15px;">Uploading : {{cookingpicture[steps.indexOf(step)].uploadValue.toFixed() + "%"}}
+                                <progress :value="cookingpicture[steps.indexOf(step)].uploadValue" max="100"></progress>
+                              </p>
+                              <button class="button btn" @click="onUploadCooking(steps.indexOf(step))" style="width:185px;">
+                                과정 이미지 등록&nbsp;<i class="fa fa-camera"></i>
+                              </button>
+                            </div>
+                          </center>
 
-            <div class="addbutton">
-              <button @click="addstep()" id="plusbtn" class="button btn"><i class="fa fa-plus"></i></button>
-            </div>
-          </b-card-text>
-				</b-tab>
-			</b-tabs>
-		</b-card>
+                          <div class="container inputbox">
+                            <table>
+                            <tbody>
+                              <tr>
+                                <th>
+                                  <h6 style="margin-bottom:5px;">{{ steps.indexOf(step) + 1 }}단계 설명</h6>
+                                </th>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <b-form-textarea
+                                    v-model="step.cookingDc"
+                                    id="textarea"
+                                    placeholder="레시피 상세 설명을 입력해주세요."
+                                  ></b-form-textarea>
+                                </td>
+                              </tr>
+                            </tbody>
+                            </table>
+                          </div>
+                          <!-- v-if="step.timerYN == 'Y'" -->
+                          <div class="container" style="margin-top:10px;" v-if="step.timerYN == 'Y'">
+                            <div class="timer-container">
+                              <img src="@/assets/blocookImg/stopwatch.png" id="stopwatch">
+                              <table>
+                                <tr>
+                                  <td id="time"><b-form-input size="sm" type="number" min="0" placeholder="시" style="width:50px;"></b-form-input></td>
+                                  <td style="width:5px;vertical-align:middle;">:</td>
+                                  <td id="time"><b-form-input size="sm" type="number" min="0" placeholder="분" style="width:50px;"></b-form-input></td>
+                                  <td style="width:5px;vertical-align:middle;">:</td>
+                                  <td id="time"><b-form-input size="sm" type="number" min="0" placeholder="초" style="width:50px;"></b-form-input></td>
+                                </tr>
+                              </table>
+                            </div>
+                          </div>
+                          
+                          <div class="timerbutton">
+                            <button @click="addtimer(steps.indexOf(step))" id="timerbutton" class="button btn" style="background-color:rgb(150, 111, 193);"><i class="fa fa-clock-o"></i></button>
+                          </div>
 
-    <div class="user">
-			<button class="button btn" @click="checkHandler()" style="width:190px; margin-bottom:30px; background-color:rgb(241, 196, 15);">
-        <i class="fa fa-check"></i>&nbsp;레시피 등록 완료
-      </button>
-		</div>
-  </div>
+                          <div class="minusbutton">
+                            <button @click="removestep(step)" id="minusbtn" class="button btn" v-if="minus"><i class="fa fa-minus"></i></button>
+                          </div>
+                        </div>
+
+                        <div class="addbutton">
+                          <button @click="addstep()" id="plusbtn" class="button btn"><i class="fa fa-plus"></i></button>
+                        </div>
+                    </tab-pane>
+                </card>
+            </tabs>
+        </div>
+
+        <div class="user">
+          <button class="button btn" @click="checkHandler()" style="width:190px; height: 40px; margin-bottom:30px; background-color:rgb(41, 165, 0);">
+            <i class="fa fa-check"></i>&nbsp;레시피 등록 완료
+          </button>
+        </div>
+    </div>
 </template>
 
 <script>
 import http from "@/util/http-common.js";
 import firebase from 'firebase';
+import Tabs from "@/components/Tabs/Tabs.vue";
+import TabPane from "@/components/Tabs/TabPane.vue";
 
 export default {
   name: 'addrecipe',
+  components: {
+    Tabs,
+    TabPane
+  },
   data() {
     return {
       title: "addrecipe page",
@@ -534,7 +551,8 @@ img {
 	height: auto;
 }
 h1, h4, h5, h6 {
-	font-weight: bold;
+  font-weight: bold;
+  font-family: 'Poor Story', cursive;
 }
 .container {
 	max-width: 500px;
@@ -562,7 +580,7 @@ a {
 }
 .button {
 	width : 268px;
-	background-color: rgb(45, 180, 0); 
+	background-color: rgb(241, 196, 15); 
 	margin-top: 10px;
 	color:white;
 	font-weight: bold;
@@ -590,23 +608,30 @@ select {
   float: left;
 }
 .timerbutton {
-  margin: 0px 30px 0px 30px;
+  margin: 10px 30px 0px 30px;
+  float: none;
+}
+#timerbutton {
+	border-radius: 100%;
+	width: 38px;
+	margin-right: 5px;
   float: none;
 }
 #plusbtn {
-	border-radius: 50%;
-	width:40px;
+  background-color:rgb(94, 114, 228);
+	border-radius: 100%;
+	width: 38px;
 	margin-right: 5px;
   float: none;
 }
 #minusbtn {
 	background-color: rgb(255, 93, 72); 
-	border-radius: 50%;
-	width:40px;
+	border-radius: 100%;
+	width: 38px;
   float: none;
 }
 .minusbutton {
-	margin: 10px 30px 0px 30px;
+	margin: 0px 30px 0px 30px;
 }
 .card {
   border:none;
