@@ -86,6 +86,8 @@
 											</tr>
 										</tbody>
 										</table>
+										<!-- v-if="cooking.timerYN==Y" -->
+										<router-link :to="'timer?time='+cooking.timerTime" class="timer_btn">타이머 보기</router-link>
 									</div>
 								</div>
 						</slide>
