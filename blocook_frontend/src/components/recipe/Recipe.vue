@@ -99,6 +99,7 @@
 <script>
 import http from "@/util/http-common.js";
 
+var say = '';
 export default {
 	computed : {
 			imgUrl() {
@@ -113,7 +114,7 @@ export default {
 			cookings: [],
 			bookmarkCnt: 0,
 			like: false,
-			say: ""
+			// say: ""
 		};
 	},
 	created() {
@@ -195,14 +196,16 @@ export default {
 			speechRecognition.onresult = function(event) {
 				console.log(event.results[0][0].transcript);
 				console.log(typeof(event.results[0][0].transcript));
-				this.say = event.results[0][0].transcript;
+				say = event.results[0][0].transcript;
+				alert(say);
 			};
 			speechRecognition.start();
 		},
 		recordresult() {
-			alert(this.say);
-			console.log(typeof(this.say));
-			console.log(this.say);
+			// alert(this.say);
+			// console.log(typeof(this.say));
+			// console.log(this.say);
+			console.log(say);
 		}
 	}
 }
