@@ -2,7 +2,7 @@
 	<center>
 		<div style="margin-top: 20px;">
 			<router-link to="addrecipe">
-				<button class="button btn" style="width: 82%; max-width:470px;">
+				<button class="button btn" style="width: 82%; max-width:470px; color: purple;">
 					<i class="fa fa-spoon">&nbsp;새 레시피 작성</i>
 				</button>
 			</router-link>
@@ -96,14 +96,13 @@ img {
 .card-title {
 	height: 30px;
 	text-align: center;
-	background-size: 85%;
 	background-repeat: no-repeat;
 }
 .card-text {
 	font-size: 14px;
   line-height: 16px;
 	text-align: left;
-	height: 50px;
+	height: 48px;
 	width: 120px;
 	margin-bottom: 10px;
 	overflow: hidden;

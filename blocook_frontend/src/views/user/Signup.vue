@@ -17,7 +17,7 @@
                           header-classes="bg-white pb-5"
                           body-classes="px-lg-5 py-lg-5"
                           class="border-0"
-                          style="height:390px;">
+                          style="height:420px;">
                         <template>
                             <div class="text-muted text-center mb-3">
                                 <h4 id="signup" style="font-weight:bold;">회원가입</h4>

@@ -17,7 +17,7 @@
                           header-classes="bg-white pb-5"
                           body-classes="px-lg-5 py-lg-5"
                           class="border-0"
-                          style="height:460px;">
+                          style="height:520px;">
                         <template>
                             <div class="text-muted text-center mb-3">
                                 <h4 style="font-weight:bold;">이메일/비밀번호 찾기</h4>
@@ -182,7 +182,7 @@ input {
     border: 2px solid rgb(255, 204, 0);
     border-radius: 6px;
     height : 37px;
-    width : 250px;
+    width : 240px;
     font-weight: bold;
     font-size: 13px;
     

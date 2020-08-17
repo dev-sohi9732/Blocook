@@ -224,6 +224,7 @@ export default {
 	}
 }
 </script>
+
 <style scoped>
 center {
 	margin-top: 10px;

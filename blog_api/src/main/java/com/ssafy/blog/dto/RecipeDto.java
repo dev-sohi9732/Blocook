@@ -17,6 +17,8 @@ public class RecipeDto {
 	private String imgUrl;		// 레시피 이미지 URL
 	private String detUrl;		// 상세 페이지 URL
 	private String userUid;		// user ID
+	private int likeCnt;		// like 개수
+	
 	public int getRecipeId() {
 		return recipeId;
 	}
@@ -113,13 +115,20 @@ public class RecipeDto {
 	public void setUserUid(String userUid) {
 		this.userUid = userUid;
 	}
+	public int getLikeCnt() {
+		return likeCnt;
+	}
+	public void setLikeCnt(int likeCnt) {
+		this.likeCnt = likeCnt;
+	}
+	
 	@Override
 	public String toString() {
 		return "RecipeDto [recipeId=" + recipeId + ", recipeNmKo=" + recipeNmKo + ", sumry=" + sumry + ", nationCode="
 				+ nationCode + ", nationNm=" + nationNm + ", tyCode=" + tyCode + ", tyNm=" + tyNm + ", cookingTime="
 				+ cookingTime + ", calorie=" + calorie + ", qnt=" + qnt + ", levelNm=" + levelNm + ", irdntCode="
 				+ irdntCode + ", pcNm=" + pcNm + ", imgUrl=" + imgUrl + ", detUrl=" + detUrl + ", userUid=" + userUid
-				+ "]";
+				+ ", likeCnt=" + likeCnt + "]";
 	}
 	
 }
