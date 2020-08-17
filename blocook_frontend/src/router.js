@@ -18,13 +18,21 @@ import PostEditor from "./views/community/PostEditor.vue";
 import MyPost from "./views/community/MyPost.vue";
 import DetailPost from "./views/community/DetailPost.vue";
 import EditPost from "./views/community/EditPost.vue";
-
+import Timer from "./components/recipe/Timer.vue";
 Vue.use(Router);
 
 export default new Router({
   mode: 'history',
   linkExactActiveClass: "active",
   routes: [
+    {
+      path: "/timer",
+      name: "timer",
+      components: {
+        header: AppHeader,
+        default: Timer
+      }
+    },
     {
       path: "/",
       name: "main",
