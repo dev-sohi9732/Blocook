@@ -1,7 +1,7 @@
 <template>
 	<div class="categoryitem col-6">
 		<div class="container" style="padding-left: 2vw;">
-			<div class="card" id="recipecard">
+			<div class="card" id="recipecard" style="font-family: 'Poor Story', cursive;">
 				<img class="card-img-top" :src="recipe.imgUrl" alt="Card image cap" style="padding: 0.2rem;width: 100%;height: 43%;">
 				<div class="card-body" style="padding: 0.5rem;">
 					<h5 class="card-title" style="margin-bottom: 0.5rem;">{{ recipe.recipeNmKo }}</h5>
@@ -58,6 +58,7 @@ export default {
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding:wght@400;700&family=Poor+Story&display=swap');
 #recipecard {
   margin-bottom: 15px;
 	text-align: center;
@@ -72,5 +73,11 @@ export default {
 }
 .categoryitem {
 	margin: 0 auto;
+}
+.card {
+	height: 315px;
+}
+.card-body {
+	height: 200px;
 }
 </style>

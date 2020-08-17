@@ -257,7 +257,7 @@ export default {
 }
 .maincard {
     font-family: 'Poor Story', cursive;
-    height: 330px;
+    height: 315px;
 }
 .maincardbody {
 	height: 200px;

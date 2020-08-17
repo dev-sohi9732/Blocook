@@ -12,14 +12,14 @@
 			<div class="container" style="padding: 10px 25px 30px 25px;">
 				<div class="row">
 					<div class="col-6" v-for="myRecipe in myRecipes" :key="myRecipe.recipeId">
-						<div class="card" id="recipecard">
+						<div class="card" id="recipecard" style="font-family: 'Poor Story', cursive;">
 							<img class="card-img-top" :src="myRecipe.imgUrl" alt="Card image cap" style="padding: 0.2rem;width: 100%;height: 150px;">
 							<div class="card-body" style="padding: 0.5rem;">
 								<h5 class="card-title" style="margin-bottom: 0.5rem;">{{ myRecipe.recipeNmKo }}</h5>
 								<span style="font-size:0.8rem; margin-right:10px;"><i class="fa fa-apple" style="color:orange;font-weight:bold;"></i>&nbsp; {{myRecipe.calorie}}kcal</span>
 								<span style="font-size:0.8rem;"><i class="fa fa-heart" style="color:red;font-weight:bold;"></i>&nbsp; {{ myRecipe.likeCnt }}</span>
 								<p class="card-text">{{ myRecipe.sumry }}</p>
-								<router-link :to="'recipe?Id=' +myRecipe.recipeId" class="btn btn-primary" style="width:100%;">레시피 보기&nbsp;<i class="fa fa-book"></i></router-link>
+								<router-link :to="'recipe?Id=' +myRecipe.recipeId" class="btn btn-primary" style="padding-left: 10px;padding-right: 10px;margin-left: .1rem;">레시피 보기&nbsp;<i class="fa fa-book"></i></router-link>
 								<router-link :to="'editrecipe?Id='+myRecipe.recipeId" class="btn" id="editbtn" style="background-color:rgb(241, 196, 15);font-weight:bold;color:white;">수정</router-link>
 								<button class="button btn" id="delbtn" @click="deleteRecipe(myRecipe.recipeId)">삭제</button>
 							</div>
@@ -72,6 +72,7 @@ export default {
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding:wght@400;700&family=Poor+Story&display=swap');
 button {
 	margin-bottom: 20px;
 }
@@ -86,7 +87,7 @@ img {
 	height: 100px;
 }
 .card {
-	height: 375px;
+	height: 368px;
 }
 .card-body {
 	height: 200px;
@@ -125,7 +126,7 @@ img {
 #editbtn {
 	margin: 5px 2.74px 0px 0px;
 	background-color: rgb(241, 196, 15);
-	width:48%;
+	width:47%;
 	font-weight:bold;
 	height: 34px;
 	padding: 5px;
@@ -134,7 +135,7 @@ img {
 	margin: 5px 0px 0px 2.74px;
 	background-color: rgb(255, 93, 72);
 	color: white;
-	width:48%;
+	width:47%;
 	font-weight:bold;
 	height: 34px;
 	padding: 5px;
