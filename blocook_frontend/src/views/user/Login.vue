@@ -127,7 +127,7 @@ export default {
     background: linear-gradient(87deg, #74c8ff 0, #4d0cff 100%) !important;
 }
 #logincard {
-    height: 160%;
+    height: 90%;
 }
 @media(max-width: 360px) {
     #logincard {
