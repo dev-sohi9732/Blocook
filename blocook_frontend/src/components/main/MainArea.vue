@@ -16,22 +16,44 @@
             <div class="col px-0">
                 <div class="row justify-content-center align-items-center">
                     <div class="col-lg-7 text-center">
-                        <!------------------------------------- 검색창 ------------------------------------->
-                        <div class="searchbar">
+                        <!------------------------------------- 검색창 start ------------------------------------->
+                        <!-- 재료 검색 -->
+                        <div class="searchbar" v-if="selected=='irdnt'">
+                            <div style="margin-left:31px;margin-right:30px;">
+                                <select v-model="selected" style="float:left;">
+                                    <option disabled value="">선택</option>
+                                    <option value="recipe_nm" >요리</option>
+                                    <option value="irdnt">재료</option>
+                                </select>
+                                <button @click.prevent="searchirdnt" id="irdntbtn" style="float:right;"><i class="fa fa-search" ></i></button>
+                            </div>
+                            <div style="padding-top:40px;">
+                                <form class="s-form">
+                                    <multiselect v-model="multi" 
+                                                tag-placeholder="해당 재료를 사용하는 레시피가 없습니다."
+                                                placeholder="검색할 재료를 입력하세요." 
+                                                :selectLabel="'Press enter'" 
+                                                :options="irdnts" 
+                                                :multiple="true" 
+                                                :taggable="true" 
+                                                :max-height="200" />
+                                </form>
+                            </div>
+                        </div>
+                        
+                        <!-- 요리 검색 -->
+                        <div class="searchbar" v-else>
                             <select v-model="selected">
                                 <option disabled value="">선택</option>
                                 <option value="recipe_nm" >요리</option>
                                 <option value="irdnt">재료</option>
                             </select>
-                            <form v-if="selected=='irdnt'" class="s-form" >
-                                <multiselect style="width:280px; margin-top:1px;" v-model="multi" tag-placeholder="해당 재료를 사용하는 레시피가 없습니다." placeholder="검색어를 입력하세요." :options="irdnts" :multiple="true" :taggable="true"></multiselect>
-                                <button  @click.prevent="searchirdnt" style="width:60px;"><i class="fa fa-search" ></i></button>
-                            </form>
-                            <form  v-else class="s-form">
-                                <input class="title-input" type="text" v-model="query" placeholder="검색어를 입력하세요." autofocus>
+                            <form class="s-form">
+                                <input class="title-input" type="text" v-model="query" placeholder="검색어를 입력해주세요." autofocus>
                                 <button @click.prevent="searchtitle" ><i class="fa fa-search" ></i></button>
                             </form>
                         </div>
+                        <!------------------------------------- 검색창 end ------------------------------------->
 
                         <img src="img/blocook/todaysrecipe.png" style="width: 300px;margin-top: 20px;" class="img-fluid">
                         <p class="lead text-white mt-2 mb-1"></p>
@@ -125,6 +147,9 @@ import http from "@/util/http-common.js";
 import Multiselect from 'vue-multiselect'
 
 export default {
+    components: {
+        Multiselect
+    },
     data() {
       return {
         query: '',
@@ -171,7 +196,7 @@ export default {
         .get('recipes/search/irdnts/소금')
         .then(({ data }) => {
         this.recipes = data;
-        for (var i=0; i<this.recipes.length; i++ ) {
+        for (var i=0; i<6; i++ ) {
             http.get(`/recipes/${this.recipes[i].recipeId}/bookmark-count`)
                 .then((res) => {
                     this.likeCnt.push(res.data)
@@ -207,10 +232,20 @@ export default {
 };
 </script>
 
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding:wght@400;700&family=Poor+Story&display=swap');
 .gradient {
     background: linear-gradient(to bottom, rgb(205, 100, 100) 10%, #8f6ed5 70%);
+}
+.multiselect {
+	border: 4px solid rgb(255, 204, 0);
+    background-color:white;
+	margin:0px;
+    height: 43px;
+    width: 80%;
+    border-radius: 5px;
+    margin: 5px auto;
 }
 .searchbar select {
     display:inline;
@@ -230,6 +265,14 @@ export default {
     width: 60%;
     border-radius: 5px;
 	margin: auto 2.5px;
+}
+#irdntbtn {
+    background-color :rgb(255, 204, 0);
+    border-radius: 5px;
+    border: none;
+    height: 40px;
+    width: 40px;
+    color:white;
 }
 .s-form button {
     background-color :rgb(255, 204, 0);
