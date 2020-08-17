@@ -1,25 +1,33 @@
 <template>
 	<center class="area">
 		<div class="community">
-			<select>
+			<select v-model="selected">
 				<!-- v-model="option" -->
 				<!-- v-on:change="filter" -->
+				<option disabled value="">선택</option>
 				<option value="title">제목</option>
-				<option value="content">내용</option>
+				<!-- <option value="content">내용</option> -->
 				<option value="writer">작성자</option>
 			</select>
-			<form class="s-form">
-				<input type="text">
-				<!-- v-model="search" -->
-				<!-- v-on:keyup="filter" -->
-				<button><i class="fa fa-search"></i></button>
+			<!-- <form v-if="selected=='content'" class="s-form">
+				<input v-model="query" class="title-input" type="text">
+				<button @click.prevent="searchcontent()"><i class="fa fa-search"></i></button>
+			</form> -->
+			<form v-if="selected=='writer'" class="s-form">
+				<input v-model="query" class="title-input" type="text">
+				<button @click.prevent="searchwriter()"><i class="fa fa-search"></i></button>
+			</form>
+			<form v-else class="s-form">
+				<input v-model="query" class="title-input" type="text">
+				<button @click.prevent="searchposttitle()"><i class="fa fa-search"></i></button>
 			</form>
 		</div>
 
 		<div>
-			<select class="sorting">
+			<select v-model="sorting" class="sorting">
 				<!-- v-model="option" -->
 				<!-- v-on:change="filter" -->
+				<!-- <option disabled value="">순서</option> -->
 				<option value="new">최신순</option>
 				<option value="see">조회순</option>
 				<option value="like">좋아요순</option>
@@ -33,39 +41,101 @@
 
 		<div class="posts">
 			<table>
-				<tbody>
-				<tr v-for="(post, index) in articles" :key="index + '_items'" >
-					<td>
-						<!-- :to="'detailpost?Id=' +post.id" -->
-						<router-link :to="'detailpost?Id=' +post.id">{{post.title}}</router-link>
-						<div class="info"><span>{{post.nickname}}</span>&emsp;<span>{{post.createDate}}</span></div>
-					</td>
-					<td class="heart">
-						<div><i class="fa fa-eye"></i>&nbsp;{{post.view_cnt}}</div>
-						<div><i class="fa fa-heart" style="color:red;"></i>&nbsp;15</div>
-						<div><i class="fa fa-comment-o"></i>&nbsp;4</div>
-					</td>
-				</tr>
-			</tbody>
+				<tbody v-if="sorting=='see'">
+					<tr v-for="(post, index) in articles" :key="index + '_items'" >
+						<td>
+							<!-- :to="'detailpost?Id=' +post.id" -->
+							<router-link :to="'detailpost?Id=' +post.id">{{post.title}}</router-link>
+							<div class="info"><span>{{post.nickname}}</span>&emsp;<span>{{post.createDate}}</span></div>
+						</td>
+						<td class="heart">
+							<CommunityItem :post="post"/>
+						</td>
+					</tr>
+				</tbody>
+				<tbody v-else-if="sorting=='like'">
+					<tr v-for="(post, index) in articles" :key="index + '_items'" >
+						<td>
+							<!-- :to="'detailpost?Id=' +post.id" -->
+							<router-link :to="'detailpost?Id=' +post.id">{{post.title}}</router-link>
+							<div class="info"><span>{{post.nickname}}</span>&emsp;<span>{{post.createDate}}</span></div>
+						</td>
+						<td class="heart">
+							<CommunityItem :post="post"/>
+						</td>
+					</tr>
+				</tbody>
+				<tbody v-else>
+					<tr v-for="(post, index) in newPosts" :key="index + '_items'" >
+						<td>
+							<!-- :to="'detailpost?Id=' +post.id" -->
+							<router-link :to="'detailpost?Id=' +post.id">{{post.title}}</router-link>
+							<div class="info"><span>{{post.nickname}}</span>&emsp;<span>{{post.createDate}}</span></div>
+						</td>
+						<td class="heart">
+							<CommunityItem :post="post"/>
+						</td>
+					</tr>
+				</tbody>
 			</table>
 		</div>
+		<a style="display:scroll;position:fixed;bottom:12px;right:12px;" href="#" title="맨 위로"><img style="width:45px; height:45px; opacity: 0.5;" src="@/../src/assets/img/top.png"></a> 
 	</center>
 </template>
 
 <script>
 import http from "@/util/http-common.js";
+import CommunityItem from "@/components/community/CommunityItem.vue"
+import VueLodash from 'vue-lodash'
+import lodash from 'lodash'
 export default {
 	data() {
 	  return {
-		articles: []
+		selected: '',
+		articles: [],
+		query:'',
+		sorting:'new',
 	  }
 	},
+	components: {
+        CommunityItem,
+    },
 	methods: {
 		moveToNewPost() {
 			this.$router.push('/post')
 		},
 		moveToMyPost() {
 			this.$router.push('/mypost')
+		},
+		searchposttitle() {
+			if (this.query== "")
+				alert("검색어를 입력해주세요.");
+			else
+				this.$router.push("/community?title=" + this.query ).catch(()=>{});
+				
+				const params = new URL(document.location).searchParams;
+				http.get(`/posts/search/title/${params.get('title')}`)
+					.then(response => {
+					this.articles = response.data
+					})
+					.catch(error => {
+					console.log(error)
+					})
+		},
+		searchwriter() {
+			if (this.query== "")
+				alert("검색어를 입력해주세요.");
+			else
+				this.$router.push("/community?writer=" + this.query ).catch(()=>{});
+				
+				const params = new URL(document.location).searchParams;
+				http.get(`/posts/search/nickname/${params.get('writer')}`)
+					.then(response => {
+					this.articles = response.data
+					})
+					.catch(error => {
+					console.log(error)
+					})
 		},
 	},
 	created() {
@@ -76,6 +146,11 @@ export default {
 			.catch(err => {
 				console.log("error!!!")
 			})
+	},
+	computed: {
+		newPosts() {
+			return _.orderBy(this.articles, 'createDate','desc')
+		}
 	}
 }
 </script>
@@ -132,4 +207,5 @@ td {
 .area {
 	margin-top: 10px;
 }
+
 </style>

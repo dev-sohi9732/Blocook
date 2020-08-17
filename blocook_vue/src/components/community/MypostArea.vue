@@ -1,12 +1,11 @@
 <template>
 	<center>
 		<div class="left">
-			작성한 글 : 15개 / 댓글 : 30개
+			작성한 글 : {{posts.length}}개 / 댓글 : {{comments.length}}개
 		</div>
 		<div>
-			<button class="writing"><i class="fa fa-pencil">&nbsp;글쓰기</i></button>
+			<button @click="moveToNewPost()" class="writing"><i class="fa fa-pencil">&nbsp;글쓰기</i></button>
 		</div>
-
 		<div>
 			<table class="whole">
 			<tbody>
@@ -14,24 +13,13 @@
 					<b-tab title="작성글" active>
 						<table>
 						<tbody>
-							<tr>
+							<tr v-for="(post, index) in posts" :key="index + '_items'">
 								<td>
-									<div class="title">더운 여름, 수박 화채로 시원하게 보내기! 내 레시피를 참고해!</div>
-									<div class="info"><span>2020.7.15 13:45</span></div>
+									<router-link :to="'detailpost?Id=' +post.id">{{post.title}}</router-link>
+									<div class="info"><span>{{post.createDate}}</span></div>
 								</td>
 								<td class="heart">
-									<div><i class="fa fa-eye"></i>&nbsp;50</div>
-									<div><i class="fa fa-heart" style="color:red;"></i>&nbsp;15</div>
-									<div><i class="fa fa-comment-o"></i>&nbsp;4</div>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<div class="title">더운 여름, 수박 화채로 시원하게 보내기! 내 레시피를 참고해!</div>
-									<div class="info"><span>2020.7.15 13:45</span></div>
-								</td>
-								<td class="heart">
-									<div><i class="fa fa-eye"></i>&nbsp;50</div>
+									<div><i class="fa fa-eye"></i>&nbsp;{{post.view_cnt}}</div>
 									<div><i class="fa fa-heart" style="color:red;"></i>&nbsp;15</div>
 									<div><i class="fa fa-comment-o"></i>&nbsp;4</div>
 								</td>
@@ -42,17 +30,8 @@
 					<b-tab title="작성댓글">
 						<table>
 						<tbody>
-							<tr>
-								<td>
-									<div class="title">레시피가 좋네요! 저도 만들어 볼게요~</div>
-									<div class="info"><span>2020.7.15 13:45</span></div>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<div class="title">레시피가 아주 좋네요!</div>
-									<div class="info"><span>2020.7.15 13:45</span></div>
-								</td>
+							<tr v-for="(comment, index) in comments" :key="index + '_comments'">
+								<MyPostCommentItem :comment="comment" />
 							</tr>
 						</tbody>
 						</table>
@@ -65,7 +44,49 @@
 </template>
 
 <script>
+import http from "@/util/http-common.js";
+import MyPostCommentItem from "@/components/community/MyPostCommentItem.vue"
 export default {
+	data() {
+		return {
+			posts: [],
+			comments: [],
+			article: [],
+		}
+	},
+	components: {
+		MyPostCommentItem
+	},
+	methods: {
+		moveToNewPost() {
+			this.$router.push('/post')
+		},
+	},
+	created() {
+		http.get(`/posts/search/uid/${this.$store.state.user.uid}`)
+			.then(res => {
+				this.posts = res.data
+			})
+			.catch(err => {
+				console.log("error!!!")
+			})
+		http.get(`/comments/search/uid/${this.$store.state.user.uid}`)
+			.then(res => {
+				this.comments = res.data
+				// for (var i=0 ;i<this.comments.length; i++ ) {
+				// 	http.get(`posts/${this.comments[i].postId}`)
+				// 	.then(res => {
+				// 		this.commentpost.push(res.data.title)
+				// 	})
+				// 	.catch(err => {
+				// 		console.log("error!!!")
+		// 	})
+		// }
+			})
+			.catch(err => {
+				console.log("error!!!")
+			})
+	},
 }
 </script>
 

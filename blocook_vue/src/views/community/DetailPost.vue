@@ -63,6 +63,7 @@ export default {
             comments: [],
             like: false,
             unickname:'',
+            leng:0
         }
     },
     created() {
@@ -95,6 +96,7 @@ export default {
         http.get(`/comments/search/postid/${params.get('Id')}`)
 			.then(response => {
                 this.comments = response.data
+                this.leng = this.comments.length
             })
             .catch(error => {
 			console.log(error)

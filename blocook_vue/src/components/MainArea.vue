@@ -2,7 +2,7 @@
 	<center>
 		<div class="searchbar">
 			<select v-model="selected">
-  				<option disabled value="">선택</option>
+  				<!-- <option disabled value="">선택</option> -->
 				<option value="recipe_nm" >요리</option>
 				<option value="irdnt">재료</option>
 			</select>
@@ -19,9 +19,8 @@
 			<h2>Today's Recipe&nbsp;</h2>
 			<img class="recipebook" src="@/assets/img/recipeicon.png">
 		</div>
-
 		<div id="carouselExampleInterval" class="carousel slide" data-ride="carousel">
-			<div class="carousel-inner">
+			<div  v-if="recipes.length" class="carousel-inner">
 				<div class="carousel-item active" data-interval="10000">
 					<center>
 						<div class="container">
@@ -34,7 +33,8 @@
 										<div class="card-body" style="padding:5px;">
 											<h5 class="card-title" style="margin-bottom:3px;">{{ recipes[0].recipeNmKo }}</h5>
 											<i class="fa fa-apple" style="font-size:0.8rem; margin-right: 10px;">&nbsp; {{recipes[0].calorie}}kcal </i>
-											<span style="font-size:0.8rem;"><i class="fa fa-heart" style="color:red;font-weight:bold;"></i>&nbsp; {{ likeCnt[0] }}</span>
+											<!-- <span style="font-size:0.8rem;"><i class="fa fa-heart" style="color:red;font-weight:bold;"></i>&nbsp; {{ likeCnt[0] }}</span> -->
+											<MainAreaItem :recipe="recipes[0]" />
 											<p class="card-text">{{ recipes[0].sumry }}</p>
 											<center>
 												<router-link :to="'recipe?Id=' +recipes[0].recipeId" class="btn" style="width:150px; background-color:#B3D662;">레시피&nbsp;<img style="width:25px; height: 25px;" src="@/assets/img/recipeicon.png"></router-link>
@@ -50,7 +50,8 @@
 										<div class="card-body" style="padding:5px;">
 											<h5 class="card-title" style="margin-bottom:3px;">{{ recipes[1].recipeNmKo }}</h5>
 											<i class="fa fa-apple" style="font-size:0.8rem; margin-right: 10px;">&nbsp; {{recipes[1].calorie}}kcal </i>
-											<span style="font-size:0.8rem;"><i class="fa fa-heart" style="color:red;font-weight:bold;"></i>&nbsp; {{ likeCnt[1] }}</span>
+											<!-- <span style="font-size:0.8rem;"><i class="fa fa-heart" style="color:red;font-weight:bold;"></i>&nbsp; {{ likeCnt[1] }}</span> -->
+											<MainAreaItem :recipe="recipes[1]" />
 											<p class="card-text">{{ recipes[1].sumry }}</p>
 											<center>
 												<router-link :to="'recipe?Id=' +recipes[1].recipeId" class="btn" style="width:150px; background-color:#B3D662;">레시피&nbsp;<img style="width:25px; height: 25px;" src="@/assets/img/recipeicon.png"></router-link>
@@ -74,7 +75,8 @@
 										<div class="card-body" style="padding:5px;">
 											<h5 class="card-title" style="margin-bottom:3px;">{{ recipes[2].recipeNmKo }}</h5>
 											<i class="fa fa-apple" style="font-size:0.8rem; margin-right: 10px;">&nbsp; {{recipes[2].calorie}}kcal </i>
-											<span style="font-size:0.8rem;"><i class="fa fa-heart" style="color:red;font-weight:bold;"></i>&nbsp; {{ likeCnt[2] }}</span>
+											<!-- <span style="font-size:0.8rem;"><i class="fa fa-heart" style="color:red;font-weight:bold;"></i>&nbsp; {{ likeCnt[2] }}</span> -->
+											<MainAreaItem :recipe="recipes[2]" />
 											<p class="card-text">{{ recipes[2].sumry }}</p>
 											<center>
 												<router-link :to="'recipe?Id=' +recipes[2].recipeId" class="btn" style="width:150px; background-color:#B3D662;">레시피&nbsp;<img style="width:25px; height: 25px;" src="@/assets/img/recipeicon.png"></router-link>
@@ -90,7 +92,8 @@
 										<div class="card-body" style="padding:5px;">
 											<h5 class="card-title" style="margin-bottom:3px;">{{ recipes[3].recipeNmKo }}</h5>
 											<i class="fa fa-apple" style="font-size:0.8rem; margin-right: 10px;">&nbsp; {{recipes[3].calorie}}kcal </i>
-											<span style="font-size:0.8rem;"><i class="fa fa-heart" style="color:red;font-weight:bold;"></i>&nbsp; {{ likeCnt[3] }}</span>
+											<!-- <span style="font-size:0.8rem;"><i class="fa fa-heart" style="color:red;font-weight:bold;"></i>&nbsp; {{ likeCnt[3] }}</span> -->
+											<MainAreaItem :recipe="recipes[3]" />
 											<p class="card-text">{{ recipes[3].sumry }}</p>
 											<center>
 												<router-link :to="'recipe?Id=' +recipes[3].recipeId" class="btn" style="width:150px; background-color:#B3D662;">레시피&nbsp;<img style="width:25px; height: 25px;" src="@/assets/img/recipeicon.png"></router-link>
@@ -114,7 +117,8 @@
 										<div class="card-body" style="padding:5px;">
 											<h5 class="card-title" style="margin-bottom:3px;">{{ recipes[4].recipeNmKo }}</h5>
 											<i class="fa fa-apple" style="font-size:0.8rem; margin-right: 10px;">&nbsp; {{recipes[4].calorie}}kcal </i>
-											<span style="font-size:0.8rem;"><i class="fa fa-heart" style="color:red;font-weight:bold;"></i>&nbsp; {{ likeCnt[4] }}</span>
+											<!-- <span style="font-size:0.8rem;"><i class="fa fa-heart" style="color:red;font-weight:bold;"></i>&nbsp; {{ likeCnt[4] }}</span> -->
+											<MainAreaItem :recipe="recipes[4]" />
 											<p class="card-text">{{ recipes[4].sumry }}</p>
 											<center>
 												<router-link :to="'recipe?Id=' +recipes[4].recipeId" class="btn" style="width:150px; background-color:#B3D662;">레시피&nbsp;<img style="width:25px; height: 25px;" src="@/assets/img/recipeicon.png"></router-link>
@@ -130,7 +134,8 @@
 										<div class="card-body" style="padding:5px;">
 											<h5 class="card-title" style="margin-bottom:3px;">{{ recipes[5].recipeNmKo }}</h5>
 											<i class="fa fa-apple" style="font-size:0.8rem; margin-right: 10px;">&nbsp; {{recipes[5].calorie}}kcal </i>
-											<span style="font-size:0.8rem;"><i class="fa fa-heart" style="color:red;font-weight:bold;"></i>&nbsp; {{ likeCnt[5] }}</span>
+											<!-- <span style="font-size:0.8rem;"><i class="fa fa-heart" style="color:red;font-weight:bold;"></i>&nbsp; {{ likeCnt[5] }}</span> -->
+											<MainAreaItem :recipe="recipes[5]" />
 											<p class="card-text">{{ recipes[5].sumry }}</p>
 											<center>
 												<router-link :to="'recipe?Id=' +recipes[5].recipeId" class="btn" style="width:150px; background-color:#B3D662;">레시피&nbsp;<img style="width:25px; height: 25px;" src="@/assets/img/recipeicon.png"></router-link>
@@ -157,45 +162,48 @@
 
 <script>
 import http from "@/util/http-common.js";
+import MainAreaItem from "@/components/recipe/MainAreaItem.vue"
 import Multiselect from 'vue-multiselect'
 
 export default {
   components: {
-    Multiselect
+	Multiselect,
+	MainAreaItem
   },
   props: [],
   data() {
     return {
 	  query: '',
-	  selected:'',
+	  selected:'recipe_nm',
 	  recipes: [],
 	  irdnts: [],
 	  slide: 0,
 	  sliding: null,
 	  multi: [],
 	  likeCnt: [],
+
     };
   },
   created() {
-    for (var i = 0; i < 6; i++) {
-        this.recipes.push({
-            "recipeId": -1,
-            "recipeNmKo": "",
-            "sumry": "",
-            "nationCode": -1,
-            "nationNm": "",
-            "tyCode": -1,
-            "tyNm": "",
-            "cookingTime": -1,
-            "calorie": -1,
-            "qnt": -1,
-            "levelNm": "",
-            "irdntCode": "",
-            "pcNm": -1,
-            "imgUrl": "",
-            "detUrl": ""
-        })
-	}
+    // for (var i = 0; i < 6; i++) {
+    //     this.recipes.push({
+    //         "recipeId": -1,
+    //         "recipeNmKo": "",
+    //         "sumry": "",
+    //         "nationCode": -1,
+    //         "nationNm": "",
+    //         "tyCode": -1,
+    //         "tyNm": "",
+    //         "cookingTime": -1,
+    //         "calorie": -1,
+    //         "qnt": -1,
+    //         "levelNm": "",
+    //         "irdntCode": "",
+    //         "pcNm": -1,
+    //         "imgUrl": "",
+    //         "detUrl": ""
+    //     })
+	// }
 	//재료 데이터 가져오기
 	http
 		.post("/recipes/get/irdnts")
@@ -206,27 +214,21 @@ export default {
 			console.dir(error);
 		});
 
-    http.get('recipes/search/irdnts/소금')
-    .then(({ data }) => {
+    http.get('/recipes/search/irdnts/소금')
+    .then(({data}) => {
 	  this.recipes = data;
-	  for (var i=0; i<this.recipes.length; i++ ) {
-	    http.get(`/recipes/${this.recipes[i].recipeId}/bookmark-count`)
-			.then((res) => {
-				this.likeCnt.push(res.data)
-			})
-			.catch((error) => {
-				console.dir(error);
-			});
-	}
     })
     .catch((error) => {
         alert('검색 결과 요청에 실패하였습니다.')
         console.log(error)
     })  
   },
-  mounted() {
-  },
-  computed: {
+  computed : {
+        imgUrl() {
+            return this.recipe.imgUrl
+        },
+	},
+  updated() {
   },
   watch: {
   },
