@@ -27,4 +27,6 @@ public interface PostService {
 	public int update(PostDto dto) throws Exception;
 	
 	public int delete(String id) throws Exception;
+	
+	public int addViewCount(String id) throws Exception;
 }

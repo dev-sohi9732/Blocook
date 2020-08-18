@@ -179,5 +179,15 @@ public class PostController {
 
 	}
 
+	@ApiOperation(value = "포스트 아이디를 받아 조회수 증가시키기", response = String.class)
+	@PutMapping(value = "/addViewCount/{id}")
+	public ResponseEntity<String> addViewCount(@PathVariable String id) throws Exception {
+		int total = postService.addViewCount(id);
+
+		if (total == 0) {
+			return new ResponseEntity<String>(FAIL, HttpStatus.OK);
+		}
+		return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+	}
 
 }

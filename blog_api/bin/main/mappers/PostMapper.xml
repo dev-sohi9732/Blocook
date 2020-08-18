@@ -3,8 +3,13 @@
 <mapper namespace="com.ssafy.blog.mapper.PostMapper">
 
 	<select id="selectAllPosts" resultType="com.ssafy.blog.dto.PostDto">
-		SELECT *
-		FROM post
+		SELECT a.*, b.like_cnt
+		  FROM (SELECT * 
+		  		  FROM post) as a
+		  LEFT JOIN (SELECT count(*) as like_cnt, post_id 
+		  			   FROM post_bookmark 
+		  			  GROUP BY post_id) as b
+				 ON a.id = b.post_id;
 	</select>
 
 	<select id="selectByTitle" parameterType="String" resultType="com.ssafy.blog.dto.PostDto">
@@ -26,7 +31,14 @@
 	</select>
 	
 	<select id="selectPostById" parameterType="String" resultType="com.ssafy.blog.dto.PostDto">
-		SELECT * FROM post WHERE id = #{id}
+		SELECT a.*, b.like_cnt
+		  FROM (SELECT * 
+		  		  FROM post 
+		  		 WHERE id = #{id}) as a
+		  LEFT JOIN (SELECT count(*) as like_cnt, post_id 
+		  			   FROM post_bookmark 
+		  			  GROUP BY post_id) as b
+			ON a.id = b.post_id;
 	</select>
 	
 	<insert id="bookmarkPost">
@@ -60,5 +72,11 @@
 	<delete id="delete" parameterType="map">
 		delete from post where id = #{id}
 	</delete>
+	
+	<update id="addViewCount" parameterType="String">
+		update post 
+		set view_cnt = view_cnt + 1
+		where id = #{id}
+	</update>
 
 </mapper>

@@ -30,4 +30,6 @@ public interface PostMapper {
 	public int update(PostDto dto);
 	
 	public int delete(String id);
+
+	public int addViewCount(String id);
 }

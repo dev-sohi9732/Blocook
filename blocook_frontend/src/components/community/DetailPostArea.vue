@@ -14,8 +14,8 @@
             <div>
 							<p style="text-align:left; margin-left:20px; font-size:1rem;font-family:'Poor Story',cursive;margin-bottom: 0px;">작성일 : {{post.createDate}}</p>
             	<p style="text-align:right; margin-right:20px; font-size:0.8rem;">
-								<i class="fa fa-eye"></i>&nbsp;{{post.view_cnt}}&emsp;
-								<i class="fa fa-heart" style="color:red;"></i>&nbsp;15&emsp;
+								<i class="fa fa-eye"></i>&nbsp;{{post.viewCnt}}&emsp;
+								<i class="fa fa-heart" style="color:red;"></i>&nbsp;{{post.likeCnt}}&emsp;
 								<i class="fa fa-comment-o"></i>&nbsp;{{comments.length}}
 							</p>
 						</div>
@@ -82,6 +82,7 @@ export default {
 			.then(response => {
                 this.post = response.data
                 this.unickname = this.$store.state.user.nickname
+                // 좋아요 표시했는지 여부 확인
                 if(this.$store.state.user.authorized == true) {
 					http.post('/posts/isbookmarked', {
 						"id": this.post.id,
@@ -97,7 +98,11 @@ export default {
 					.catch(error => {
 						console.log(error);
 					})
-				}
+                }
+                // 조회수 +1 처리
+                http.put(`/posts/addViewCount/${this.post.id}`)
+                    .then(res => {})
+                    .catch(err => console.log('add view_cnt error'))
             })
             .catch(error => {
 			console.log(error)
