@@ -3,16 +3,27 @@
 <mapper namespace="com.ssafy.blog.mapper.RecipeMapper">
 
 	<select id="selectAllRecipes" resultType="com.ssafy.blog.dto.RecipeDto">
-		SELECT *
-		FROM recipe
-		ORDER BY recipe_id DESC
+		SELECT a.*, b.like_cnt
+		  FROM (SELECT * 
+		  		  FROM recipe) as a
+		  LEFT JOIN (SELECT count(*) as like_cnt, recipe_id
+		  			   FROM recipe_bookmark 
+		  			  GROUP BY recipe_id) as b
+				 ON a.recipe_id = b.recipe_id
+              ORDER BY recipe_id DESC;
 	</select>
 
 	<select id="selectByNationCode" parameterType="String" resultType="com.ssafy.blog.dto.RecipeDto">
-		SELECT * 
-		FROM recipe 
-		WHERE nation_code = #{nationCode}
-		order by recipe_id
+		SELECT a.*, b.like_cnt
+		  FROM (SELECT * 
+				  FROM recipe 
+				 WHERE nation_code = #{nationCode}
+		order by recipe_id) as a
+		  LEFT JOIN (SELECT count(*) as like_cnt, recipe_id
+		  			   FROM recipe_bookmark 
+		  			  GROUP BY recipe_id) as b
+				 ON a.recipe_id = b.recipe_id
+              ORDER BY recipe_id DESC;
 	</select>
 
 	<select id="selectByIrdnts" resultType="com.ssafy.blog.dto.RecipeDto">
