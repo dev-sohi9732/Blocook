@@ -12,18 +12,28 @@ import UserInfo from "./views/user/UserInfo.vue";
 import Recipe from "./views/recipe/Recipe.vue";
 import SearchRecipe from "./views/recipe/SearchRecipe.vue";
 import AddRecipe from "./views/recipe/AddRecipe.vue";
+import EditRecipe from "./views/recipe/EditRecipe.vue";
 import MyRecipe from "./views/recipe/MyRecipe.vue";
 import Community from "./views/community/Community.vue";
 import PostEditor from "./views/community/PostEditor.vue";
 import MyPost from "./views/community/MyPost.vue";
 import DetailPost from "./views/community/DetailPost.vue";
 import EditPost from "./views/community/EditPost.vue";
+import Timer from "./components/recipe/Timer.vue";
 Vue.use(Router);
 
 export default new Router({
   mode: 'history',
   linkExactActiveClass: "active",
   routes: [
+    {
+      path: "/timer",
+      name: "timer",
+      components: {
+        header: AppHeader,
+        default: Timer
+      }
+    },
     {
       path: "/",
       name: "main",
@@ -94,6 +104,14 @@ export default new Router({
       components: {
         header: AppHeader,
         default: AddRecipe
+      }
+    },
+    {
+      path: "/editrecipe",
+      name: "editrecipe",
+      components: {
+        header: AppHeader,
+        default: EditRecipe
       }
     },
     {

@@ -41,10 +41,10 @@
 		SELECT a.*, b.like_cnt
 		  FROM (SELECT * 
 				  FROM recipe 
-       		     WHERE user_uid = 21) as a
+       		     WHERE user_uid = #{uid}) as a
 		  LEFT JOIN (SELECT count(*) as like_cnt, recipe_id 
 		  			   FROM recipe_bookmark 
-		  			  WHERE uid = 21 
+		  			  WHERE uid = #{uid}
 		  			  GROUP BY recipe_id) as b
 		 	ON a.recipe_id = b.recipe_id
 		 ORDER BY recipe_id DESC;
