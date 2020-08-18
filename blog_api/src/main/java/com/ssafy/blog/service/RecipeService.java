@@ -54,4 +54,6 @@ public interface RecipeService {
 	public int deleteRecipeCooking(String recipeId) throws Exception;
 	
 	public int deleteRecipeIrdnt(String recipeId) throws Exception;
+	
+	public List<RecipeDto> selectTypes() throws Exception;
 }

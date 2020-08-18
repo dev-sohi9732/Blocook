@@ -166,6 +166,12 @@
 		FROM recipe_irdnt
 		WHERE recipe_id = #{recipeId};
 	</delete>
+	
+	<select id="selectTypes" resultType="com.ssafy.blog.dto.RecipeDto">
+		SELECT DISTINCT ty_code, ty_nm
+		  FROM recipe;
+	</select>
+	
 </mapper>
 
 
