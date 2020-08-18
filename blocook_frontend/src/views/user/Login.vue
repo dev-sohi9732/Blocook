@@ -18,7 +18,7 @@
                           body-classes="px-lg-5 py-lg-5"
                           class="border-0"
                           id="logincard">
-                        <template>
+                        <!-- <template>
                             <div class="text-muted text-center mb-3">
                                 <small>간편 로그인하기</small>
                             </div>
@@ -33,9 +33,9 @@
                                     Google
                                 </base-button>
                             </div>
-                        </template>
+                        </template> -->
                         <template>
-                            <div class="text-center text-muted mb-4"></div>
+                            <div class="text-center text-muted mb-4"><span>로그인하기</span></div>
                             <form role="form">
                                 <base-input alternative
                                             class="mb-3"
@@ -102,7 +102,7 @@ export default {
 				this.$router.push('/') // 메인 페이지로 이동
 			})
 			.catch((error) => {
-				alert('로그인에 실패하였습니다.')
+				alert('잘못된 이메일 또는 비밀번호입니다.')
 				console.log(error)
 				console.log('LOGIN FAILED..')
 			})
