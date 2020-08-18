@@ -10,7 +10,7 @@
 
 		<div class="myrecipe" v-if="nodata">
 			<div class="container" style="padding: 10px 25px 30px 25px;">
-				<h3 style="color:red;font-family: 'Poor Story', cursive;">등록된 레시피가 없습니다.</h3>
+				<h3 style="font-family: 'Poor Story', cursive;">등록된 레시피가 없습니다.</h3>
 			</div>
 		</div>
 

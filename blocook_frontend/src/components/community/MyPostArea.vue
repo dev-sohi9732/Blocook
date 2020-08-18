@@ -11,7 +11,8 @@
 			<tbody>
 				<b-tabs>
 					<b-tab title="작성글" active>
-						<table>
+						<h3 style="font-family: 'Poor Story', cursive;text-align:center;margin-top:30px;" v-if="noPost">작성한 글이 없습니다.</h3>
+						<table v-else>
 						<tbody>
 							<tr v-for="(post, index) in posts" :key="index + '_items'">
 								<td>
@@ -29,7 +30,8 @@
 						</table>
 					</b-tab>
 					<b-tab title="작성댓글">
-						<table>
+						<h3 style="font-family: 'Poor Story', cursive;text-align:center;margin-top:30px;" v-if="noComment">작성한 댓글이 없습니다.</h3>
+						<table v-else>
 						<tbody>
 							<tr v-for="(comment, index) in comments" :key="index + '_comments'">
 								<MyPostCommentItem :comment="comment" />
@@ -53,6 +55,8 @@ export default {
 			posts: [],
 			comments: [],
 			article: [],
+			noPost: false,
+			noComment: false
 		}
 	},
 	components: {
@@ -67,6 +71,7 @@ export default {
 		http.get(`/posts/search/uid/${this.$store.state.user.uid}`)
 			.then(res => {
 				this.posts = res.data
+				if(res.data.length == 0) this.noPost = true;
 			})
 			.catch(err => {
 				console.log("error!!!")
@@ -74,6 +79,7 @@ export default {
 		http.get(`/comments/search/uid/${this.$store.state.user.uid}`)
 			.then(res => {
 				this.comments = res.data
+				if(res.data.length == 0) this.noComment = true;
 			})
 			.catch(err => {
 				console.log("error!!!")
