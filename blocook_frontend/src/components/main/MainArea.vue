@@ -224,7 +224,6 @@ export default {
             this.sliding = false;
         },
         onSubmit() {
-            console.log(eeeee);
         }
     }
 };

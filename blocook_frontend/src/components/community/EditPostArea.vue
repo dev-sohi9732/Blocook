@@ -57,8 +57,6 @@ export default {
           http
             .put('/posts/update', post)
             .then(res => {
-                console.log(res);
-                console.log(res.data)
                 alert("글이 수정 완료되었습니다.");
                 this.$router.push('/community');
             })
@@ -69,7 +67,6 @@ export default {
       const params = new URL(document.location).searchParams;
       http.get(`/posts/${params.get('Id')}`)
       .then(res => {
-          console.log(res.data)
           this.Epost = res.data
       })
       .catch(err => console.log('errrr'))

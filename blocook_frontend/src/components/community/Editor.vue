@@ -55,7 +55,6 @@ export default {
             "content" : this.editorData
           })
           .then(res => {
-            console.log(res.data)
             alert("글이 등록 완료되었습니다.");
             this.$router.push('/community').catch(()=>{});
           })

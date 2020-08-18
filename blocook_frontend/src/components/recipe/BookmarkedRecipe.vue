@@ -34,7 +34,6 @@ export default {
     .then(({ data }) => {
 			this.myBookmarkedRecipes = data;
 			for(var i = 0; i < this.myBookmarkedRecipes.length; i++) {
-				console.log(this.myBookmarkedRecipes[i].imgUrl)
 			}
     })
     .catch((error) => {

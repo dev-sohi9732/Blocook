@@ -6,7 +6,6 @@
             <div class="searchbar" v-if="selected=='irdnt'">
                 <div style="margin-left:31px;margin-right:30px;">
                     <select v-model="selected" style="float:left;">
-                        <option disabled value="">선택</option>
                         <option value="recipe_nm" >요리</option>
                         <option value="irdnt">재료</option>
                     </select>
@@ -29,7 +28,6 @@
             <!-- 요리 검색 -->
             <div class="searchbar" v-else>
                 <select v-model="selected">
-                    <option disabled value="">선택</option>
                     <option value="recipe_nm" >요리</option>
                     <option value="irdnt">재료</option>
                 </select>
@@ -90,7 +88,6 @@ export default {
     data() {
       return {
         recipelist:[],
-        sorting:'calorie'
       }
     },
     data() {

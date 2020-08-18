@@ -126,7 +126,6 @@ export default {
             // 회원가입 요청
             http.post('/account/signup', newUser)
             .then(({ data }) => { // 회원가입 성공
-                console.log(data)
                 if (data === "success") {
                     alert('회원가입에 성공하였습니다!')
                     // 이메일 인증 생략 (임시)
@@ -155,7 +154,6 @@ export default {
             // 회원가입 인증 이메일 요청
             http.get(`/account/validation/send/${email}`)
             .then(({ data }) => { // 회원가입 성공
-                console.log(data)
                 if (data === "success") {
                 alert('회원가입 인증 이메일이 전송되었습니다!')
                 } else {

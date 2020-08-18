@@ -429,7 +429,6 @@ export default {
     addtimer(timerstep) {
       if(this.steps[timerstep].timerYN == "N") this.steps[timerstep].timerYN = "Y";
       else if(this.steps[timerstep].timerYN == "Y") this.steps[timerstep].timerYN = "N";
-      console.log(this.steps);
 		},
     addstep() {
       this.cookingpicture.push({uploaded: false, imageData: null, uploadValue: 0});
@@ -493,7 +492,6 @@ export default {
           irdntTyNm: '양념'
         });
       }
-      console.log(this.all_irdnts);
       
       http
       .post("/recipes/add/recipe",{ // 레시피 기본 정보 등록

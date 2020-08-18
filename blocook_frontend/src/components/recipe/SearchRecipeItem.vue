@@ -33,7 +33,6 @@ export default {
       http.get(`/recipes/${this.recipe.recipeId}/bookmark-count`)
 			.then((res) => {
         this.likeCnt = res.data
-        console.log(res.data)
 			})
 			.catch((error) => {
 				console.dir(error);
@@ -43,7 +42,6 @@ export default {
       http.get(`/recipes/${this.recipe.recipeId}/bookmark-count`)
 			.then((res) => {
         this.likeCnt = res.data
-        console.log(res.data)
 			})
 			.catch((error) => {
 				console.dir(error);

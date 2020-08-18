@@ -97,7 +97,6 @@ export default {
 				password: this.password
 			})
 			.then(({ data }) => { // 로그인 성공
-				console.log(data)
 				this.$store.dispatch('user/LOGIN', { payload: data }) // store 반영
 				this.$router.push('/') // 메인 페이지로 이동
 			})
