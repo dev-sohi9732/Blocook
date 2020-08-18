@@ -35,10 +35,10 @@
         <center>
             <hr style="margin-bottom:0px;">
             <div>
-                <button @click="MoveToList()" class="listbtn" ><p style="font-size:0.65rem; font-weight:bold;margin-bottom: 0px;">목록</p></button>
+                <button @click="MoveToList()" class="listbtn" ><p style="font-size:0.65rem; font-weight:bold;margin-bottom: 0px;color:black;">목록</p></button>
                 <div v-if="post.uid==this.$store.state.user.uid" style="display:inline;">
-                    <router-link :to="'editpost?Id='+post.id" style="background-color:rgb(236, 236, 236); color:gray;" class="detailbtns"><span style="font-size:0.65rem; font-weight:bold;">수정</span></router-link>
-                    <button @click="DeletePost(post.id)" class="detailbtns" ><p style="font-size:0.65rem; font-weight:bold;margin-bottom: 0px;">삭제</p></button>
+                    <router-link :to="'editpost?Id='+post.id" style="border-top:2px solid rgb(236, 236, 236); background-color:rgb(236, 236, 236); color:black;" class="detailbtns"><span style="font-size:0.65rem; font-weight:bold;">수정</span></router-link>
+                    <button @click="DeletePost(post.id)" class="detailbtns" ><p style="font-size:0.65rem; font-weight:bold;margin-bottom: 0px;color:black;">삭제</p></button>
                 </div>
             </div>
             <div style="margin-top: 20px;">
@@ -64,11 +64,12 @@
 
 <script>
 import http from "@/util/http-common.js";
+String.prototype.trim = function() { return this.replace(/^\s+|\s+$/g,""); }
 export default {
     data() {
         return {
             post: [],
-            content: null,
+            content: '',
             comments: [],
             like: false,
             unickname:'',
@@ -112,17 +113,20 @@ export default {
     },
     methods: {
         CreateComment() {
-            http.post('/comments/write', {
-                "postId":this.post.id,
-                "uid": this.$store.state.user.uid,
-                "nickname": this.$store.state.user.nickname,
-                "content": this.content
-            })
-            .then(res => {
-                alert("댓글이 등록되었습니다.");
-                this.$router.go()
-            })
-            .catch(err => console.log('err!!'))
+            if (this.content.trim()=='')
+                alert("댓글을 입력해주세요.");
+            else
+                http.post('/comments/write', {
+                    "postId":this.post.id,
+                    "uid": this.$store.state.user.uid,
+                    "nickname": this.$store.state.user.nickname,
+                    "content": this.content
+                })
+                .then(res => {
+                    alert("댓글이 등록되었습니다.");
+                    this.$router.go()
+                })
+                .catch(err => console.log('err!!'))
         },
         DeletePost(delId) {
             http.delete(`/posts/delete/${delId}`)

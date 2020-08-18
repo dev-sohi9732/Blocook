@@ -4,7 +4,6 @@
 			<select v-model="selected">
 				<!-- v-model="option" -->
 				<!-- v-on:change="filter" -->
-				<option disabled value="">선택</option>
 				<option value="title">제목</option>
 				<!-- <option value="content">내용</option> -->
 				<option value="writer">작성자</option>
@@ -107,7 +106,7 @@ import lodash from 'lodash'
 export default {
 	data() {
 	  return {
-		selected: '',
+		selected: 'title',
 		articles: [],
 		query:'',
 		sorting:'new',
