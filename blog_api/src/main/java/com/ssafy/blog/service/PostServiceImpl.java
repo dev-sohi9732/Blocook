@@ -74,4 +74,8 @@ public class PostServiceImpl implements PostService {
 		return postMapper.delete(id);
 	}
 
+	@Override
+	public int addViewCount(String id) throws Exception {
+		return postMapper.addViewCount(id);
+	}
 }

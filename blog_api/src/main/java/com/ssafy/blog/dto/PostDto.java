@@ -9,9 +9,10 @@ public class PostDto {
 	private int recipe_id;
 	private String title;
 	private String content;
-	private int view_cnt;
+	private int viewCnt;
 	private LocalDateTime createDate;
 	private String nickname;
+	private int likeCnt;
 	
 	public int getId() {
 		return id;
@@ -43,11 +44,11 @@ public class PostDto {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public int getView_cnt() {
-		return view_cnt;
+	public int getViewCnt() {
+		return viewCnt;
 	}
-	public void setView_cnt(int view_cnt) {
-		this.view_cnt = view_cnt;
+	public void setViewCnt(int viewCnt) {
+		this.viewCnt = viewCnt;
 	}
 	public LocalDateTime getCreateDate() {
 		return createDate;
@@ -55,17 +56,24 @@ public class PostDto {
 	public void setCreateDate(LocalDateTime createDate) {
 		this.createDate = createDate;
 	}
-	
 	public String getNickname() {
 		return nickname;
 	}
 	public void setNickname(String nickname) {
 		this.nickname = nickname;
 	}
+	public int getLikeCnt() {
+		return likeCnt;
+	}
+	public void setLike_cnt(int likeCnt) {
+		this.likeCnt = likeCnt;
+	}
+	
 	@Override
 	public String toString() {
 		return "PostDto [id=" + id + ", uid=" + uid + ", recipe_id=" + recipe_id + ", title=" + title + ", content="
-				+ content + ", view_cnt=" + view_cnt + ", createDate=" + createDate + ", nickname=" + nickname + "]";
+				+ content + ", viewCnt=" + viewCnt + ", createDate=" + createDate + ", nickname=" + nickname
+				+ ", likeCnt=" + likeCnt + "]";
 	}
 	
 

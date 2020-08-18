@@ -45,11 +45,11 @@
 
 		<div class="posts">
 			<table>
+				<!-- 조회순 -->
 				<tbody v-if="sorting=='see'">
-					<tr v-for="(post, index) in articles" :key="index + '_items'" >
+					<tr v-for="(post, index) in viewPosts" :key="index + '_items'" >
 						<td>
-							<!-- :to="'detailpost?Id=' +post.id" -->
-							<router-link :to="'detailpost?Id=' +post.id">{{post.title}}
+							<router-link :to="'detailpost?Id=' +post.id"><div>{{post.title}}</div>
 								<div class="info">
 									<span style="color:gray;">{{post.nickname}}</span>&emsp;
 									<span style="color:gray;">{{post.createDate}}</span>
@@ -61,11 +61,11 @@
 						</td>
 					</tr>
 				</tbody>
+				<!-- 좋아요순 -->
 				<tbody v-else-if="sorting=='like'">
-					<tr v-for="(post, index) in articles" :key="index + '_items'" >
+					<tr v-for="(post, index) in likePosts" :key="index + '_items'" >
 						<td>
-							<!-- :to="'detailpost?Id=' +post.id" -->
-							<router-link :to="'detailpost?Id=' +post.id">{{post.title}}
+							<router-link :to="'detailpost?Id=' +post.id"><div>{{post.title}}</div>
 								<div class="info">
 									<span style="color:gray;">{{post.nickname}}</span>&emsp;
 									<span style="color:gray;">{{post.createDate}}</span>
@@ -77,15 +77,15 @@
 						</td>
 					</tr>
 				</tbody>
+				<!-- 최신순 -->
 				<tbody v-else>
 					<tr v-for="(post, index) in newPosts" :key="index + '_items'" >
 						<td>
-							<!-- :to="'detailpost?Id=' +post.id" -->
-							<router-link :to="'detailpost?Id=' +post.id">{{post.title}}
+							<router-link :to="'detailpost?Id=' +post.id"><div>{{post.title}}</div>
 								<div class="info">
 									<span style="color:gray;">{{post.nickname}}</span>&emsp;
-								<span style="color:gray;">{{post.createDate}}</span>
-							</div>
+									<span style="color:gray;">{{post.createDate}}</span>
+								</div>
 							</router-link>
 						</td>
 						<td class="heart">
@@ -180,6 +180,12 @@ export default {
 	computed: {
 		newPosts() {
 			return _.orderBy(this.articles, 'createDate','desc')
+		},
+		likePosts() {
+			return _.orderBy(this.articles, 'likeCnt','desc')
+		},
+		viewPosts() {
+			return _.orderBy(this.articles, 'view_cnt','desc')
 		}
 	}
 }
