@@ -8,7 +8,13 @@
 			</router-link>
 		</div>
 
-		<div class="myrecipe">
+		<div class="myrecipe" v-if="nodata">
+			<div class="container" style="padding: 10px 25px 30px 25px;">
+				<h3 style="color:red;font-family: 'Poor Story', cursive;">등록된 레시피가 없습니다.</h3>
+			</div>
+		</div>
+
+		<div class="myrecipe" v-else>
 			<div class="container" style="padding: 10px 25px 30px 25px;">
 				<div class="row">
 					<div class="col-6" v-for="myRecipe in myRecipes" :key="myRecipe.recipeId">
@@ -38,6 +44,7 @@ export default {
 	data() {
 		return {
 			myRecipes: [],
+			nodata: false
 		}
 	},
 	created() {
@@ -45,6 +52,7 @@ export default {
 		.post("recipes/search/userUid", this.$store.state.user.uid)
     .then(({ data }) => {
 			this.myRecipes = data;
+			if(data.length == 0) this.nodata = true;
     })
     .catch((error) => {
 			alert('결과 요청에 실패하였습니다.')
