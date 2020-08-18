@@ -237,7 +237,7 @@
             </tabs>
 
             <button class="button btn" @click="checkHandler()" id="registerbtn">
-              <i class="fa fa-check"></i>&nbsp;레시피 등록 완료
+              <i class="fa fa-check"></i>&nbsp;레시피 수정 완료
             </button>
         </div>
     </div>
@@ -250,19 +250,17 @@ import Tabs from "@/components/Tabs/Tabs.vue";
 import TabPane from "@/components/Tabs/TabPane.vue";
 
 export default {
-  name: 'addrecipe',
+  name: 'editrecipe',
   components: {
     Tabs,
     TabPane
   },
   data() {
     return {
-      title: "addrecipe page",
+      title: "editrecipe page",
       minus: false,
-      steps: [
-        {cookingNo: 1, cookingDc: "", streStepImageUrl: require('@/assets/blocookImg/addimage.jpg'), timerYN: "N", timerM: 0, timerS: 0}
-      ],
-      addRecipeId: '',
+      steps: [],
+      editRecipeId: '',
 
       //form 정보
       recipenm: '',
@@ -317,9 +315,7 @@ export default {
       
       //image
       gibonpicture: {picture: require('@/assets/blocookImg/addimage.jpg'), uploaded: false, imageData: null, uploadValue: 0},
-      cookingpicture: [
-        {uploaded: false, imageData: null, uploadValue: 0}
-      ],
+      cookingpicture: [],
     }
   },
   created() {
@@ -332,6 +328,51 @@ export default {
 		.catch((error) => {
 			console.dir(error);
 		});
+		// 기존 레시피 정보 가져오기
+		const params = new URL(document.location).searchParams;
+		http.get(`/recipes/${params.get('Id')}`) // 레시피 기본 정보
+			.then(response => {
+				this.gibonpicture.picture = response.data.imgUrl;
+				if(response.data.imgUrl != null) this.gibonpicture.uploaded = true;
+				this.editRecipeId = response.data.recipeId;
+				this.recipenm = response.data.recipeNmKo;
+				this.recipedc = response.data.sumry;
+				this.selectedcat = response.data.nationNm;
+				this.selectedty = response.data.tyNm;
+				this.time = response.data.cookingTime;
+				this.kcal = response.data.calorie;
+				this.person = response.data.qnt;
+				if(response.data.levelNm == "초보환영") this.level.value = 1;
+				else if(response.data.levelNm == "보통") this.level.value = 2;
+				else if(response.data.levelNm == "어려움") this.level.value = 3;
+				this.level.text = response.data.levelNm;
+			})
+			.catch(error => {
+			console.log(error)
+			})
+		http.get(`/recipes/${params.get('Id')}/irdnts`) // 레시피 재료 정보
+			.then(res => {
+				for(var i = 0; i < res.data.length; i++) {
+					if(res.data[i].irdntTyCode == 3060001) this.arr_mainirdnt.push({mainirdnt_nm:res.data[i].irdntNm, mainirdnt_vol:res.data[i].irdntCpcty});
+					else if(res.data[i].irdntTyCode == 3060002) this.arr_subirdnt.push({subirdnt_nm:res.data[i].irdntNm, subirdnt_vol:res.data[i].irdntCpcty});
+					else if(res.data[i].irdntTyCode == 3060003) this.arr_seasoningirdnt.push({seasoningirdnt_nm:res.data[i].irdntNm, seasoningirdnt_vol:res.data[i].irdntCpcty});
+				}
+			})
+			.catch(err => {
+			console.log(err)
+			})
+		http.get(`/recipes/${params.get('Id')}/cookings`) // 레시피 과정 정보
+		.then(res => {
+			for(var i = 0; i < res.data.length; i++) {
+				this.steps.push({cookingNo: res.data[i].cookingNo, cookingDc: res.data[i].cookingDc, streStepImageUrl: res.data[i].streStepImageUrl, timerYN: res.data[i].timerYN, timerM: res.data[i].timerM, timerS: res.data[i].timerS});
+				if(res.data[i].streStepImageUrl != null)
+					this.cookingpicture.push({uploaded: true, imageData: null, uploadValue: 0});
+				else this.cookingpicture.push({uploaded: false, imageData: null, uploadValue: 0});
+			}
+		})
+		.catch(err => {
+			console.log(err)
+		})
 	},
 	methods: {
     previewGibonImage(event) {
@@ -465,10 +506,20 @@ export default {
 
 			if (!err) alert(msg);
 			else {
-				this.saveGibonHandler();
+				this.deleteGibonHandler(this.editRecipeId);
 			}
-    },
-    saveGibonHandler() {
+		},
+		deleteGibonHandler(delRecipeId) {
+			http
+      .delete(`/recipes/delete/recipe/${delRecipeId}`) // 레시피 삭제
+      .then(({ data }) => {
+				this.updateGibonHandler();
+      })
+      .catch((error) => {
+          console.dir(error);
+      });
+		},
+    updateGibonHandler() {
       for(var i = 0; i < this.arr_mainirdnt.length; i++) {
         this.all_irdnts.push({
           irdntNm: this.arr_mainirdnt[i].mainirdnt_nm,
@@ -493,11 +544,11 @@ export default {
           irdntTyNm: '양념'
         });
       }
-      console.log(this.all_irdnts);
       
       http
-      .post("/recipes/add/recipe",{ // 레시피 기본 정보 등록
+      .post("/recipes/update/recipe",{ // 레시피 기본 정보 수정
         recipe: {
+					recipeId: this.editRecipeId,
           recipeNmKo: this.recipenm,
           sumry: this.recipedc,
           nationNm: this.selectedcat,
@@ -512,22 +563,24 @@ export default {
         irdnts: this.all_irdnts
       })
       .then(({ data }) => {
-        this.addRecipeId = data;
-        this.saveCookingHandler(this.addRecipeId);
+        this.updateCookingHandler(this.editRecipeId);
       })
       .catch((error) => {
           console.dir(error);
       });
     },
-    saveCookingHandler(recipeId) {
+    updateCookingHandler(recipeId) {
+			for(var i = 0; i < this.steps.length; i++) {
+				this.steps[i].cookingNo = i + 1;
+			}
       http
-      .post("/recipes/add/cookings",{ // 레시피 상세 정보 등록
+      .post("/recipes/update/cookings",{ // 레시피 상세 정보 수정
         recipeId: recipeId,
         cookings: this.steps
       })
       .then(({ data }) => {
-        alert("레시피가 등록 완료되었습니다.");
-        this.$router.push('myrecipe');
+        alert("레시피가 수정되었습니다.");
+        this.$router.push('recipe?Id='+recipeId);
       })
       .catch((error) => {
           console.dir(error);
@@ -616,8 +669,8 @@ select {
 	border-radius: 100%;
 	width: 38px;
 	margin-right: 5px;
-  float: none;
-  margin-bottom: 5px;
+	float: none;
+	margin-bottom: 5px;
   padding: 6px 12px 6px 12px;
   height: 38px;
 }
@@ -634,8 +687,8 @@ select {
 	background-color: rgb(255, 93, 72); 
 	border-radius: 100%;
 	width: 38px;
-  float: none;
-  margin-bottom: 5px;
+	float: none;
+	margin-bottom: 5px;
   padding: 6px 12px 6px 12px;
   height: 38px;
 }
