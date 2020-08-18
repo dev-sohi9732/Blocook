@@ -63,7 +63,7 @@
             <CategoryItem v-for="recipe in sortcalories" :key="recipe.id" :recipe="recipe" />
         </div>
         <div class="row" v-else style="margin-top:20px;">
-            <CategoryItem v-for="recipe in recipes" :key="recipe.id" :recipe="recipe" />
+            <CategoryItem v-for="recipe in recipelist" :key="recipe.id" :recipe="recipe" />
         </div>
         <a style="display:scroll;position:fixed;bottom:12px;right:12px;" href="#" title="맨 위로">
             <img style="width:45px; height:45px; opacity: 0.5;" src="@/assets/blocookImg/top.png">
@@ -94,7 +94,7 @@ export default {
             http
             .get("/recipes/search/all" )
             .then(response => {
-                this.recipes = response.data
+                this.recipelist = response.data
             })
             .catch(error => {
                 console.log(error)
@@ -112,7 +112,7 @@ export default {
             http
             .get("/recipes/search/nation/" + code )
             .then(response => {
-            this.recipes = response.data
+            this.recipelist = response.data
             // this.$router.push('/categoryresult')
             })
             .catch(error => {
@@ -125,7 +125,7 @@ export default {
             http
             .get("/recipes/search/all" )
             .then(response => {
-                this.recipes = response.data
+                this.recipelist = response.data
             })
             .catch(error => {
                 console.log(error)
@@ -135,27 +135,27 @@ export default {
             http
             .get("/recipes/search/nation/" + nationCode )
             .then(response => {
-            this.recipes = response.data
+            this.recipelist = response.data
             // this.$router.push('/categoryresult')
             })
             .catch(error => {
             console.log(error)
             })
         },
-        onRecipeGet(recipes) {
-            this.$emit('recipe-get', recipes)
+        onRecipeGet(recipelist) {
+            this.$emit('recipe-get', recipelist)
         }
     },
     computed: {
         sortcalories: function () {
-            return _.sortBy(this.recipes, 'calorie')
+            return _.sortBy(this.recipelist, 'calorie')
         }
     },
-    props: {
+    /*props: {
         recipes: {
             type: Array,
         },
-    }
+    }*/
 }
 </script>
 
