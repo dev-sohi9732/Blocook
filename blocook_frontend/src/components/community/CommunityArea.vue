@@ -83,7 +83,7 @@
 							<router-link :to="'detailpost?Id=' +post.id"><div>{{post.title}}</div>
 								<div class="info">
 									<span style="color:gray;">{{post.nickname}}</span>&emsp;
-									<span style="color:gray;">{{post.createDate}}</span>
+									<span style="color:gray;">{{post.createDate | formatDate}}</span>
 								</div>
 							</router-link>
 						</td>
@@ -103,6 +103,7 @@ import http from "@/util/http-common.js";
 import CommunityItem from "./CommunityItem.vue"
 import VueLodash from 'vue-lodash'
 import lodash from 'lodash'
+
 export default {
 	data() {
 	  return {

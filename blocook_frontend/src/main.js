@@ -31,7 +31,13 @@ import firebase from 'firebase'
 import CKEditor from 'ckeditor4-vue'
 import VueSimpleAccordion from 'vue-simple-accordion';
 import 'vue-simple-accordion/dist/vue-simple-accordion.css';
+import moment from 'moment'
 
+Vue.filter('formatDate', function(value) {
+  if (value) {
+    return moment(String(value)).format('YYYY/MM/DD hh:mm a')
+  }
+});
 Vue.config.productionTip = false;
 Vue.use(Argon);
 Vue.use(BootstrapVue);
