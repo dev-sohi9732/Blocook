@@ -5,7 +5,7 @@
 		</center>
 
 		<div id="carousel">
-				<carousel :loop="true" :perPage="1" :navigationEnabled="true" :centerMode="true" >
+				<carousel :loop="true" :perPage="1" :navigationEnabled="true" :centerMode="true" :navigateTo="slideIndex" v-on:pageChange="pageChange">
 						<!--------------------------- 레시피 기본정보 --------------------------->
 						<slide>
 								<center class="menu">
@@ -70,32 +70,32 @@
 						<slide v-for="(cooking,cooking_key) in cookings" :key="cooking_key">
 								<div style="margin-bottom: 20px;">
 									<b-card no-body>
-									<b-tabs card>
-									<b-tab no-body title="레시피">
-									<center class="menu">
-										<h5 style="margin-top: 15px;">Step {{ cookings.indexOf(cooking) + 1 }}</h5>
-										<br>
-										<div class="cookingimg">
-											<b-card-img :src="cooking.streStepImageUrl"></b-card-img>
+									<b-tabs card >
+									<b-tab no-body title="레시피" id="recipe">
+										<center class="menu">
+											<h5 style="margin-top: 15px;">Step {{ cookings.indexOf(cooking) + 1 }}</h5>
+											<br>
+											<div class="cookingimg">
+												<b-card-img :src="cooking.streStepImageUrl"></b-card-img>
+											</div>
+										</center>
+										<div class="container inputbox">
+											<table>
+											<tbody>
+												<tr>
+													<td style="width:300px;">
+														{{cooking.cookingDc}}
+													</td>
+												</tr>
+											</tbody>
+											</table>
+											<!-- v-if="cooking.timerYN==Y" -->
+											<!-- <router-link :to="'timer?time='+cooking.timerTime" class="timer_btn">타이머 보기</router-link> -->
 										</div>
-									</center>
-									<div class="container inputbox">
-										<table>
-										<tbody>
-											<tr>
-												<td style="width:300px;">
-													{{cooking.cookingDc}}
-												</td>
-											</tr>
-										</tbody>
-										</table>
-										<!-- v-if="cooking.timerYN==Y" -->
-										<!-- <router-link :to="'timer?time='+cooking.timerTime" class="timer_btn">타이머 보기</router-link> -->
-									</div>
 									</b-tab>
-									<b-tab v-if="cooking.timerYN=='Y'" title="타이머">
+									<b-tab v-if="cooking.timerYN=='Y'" title="타이머" id="timer">
 									<!-- v-if="cooking.timerYN==Y" -->
-									<Timer :cooking="cooking" />
+										<Timer :cooking="cooking" />
 									</b-tab>
 									</b-tabs>
 								</b-card>
@@ -105,13 +105,16 @@
 		</div>
 
 		<button class="button btn" @click="record">음성인식</button>
-		<button class="button btn" @click="recordresult">인식결과</button>
+		<button class="button btn" @click="stop">음성종료</button>
+		<!-- <button class="button btn" @click="textToSpeech" value="">음성합성</button> -->
 	</div>
 </template>
 <script>
 import http from "@/util/http-common.js";
 import Timer from '@/components/recipe/Timer.vue'
-var say = '';
+
+var audio = new Audio();
+
 export default {
 	components: {
         Timer,
@@ -129,8 +132,21 @@ export default {
 			cookings: [],
 			bookmarkCnt: 0,
 			like: false,
-			// say: ""
+			slideIndex: 0,
+			cookingsLen: 0,
+			micStat: true
 		};
+	},
+	watch:{
+		slideIndex: function() {
+			audio.pause();
+			//tts
+			if(this.slideIndex != 0){
+				this.textToSpeech(this.cookings[this.slideIndex-1].cookingDc);
+			} else {
+				this.textToSpeech(this.recipe.recipeNmKo);
+			}
+		}
 	},
 	created() {
 		const params = new URL(document.location).searchParams;
@@ -143,7 +159,6 @@ export default {
 						"uid": this.$store.state.user.uid
 					})
 					.then(response => {
-						console.log();
 						if(response.data == "success"){
 							this.like = true;
 						} else {
@@ -154,6 +169,7 @@ export default {
 						console.log(error);
 					})
 				}
+				this.textToSpeech(this.recipe.recipeNmKo);
 			})
 			.catch(error => {
 				console.log(error)
@@ -167,7 +183,8 @@ export default {
 			})
 		http.get(`/recipes/${params.get('Id')}/cookings`)
 		.then(res => {
-			this.cookings = res.data
+			this.cookings = res.data;
+			this.cookingsLen = this.cookings.length;
 		})
 		.catch(err => {
 			console.log(err)
@@ -179,6 +196,18 @@ export default {
 		.catch(err => {
 			console.log(err)
 		})
+
+		// STT
+		this.$store.state.speechRecognition.continuous = true;
+		this.$store.state.speechRecognition.addEventListener('result', event => {
+				var text = event.results[event.results.length-1][0].transcript.trim();
+				this.speechHandler(text);
+			})
+		this.$store.state.speechRecognition.onend = function() {
+			if(this.micStat)
+				this.$store.state.speechRecognition.start();
+		};
+		this.$store.state.speechRecognition.start();
 	},
 	methods: {
 		addBookmark() { // 좋아요 누름
@@ -206,21 +235,85 @@ export default {
 				console.log(error)
 			})
 		},
+		pageChange(i) { 
+			this.slideIndex = i;
+		},		
 		record() {
-			var speechRecognition = new webkitSpeechRecognition();
-			speechRecognition.onresult = function(event) {
-				console.log(event.results[0][0].transcript);
-				console.log(typeof(event.results[0][0].transcript));
-				say = event.results[0][0].transcript;
-				alert(say);
-			};
-			speechRecognition.start();
+			this.$store.state.speechRecognition.stop();
+			this.$store.state.speechRecognition.start();
 		},
-		recordresult() {
-			// alert(this.say);
-			// console.log(typeof(this.say));
-			// console.log(this.say);
-			console.log(say);
+		stop(){
+			this.$store.state.speechRecognition.stop();
+		},
+		textToSpeech(sumary) {
+			audio.pause();
+			http
+				.post('/recipes/tts', {
+					content: sumary
+				},{
+					responseType: "blob"
+				})
+				.then(({ data }) => {
+					var blob=new Blob([data], {type : 'audio/ogg'});
+					const audioUrl = URL.createObjectURL(blob);
+					audio = new Audio(audioUrl);
+					audio.play();
+				})
+				.catch((error) => {
+					alert('처리 실패하였습니다.');
+					console.log(error);
+				})
+		},
+		speechHandler(text){
+			if(text == "다음") {
+				if(this.slideIndex == this.cookingsLen){
+					audio.pause();
+					this.textToSpeech("마지막 단계 입니다.");
+				}
+				else
+					this.slideIndex++;
+			}
+			else if(text == "이전") {
+				if(this.slideIndex == 0){
+					audio.pause();
+					this.textToSpeech("첫 페이지입니다.");
+				}
+				else
+					this.slideIndex--;
+			}
+			else if(text == "다시") 
+				this.textToSpeech(this.cookings[this.slideIndex-1].cookingDc);
+			else if(text == "레시피") 
+				document.getElementById('recipe___BV_tab_button__').click();
+			else if(text == "타이머") { 
+				var ele = document.getElementById('timer___BV_tab_button__');
+				if(ele != null)
+					ele.click();
+			}
+			else if(text == "타이머 시작") {
+				var ele = document.getElementById('timer_start');
+				if(ele != null)
+					ele.click();
+			}
+			else if(text == "타이머 정지") {
+				var ele = document.getElementById('timer_pause');
+				if(ele != null)
+					ele.click();
+			}
+			else if(text == "타이머 리셋"){
+				var ele = document.getElementById('timer_reset');
+				if(ele != null)
+					ele.click();
+			}
+			else if(text == "마이크 꺼 줘"){
+				this.micStat = false;
+				this.$store.state.speechRecognition.stop();
+			}
+			else {
+				audio.pause();
+				this.textToSpeech("다시 한 번 말씀해주세요.");
+			}
+
 		}
 	}
 }

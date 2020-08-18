@@ -207,7 +207,9 @@ export default {
         .catch((error) => {
             alert('검색 결과 요청에 실패하였습니다.');
             console.log(error);
-        })  
+        }) 
+
+        this.$store.state.speechRecognition.stop();
     },
     methods: {
         searchtitle() {
