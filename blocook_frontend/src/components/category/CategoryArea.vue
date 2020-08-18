@@ -55,9 +55,10 @@
         <hr style="margin-top: 16px; margin-bottom: 16px;">
         <select class="sorting" v-model="sorting">
             <!-- <option disabled value="">정렬방법</option> -->
-            <option value="calorie">칼로리순</option>
+            <option value="calorie">칼로리 낮은순</option>
             <option value="like">좋아요순</option>
         </select>
+        <!------------------------------------ 카테고리 레시피 ------------------------------------>
         <div class="row" v-if="sorting=='calorie'" style="margin-top:20px;">
             <CategoryItem v-for="recipe in sortcalories" :key="recipe.id" :recipe="recipe" />
         </div>
@@ -180,7 +181,7 @@ img {
     cursor: pointer;
     margin-left: 3vw;
 	height: 28px;
-	width: 100px;
+	width: 120px;
 	border-radius: 5px;
 	border: 4px solid rgb(40, 167, 69);
 	background-color:white;

@@ -139,6 +139,7 @@ img {
 	font-weight:bold;
 	height: 34px;
 	padding: 5px;
+	border-radius: .25rem;
 }
 #recipecard {
   margin-bottom: 15px;

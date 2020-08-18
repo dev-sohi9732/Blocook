@@ -9,10 +9,11 @@ public class UserDto {
     private String email;
     private String valid;
     private String image;
-    private String image_url;
+    private String imageUrl;
     private LocalDateTime createDate;
     private int salty;
     private int sweet;
+    
 	public String getUid() {
 		return uid;
 	}
@@ -49,11 +50,11 @@ public class UserDto {
 	public void setImage(String image) {
 		this.image = image;
 	}
-	public String getImage_url() {
-		return image_url;
+	public String getImageUrl() {
+		return imageUrl;
 	}
-	public void setImage_url(String image_url) {
-		this.image_url = image_url;
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
 	}
 	public LocalDateTime getCreateDate() {
 		return createDate;
@@ -76,7 +77,7 @@ public class UserDto {
 	@Override
 	public String toString() {
 		return "UserDto [uid=" + uid + ", password=" + password + ", email=" + email + ", valid=" + valid + ", image="
-				+ image + ", image_url=" + image_url + ", createDate=" + createDate + ", salty=" + salty + ", sweet="
+				+ image + ", imageUrl=" + imageUrl + ", createDate=" + createDate + ", salty=" + salty + ", sweet="
 				+ sweet + "]";
 	}
 	

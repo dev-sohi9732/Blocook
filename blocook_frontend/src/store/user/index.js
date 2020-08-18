@@ -12,6 +12,7 @@ export default {
     nickname: '', // 닉네임
     email: '', // 이메일
     info: '',  // 자기소개
+    img: '', //이미지
     authorized: false, // false is default value (로그인 상태)
   },
   mutations: {
@@ -24,12 +25,12 @@ export default {
   actions: {
     // 로그인 성공 후 db 저장된 사용자 정보로 갱신
     LOGIN({ commit, dispatch, rootState }, { payload }) {
-      const { uid, nickname, email, info } = { uid: payload.uid, nickname: payload.nickname, email: payload.email, info: payload.info }
+      const { uid, nickname, email, img } = { uid: payload.uid, nickname: payload.nickname, email: payload.email, img: payload.imageUrl }
       commit('SET_STATE', {
         uid,
         nickname,
         email,
-        info,
+        img,
         authorized: true,
       })
     //   console.log('LOGIN SUCCESS! => nickname: ' + rootState.user.nickname)
@@ -37,13 +38,13 @@ export default {
     //   console.log('LOGIN SUCCESS! => authorized: ' + rootState.user.authorized)
     },
     UPDATE({ commit, dispatch, rootState }, { payload }) {
-      const { uid, nickname, email, info, password } = { uid: payload.uid, nickname: payload.nickname, email: payload.email, info: payload.info, password: payload.password, }
+      const { uid, nickname, email, password, img } = { uid: payload.uid, nickname: payload.nickname, email: payload.email, password: payload.password, img: payload.imageUrl }
       commit('SET_STATE', {
         uid,
         nickname,
         email,
-        info,
         password,
+        img
       })
     },
     LOGOUT({ commit, rootState }) {
@@ -52,6 +53,7 @@ export default {
           nickname: '',
           email: '',
           info: '',
+          img: '',
           authorized: false,
         })
         // router.push('/')
