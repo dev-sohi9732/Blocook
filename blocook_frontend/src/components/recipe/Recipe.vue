@@ -69,26 +69,36 @@
 						<!--------------------------- 레시피 과정정보 --------------------------->
 						<slide v-for="(cooking,cooking_key) in cookings" :key="cooking_key">
 								<div style="margin-bottom: 20px;">
+									<b-card no-body>
+									<b-tabs card>
+									<b-tab no-body title="레시피">
 									<center class="menu">
 										<h5 style="margin-top: 15px;">Step {{ cookings.indexOf(cooking) + 1 }}</h5>
 										<br>
 										<div class="cookingimg">
-											<img :src="cooking.streStepImageUrl">
+											<b-card-img :src="cooking.streStepImageUrl"></b-card-img>
 										</div>
 									</center>
 									<div class="container inputbox">
 										<table>
 										<tbody>
 											<tr>
-												<td>
+												<td style="width:300px;">
 													{{cooking.cookingDc}}
 												</td>
 											</tr>
 										</tbody>
 										</table>
 										<!-- v-if="cooking.timerYN==Y" -->
-										<router-link :to="'timer?time='+cooking.timerTime" class="timer_btn">타이머 보기</router-link>
+										<!-- <router-link :to="'timer?time='+cooking.timerTime" class="timer_btn">타이머 보기</router-link> -->
 									</div>
+									</b-tab>
+									<b-tab v-if="cooking.timerYN=='Y'" title="타이머">
+									<!-- v-if="cooking.timerYN==Y" -->
+									<Timer :cooking="cooking" />
+									</b-tab>
+									</b-tabs>
+								</b-card>
 								</div>
 						</slide>
 				</carousel>
@@ -100,9 +110,12 @@
 </template>
 <script>
 import http from "@/util/http-common.js";
-
+import Timer from '@/components/recipe/Timer.vue'
 var say = '';
 export default {
+	components: {
+        Timer,
+    },
 	computed : {
 			imgUrl() {
 					return this.recipe.imgUrl
@@ -274,4 +287,5 @@ center > h1 {
   background-position: center;
 	max-width: 600px;
 }
+
 </style>

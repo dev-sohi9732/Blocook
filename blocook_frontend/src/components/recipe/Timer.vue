@@ -1,26 +1,26 @@
 <template>
-  <div class="c_timer" style="margin-top:90px; size:120%;" id="timer">
+  <div class="c_timer" id="timer">
 
 <!-- SVG -->
   <div class="timer-face">
-    <svg class="timer-ring" height="260px" width="260px">
+    <svg class="timer-ring" height="300" width="100%">
       <circle 
         class="timer-ring__bgline" 
         stroke="darkgray" 
         stroke-width="8" 
         fill="transparent" 
-        r="125" cx="130" cy="130"
+        r="40%" cx="50%" cy="150"
       />
       <circle 
         class="timer-ring__line"
         v-bind:style="{ stroke: started ? '#BB4E75' : '#BB4E75' }"
         stroke-width="8" 
         fill="transparent"
-        r="125" cx="130" cy="130"
+        r="40%" cx="50%" cy="150"
         :stroke-dashoffset="setProgress"
       />
     </svg>
-    <div style="font-size:5rem;" class="timer-face__text">{{ minutes }}:{{ seconds }}</div>
+    <div style="font-size:4rem;" class="timer-face__text">{{ minutes }}:{{ seconds }}</div>
   </div>
   
 <!-- BUTTONS -->
@@ -29,7 +29,6 @@
     <button class="button pause" v-if="started" @click="pauseTimer()">Pause</button>
     <button class="button reset" @click="resetTimer">&#8635;</button> 
   </div>
-  <button style="float:right; background-color:#a4baf5;" class="button back" @click="backrecipe">Return Recipe</button> 
 </div>
 
 <!-- FOR STROKE GRADIENT 
@@ -47,16 +46,21 @@ stroke="url(#Gradient)"
 </template>
 
 <script>
-const params = new URL(document.location).searchParams;
+// const params = new URL(document.location).searchParams;
 export default {
   name: "Timer",
+  props: {
+        cooking: {
+            type: Object,
+        },
+    },
   data() {
     return{
         timer: null,
-        time: params.get('time'), // cooking.timerTime
-        startTime: params.get('time'),
+        time: 0, // cooking.timerTime
+        startTime: 0,
         started: false,
-        radioVal: params.get('time'),
+        radioVal: 0,
         // proptime: 0,
     }
   },
@@ -85,9 +89,6 @@ export default {
     formatTime(time) {
       return (time < 10 ? '0' : '') + time;
     },
-    backrecipe() {
-        this.$router.go(-1)
-    }
   },
   watch: {
     radioVal() {
@@ -98,7 +99,7 @@ export default {
   },
   computed: {
     setProgress() {
-      const offset = 784 - this.time / this.startTime * 784;
+      const offset = 654 - this.time / this.startTime * 654;
       return -offset;
     },
     minutes() {
@@ -111,10 +112,11 @@ export default {
     }
   },
 
-    // created() {
-	// 	const params = new URL(document.location).searchParams;
-    //     this.proptime = params.get('time')
-//   }
+    created() {
+      this.time = this.cooking.timerM *60 + this.cooking.timerS
+      this.startTime = this.cooking.timerM *60 + this.cooking.timerS
+      this.radioVal = this.cooking.timerM *60 + this.cooking.timerS
+  }
 }
 </script>
 
@@ -142,7 +144,7 @@ html {
   {display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 40px 40px;
+  padding: 10px 10px;
   box-shadow: 3px 3px 3px 0px rgba(0,0,0,0.3)
 }
 
@@ -150,7 +152,8 @@ html {
   {font-family: 'Rubik', serif;
   font-weight: bold;
   padding: 12px 23px;
-  margin-top: 20px;
+  margin-top: -10px;
+  margin-bottom: 30px;
   border: 0;
   border-radius: 30px;
   color: #fff;
@@ -173,8 +176,10 @@ html {
 .timer-face__text
   {font-weight: bold;
   position: absolute;
-  bottom: 80px;
-  left: 30px;
+  bottom:36%;
+  left:50%; 
+  transform:translateX(-50%);
+  /* text-align:center; */
   font-size: 2em}
   
 .timer-seconds
