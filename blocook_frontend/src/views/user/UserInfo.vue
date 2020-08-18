@@ -218,7 +218,7 @@ export default {
 }
 @media(max-width: 767px) {
     #whitecard {
-        height: 480px;
+        height: 520px;
     }
 }
 .card {
