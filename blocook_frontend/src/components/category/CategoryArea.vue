@@ -63,7 +63,7 @@
             <CategoryItem v-for="recipe in sortcalories" :key="recipe.id" :recipe="recipe" />
         </div>
         <div class="row" v-else style="margin-top:20px;">
-            <CategoryItem v-for="recipe in recipelist" :key="recipe.id" :recipe="recipe" />
+            <CategoryItem v-for="recipe in sortlikes" :key="recipe.id" :recipe="recipe" />
         </div>
         <a style="display:scroll;position:fixed;bottom:12px;right:12px;" href="#" title="맨 위로">
             <img style="width:45px; height:45px; opacity: 0.5;" src="@/assets/blocookImg/top.png">
@@ -149,6 +149,9 @@ export default {
     computed: {
         sortcalories: function () {
             return _.sortBy(this.recipelist, 'calorie')
+        },
+        sortlikes: function () {
+            return _.orderBy(this.recipelist, ['likeCnt'],['desc'])
         }
     },
     /*props: {

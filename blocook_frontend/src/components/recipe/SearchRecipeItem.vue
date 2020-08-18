@@ -21,7 +21,6 @@ export default {
     name: 'SearchRecipeItem',
     data() {
         return {
-            likeCnt:0
         }
     },
     props: {
@@ -29,24 +28,7 @@ export default {
             type: Object,
         },
     },
-    created() {
-      http.get(`/recipes/${this.recipe.recipeId}/bookmark-count`)
-			.then((res) => {
-        this.likeCnt = res.data
-			})
-			.catch((error) => {
-				console.dir(error);
-			});
-    },
-    updated() {
-      http.get(`/recipes/${this.recipe.recipeId}/bookmark-count`)
-			.then((res) => {
-        this.likeCnt = res.data
-			})
-			.catch((error) => {
-				console.dir(error);
-			});
-    },
+   
 }
 </script>
 
