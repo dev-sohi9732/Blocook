@@ -119,6 +119,7 @@ export default {
                 http.get(`/recipes/search/title/${params.get('title')}`)
                     .then(response => {
                     this.recipes = response.data
+                console.log(this.recipes)
                     })
                     .catch(error => {
                     console.log(error)
