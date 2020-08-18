@@ -185,7 +185,7 @@ export default {
 			return _.orderBy(this.articles, 'likeCnt','desc')
 		},
 		viewPosts() {
-			return _.orderBy(this.articles, 'view_cnt','desc')
+			return _.orderBy(this.articles, 'viewCnt','desc')
 		}
 	}
 }
