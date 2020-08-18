@@ -14,6 +14,9 @@ export default {
     CommunityArea,
     LogoArea
   },
-  created(){this.$store.state.speechRecognition.stop()}
+  created(){
+    this.$store.state.speechRecognition.stop()
+    this.$store.state.audio.pause();  
+  }
 };
 </script>

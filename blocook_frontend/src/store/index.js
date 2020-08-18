@@ -9,7 +9,8 @@ export default new Vuex.Store({
         user,
     },
     state: {
-        speechRecognition: new webkitSpeechRecognition()
+        speechRecognition: new webkitSpeechRecognition(),
+        audio: new Audio()
     },
     mutations: {},
     actions: {},

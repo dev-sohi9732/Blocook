@@ -106,14 +106,14 @@
 
 		<button class="button btn" @click="record">음성인식</button>
 		<button class="button btn" @click="stop">음성종료</button>
-		<!-- <button class="button btn" @click="textToSpeech" value="">음성합성</button> -->
 	</div>
 </template>
 <script>
 import http from "@/util/http-common.js";
 import Timer from '@/components/recipe/Timer.vue'
 
-var audio = new Audio();
+var audio;
+var speechRecognition;
 
 export default {
 	components: {
@@ -139,7 +139,7 @@ export default {
 	},
 	watch:{
 		slideIndex: function() {
-			audio.pause();
+			this.$store.state.audio.pause();
 			//tts
 			if(this.slideIndex != 0){
 				this.textToSpeech(this.cookings[this.slideIndex-1].cookingDc);
@@ -197,17 +197,48 @@ export default {
 			console.log(err)
 		})
 
+		// 뒤로가기 버튼 누르면 오디오, 마이크 정지
+		window.onpopstate = function(event) {
+			audio.pause();
+			speechRecognition.stop();
+		}
+
 		// STT
-		this.$store.state.speechRecognition.continuous = true;
-		this.$store.state.speechRecognition.addEventListener('result', event => {
+		this.$store.state.audio.pause();
+		this.$store.state.speechRecognition = new webkitSpeechRecognition();
+		speechRecognition = this.$store.state.speechRecognition;
+
+
+		var says = [ '다음' , '이전' , '다시', '레시피', '타이머', '타이머 시작', '타이머 정지', '타이머 리셋', '마이크 꺼 줘'];
+		var grammar = '#JSGF V1.0; grammar says; public <say> = ' + says.join(' | ') + ' ;'
+		var speechRecognitionList = new webkitSpeechGrammarList();
+		speechRecognitionList.addFromString(grammar, 1);
+
+		speechRecognition.grammars = speechRecognitionList;
+		speechRecognition.continuous = true;
+		speechRecognition.addEventListener('result', event => {
+				// console.log(event.results);
 				var text = event.results[event.results.length-1][0].transcript.trim();
+				// console.log("say: "+text);
 				this.speechHandler(text);
-			})
-		this.$store.state.speechRecognition.onend = function() {
-			if(this.micStat)
-				this.$store.state.speechRecognition.start();
+		})
+
+		speechRecognition.onerror = function(event) {
+			// console.log('onerror', event);
+
+			if (event.error.match(/no-speech|audio-capture|not-allowed/)) {
+				console.log("무시");
+			}
 		};
-		this.$store.state.speechRecognition.start();
+		speechRecognition.onnomatch = function(event) {
+			console.log("노매치");
+		}
+		speechRecognition.onend = function() {
+			if(this.micStat)
+				speechRecognition.start();
+		};
+
+		speechRecognition.start();
 	},
 	methods: {
 		addBookmark() { // 좋아요 누름
@@ -239,14 +270,14 @@ export default {
 			this.slideIndex = i;
 		},		
 		record() {
-			this.$store.state.speechRecognition.stop();
-			this.$store.state.speechRecognition.start();
+			speechRecognition.stop();
+			speechRecognition.start();
 		},
 		stop(){
-			this.$store.state.speechRecognition.stop();
+			speechRecognition.stop();
 		},
 		textToSpeech(sumary) {
-			audio.pause();
+			this.$store.state.audio.pause();
 			http
 				.post('/recipes/tts', {
 					content: sumary
@@ -254,10 +285,12 @@ export default {
 					responseType: "blob"
 				})
 				.then(({ data }) => {
+					// console.log(data);
 					var blob=new Blob([data], {type : 'audio/ogg'});
 					const audioUrl = URL.createObjectURL(blob);
-					audio = new Audio(audioUrl);
-					audio.play();
+					this.$store.state.audio = new Audio(audioUrl);
+					audio = this.$store.state.audio;
+					this.$store.state.audio.play();
 				})
 				.catch((error) => {
 					alert('처리 실패하였습니다.');
@@ -265,53 +298,58 @@ export default {
 				})
 		},
 		speechHandler(text){
-			if(text == "다음") {
+			if(text.endsWith("다음")) {
+				this.$store.state.audio.pause();
 				if(this.slideIndex == this.cookingsLen){
-					audio.pause();
 					this.textToSpeech("마지막 단계 입니다.");
 				}
 				else
 					this.slideIndex++;
 			}
-			else if(text == "이전") {
+			else if(text.endsWith("이전")) {
+				this.$store.state.audio.pause();
 				if(this.slideIndex == 0){
-					audio.pause();
 					this.textToSpeech("첫 페이지입니다.");
 				}
 				else
 					this.slideIndex--;
 			}
-			else if(text == "다시") 
-				this.textToSpeech(this.cookings[this.slideIndex-1].cookingDc);
-			else if(text == "레시피") 
+			else if(text.endsWith("다시")) {
+				if(this.slideIndex != 0){
+					this.textToSpeech(this.cookings[this.slideIndex-1].cookingDc);
+				} else {
+					this.textToSpeech(this.recipe.recipeNmKo);
+				}
+			}
+			else if(text.endsWith("레시피"))
 				document.getElementById('recipe___BV_tab_button__').click();
-			else if(text == "타이머") { 
+			else if(text.endsWith("타이머")) { 
 				var ele = document.getElementById('timer___BV_tab_button__');
 				if(ele != null)
 					ele.click();
 			}
-			else if(text == "타이머 시작") {
+			else if(text.endsWith("타이머 시작")) {
 				var ele = document.getElementById('timer_start');
 				if(ele != null)
 					ele.click();
 			}
-			else if(text == "타이머 정지") {
+			else if(text.endsWith("타이머 정지")) {
 				var ele = document.getElementById('timer_pause');
 				if(ele != null)
 					ele.click();
 			}
-			else if(text == "타이머 리셋"){
+			else if(text.endsWith("타이머 리셋")){
 				var ele = document.getElementById('timer_reset');
 				if(ele != null)
 					ele.click();
 			}
-			else if(text == "마이크 꺼 줘"){
+			else if(text.endsWith("마이크 꺼 줘")){
 				this.micStat = false;
-				this.$store.state.speechRecognition.stop();
+				speechRecognition.stop();
 			}
 			else {
-				audio.pause();
-				this.textToSpeech("다시 한 번 말씀해주세요.");
+				this.$store.state.audio.pause();
+				this.textToSpeech("정확하게 말씀해주세요.");
 			}
 
 		}
