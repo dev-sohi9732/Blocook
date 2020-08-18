@@ -55,4 +55,6 @@ public interface RecipeMapper {
 	public int deleteRecipeCooking(String recipeId);
 	
 	public int deleteRecipeIrdnt(String recipeId);
+	
+	public List<RecipeDto> selectTypes();
 }

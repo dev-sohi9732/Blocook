@@ -137,4 +137,8 @@ public class RecipeServiceImpl implements RecipeService{
 		return recipeMapper.deleteRecipeIrdnt(recipeId);
 	};
 	
+	@Override
+	public List<RecipeDto> selectTypes() throws Exception {
+		return recipeMapper.selectTypes();
+	};
 }

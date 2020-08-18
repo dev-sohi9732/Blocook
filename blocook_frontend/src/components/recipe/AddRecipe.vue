@@ -274,7 +274,9 @@ export default {
       seasoningirdnt_amount: '',
       recipedc: '',
       selectedcat: null,
+      selectedcatNm: '',
       selectedty: null,
+      selectedtyNm: '',
       time : '',
       kcal : '',
       person : '',
@@ -286,33 +288,18 @@ export default {
 
       //select 박스 정보
       irdnts: [],
-      options: [
-        { value: null, text: '종류 선택' },
-        { value: '밥', text: '밥' },
-        { value: '국', text: '국' },
-        { value: '조림', text: '조림' },
-        { value: '구이', text: '구이' },
-        { value: '튀김/커틀릿', text: '튀김/커틀릿' },
-        { value: '찜', text: '찜' },
-        { value: '나물/생채/샐러드', text: '나물/생채/샐러드' },
-        { value: '밑반찬/김치', text: '밑반찬/김치' },
-        { value: '기타', text: '기타' },
-      ],
       categories: [
         { value: null, text: '카테고리 선택' },
-        { value: '한식', text: '한식' },
-        { value: '서양', text: '서양' },
-        { value: '이탈리아', text: '이탈리아' },
-        { value: '일본', text: '일본' },
-        { value: '중국', text: '중국' },
-        { value: '동남아시아', text: '동남아시아' },
-        { value: '퓨전', text: '퓨전' },
-        { value: '기타', text: '기타' },
+        { value: '3020001', text: '한식' },
+        { value: '3020002', text: '서양' },
+        { value: '3020006', text: '이탈리아' },
+        { value: '3020003', text: '일본' },
+        { value: '3020004', text: '중국' },
+        { value: '3020005', text: '동남아시아' },
+        { value: '3020009', text: '퓨전' },
+        { value: '0', text: '기타' },
 		  ],
-      units: [
-        { value: null, text: '단위' },
-        { value: 'g', text: 'g' },
-		  ],
+      options: [{ value: null, text: '종류 선택' }],
       level: { value: '2', text: '보통'},
       
       //image
@@ -331,7 +318,18 @@ export default {
 		})
 		.catch((error) => {
 			console.dir(error);
-		});
+    });
+    // 종류(type) 데이터 가져오기
+    http
+    .get("/recipes/search/types")
+    .then(({data}) => {
+      for(var i = 0; i < data.length; i++) {
+        this.options.push({value:data[i].tyCode, text:data[i].tyNm});
+      }
+    })
+		.catch((error) => {
+			console.dir(error);
+    });
 	},
 	methods: {
     previewGibonImage(event) {
@@ -492,14 +490,33 @@ export default {
           irdntTyNm: '양념'
         });
       }
-      
+
+      // 카테고리
+      if(this.selectedcat == '3020001') this.selectedcatNm = '한식';
+      else if(this.selectedcat == '3020002') this.selectedcatNm = '서양';
+      else if(this.selectedcat == '3020006') this.selectedcatNm = '이탈리아';
+      else if(this.selectedcat == '3020003') this.selectedcatNm = '일본';
+      else if(this.selectedcat == '3020004') this.selectedcatNm = '중국';
+      else if(this.selectedcat == '3020005') this.selectedcatNm = '동남아시아';
+      else if(this.selectedcat == '3020009') this.selectedcatNm = '퓨전';
+
+      // 종류
+      for(var i = 0; i < this.options.length; i++) {
+        if(this.options[i].value == this.selectedty) {
+          this.selectedtyNm = this.options[i].text;
+          break;
+        }
+      }
+
       http
       .post("/recipes/add/recipe",{ // 레시피 기본 정보 등록
         recipe: {
           recipeNmKo: this.recipenm,
           sumry: this.recipedc,
-          nationNm: this.selectedcat,
-          tyNm: this.selectedty,
+          nationCode: this.selectedcat,
+          nationNm: this.selectedcatNm,
+          tyCode: this.selectedty,
+          tyNm: this.selectedtyNm,
           cookingTime: this.time,
           calorie: this.kcal,
           qnt: this.person,

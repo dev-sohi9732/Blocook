@@ -73,7 +73,8 @@ export default {
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding:wght@400;700&family=Poor+Story&display=swap');
 button {
-	margin-bottom: 20px;
+	margin-top: 0px;
+	margin-bottom: 10px;
 }
 .btn {
 	width: 98%;
