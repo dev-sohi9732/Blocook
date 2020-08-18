@@ -13,6 +13,7 @@ export default {
   components: {
     CommunityArea,
     LogoArea
-  }
+  },
+  created(){this.$store.state.speechRecognition.stop()}
 };
 </script>

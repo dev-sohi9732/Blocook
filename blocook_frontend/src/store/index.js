@@ -8,7 +8,9 @@ export default new Vuex.Store({
     modules: {
         user,
     },
-    state: {},
+    state: {
+        speechRecognition: new webkitSpeechRecognition()
+    },
     mutations: {},
     actions: {},
     plugins: [

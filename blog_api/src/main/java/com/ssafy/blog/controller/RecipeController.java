@@ -1,10 +1,17 @@
 package com.ssafy.blog.controller;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -20,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
+import com.ssafy.blog.api.APIExamTTS;
 import com.ssafy.blog.dto.CookingDto;
 import com.ssafy.blog.dto.IrdntDto;
 import com.ssafy.blog.dto.RecipeDto;
@@ -37,6 +45,8 @@ public class RecipeController {
 
 	@Autowired
 	private RecipeService recipeService;
+	
+	private APIExamTTS tts = new APIExamTTS(); 
 	
 	@ApiOperation(value = "모든 레시피들을 반환한다.", response = List.class)
 	@GetMapping(value = "/search/all")
@@ -382,4 +392,20 @@ public class RecipeController {
 		else return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
 	}
 	
+	@ApiOperation(value = "문자열을 받아 음성을 합성하고 반환해준다.", response = String.class)
+	@PostMapping(value = "/tts")
+	public ResponseEntity<byte[]> textToSpeech(@RequestBody Map<String,String> params) throws Exception {
+		InputStream is = tts.clovaCSS(params.get("content"), "1");
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        byte[] buffer = new byte[512];
+        int l = is.read(buffer);
+        while(l >= 0) {
+            outputStream.write(buffer, 0, l);
+            l = is.read(buffer);
+        }
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "audio/mpeg");
+        headers.set("Content-Disposition", "attachment; filename=\"" + "tts" + ".mp3\"");
+        return new ResponseEntity<byte[]>(outputStream.toByteArray(), headers, HttpStatus.OK);
+	}
 }

@@ -90,7 +90,8 @@
 <script>
 export default {
   name: "home",
-  components: {}
+  components: {},
+  created() {this.$store.state.speechRecognition.stop()}
 };
 </script>
 

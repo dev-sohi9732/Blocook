@@ -25,9 +25,9 @@
   
 <!-- BUTTONS -->
   <div class="buttons">
-    <button class="button start" v-if="!started" @click="startTimer()">Start</button>
-    <button class="button pause" v-if="started" @click="pauseTimer()">Pause</button>
-    <button class="button reset" @click="resetTimer">&#8635;</button> 
+    <button class="button start" v-if="!started" @click="startTimer()" id="timer_start">Start</button>
+    <button class="button pause" v-if="started" @click="pauseTimer()" id="timer_pause">Pause</button>
+    <button class="button reset" @click="resetTimer" id="timer_reset">&#8635;</button> 
   </div>
 </div>
 
