@@ -87,7 +87,6 @@ export default {
 						"uid": this.$store.state.user.uid
 					})
 					.then(response => {
-						console.log();
 						if(response.data == "success"){
 							this.like = true;
 						} else {

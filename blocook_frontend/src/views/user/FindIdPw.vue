@@ -109,7 +109,6 @@ export default {
 					let err = true;
 					let msg = '';
 
-					console.log(this.nicknameE);
 					!this.nicknameE && ((msg = '닉네임을 입력해주세요'), (err = false));
 					err && !this.password && ((msg = '비밀번호를 입력해주세요'), (err = false));
 
@@ -122,7 +121,6 @@ export default {
 					http
 					.get(`/account/findemail/${this.nicknameE}/${this.password}/`)
 					.then(({ data }) => {
-							console.log(data);
 							if(data == ''){
 									alert("닉네임 또는 비밀번호가 맞지 않습니다.");
 							} else {
@@ -138,7 +136,6 @@ export default {
 					let err = true;
 					let msg = '';
 
-					console.log(this.nicknameP);
 					!this.nicknameP && ((msg = '닉네임을 입력해주세요'), (err = false));
 					err && !this.email && ((msg = '이메일을 입력해주세요'), (err = false));
 
@@ -151,7 +148,6 @@ export default {
 					http
 					.get(`/account/findpw/${this.nicknameP}/${this.email}/`)
 					.then(({ data }) => {
-							console.log(data);
 							if(data == ''){
 									alert("닉네임 또는 이메일이 맞지 않습니다.");
 							} else {

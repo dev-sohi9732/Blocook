@@ -105,11 +105,9 @@ export default {
   },
   created() {
     const params = new URL(document.location).searchParams;
-    console.log(params.get('email'));
     http
         .get(`/account/userinfo/${params.get('email')}`)
         .then(({ data }) => {
-            console.log(data);
             this.userid = data.uid;
             this.email = data.email;
             this.originNickname = data.nickname;
@@ -133,7 +131,6 @@ export default {
               http
                 .put('/account/update', user)
                 .then(({ data }) => { // 회원가입 성공
-                    console.log(data)
                     if (data === "success") {
                         alert('정보수정을 성공하였습니다!')
                         this.$store.dispatch('user/UPDATE', { payload: user }) // store 반영

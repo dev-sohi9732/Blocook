@@ -56,7 +56,6 @@ export default {
 			this.$router.push("/editrecipe");
 		},
 		deleteRecipe(delRecipeId) {
-			console.log(delRecipeId);
 			http
       .delete(`/recipes/delete/recipe/${delRecipeId}`) // 레시피 삭제
       .then(({ data }) => {
