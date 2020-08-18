@@ -63,7 +63,7 @@
                 </div>
             </div>
             <div class="row" v-else>
-                <div v-for="(recipe, index) in recipes" :key="index + '_items'" class="col-6" style="padding:0px;">
+                <div v-for="(recipe, index) in sortlikes" :key="index + '_items'" class="col-6" style="padding:0px;">
                     <SearchRecipeItem :recipe="recipe" />
                 </div>
             </div>
@@ -104,9 +104,9 @@ export default {
         sortcalories: function () {
             return _.sortBy(this.recipes, 'calorie')
         },
-        // sortlikes: function () {
-        //     return _.sortBy(this.recipes, 'likeCnt')
-        // }
+        sortlikes: function () {
+            return _.orderBy(this.recipes, ['likeCnt'],['desc'])
+        }
     },
     methods: {
         searchtitle() {
@@ -119,7 +119,6 @@ export default {
                 http.get(`/recipes/search/title/${params.get('title')}`)
                     .then(response => {
                     this.recipes = response.data
-                console.log(this.recipes)
                     })
                     .catch(error => {
                     console.log(error)

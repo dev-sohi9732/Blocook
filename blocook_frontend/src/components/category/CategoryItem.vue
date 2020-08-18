@@ -22,7 +22,6 @@ export default {
     name: 'CategoryItem',
     data() {
       return {
-        likeCnt:0,
       }
     },
     props: {
@@ -35,24 +34,7 @@ export default {
             return this.recipe.imgUrl
         },
     },
-    created() {
-      http.get(`/recipes/${this.recipe.recipeId}/bookmark-count`)
-			.then((res) => {
-        this.likeCnt = res.data
-			})
-			.catch((error) => {
-				console.dir(error);
-			});
-    },
-    updated() {
-      http.get(`/recipes/${this.recipe.recipeId}/bookmark-count`)
-			.then((res) => {
-        this.likeCnt = res.data
-			})
-			.catch((error) => {
-				console.dir(error);
-			});
-    },
+   
   }
 
 </script>
