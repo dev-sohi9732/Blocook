@@ -210,6 +210,7 @@ export default {
         }) 
 
         this.$store.state.speechRecognition.stop();
+        this.$store.state.audio.pause();
     },
     methods: {
         searchtitle() {

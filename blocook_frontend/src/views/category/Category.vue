@@ -91,7 +91,10 @@
 export default {
   name: "home",
   components: {},
-  created() {this.$store.state.speechRecognition.stop()}
+  created() {
+      this.$store.state.speechRecognition.stop();
+      this.$store.state.audio.pause();
+    }
 };
 </script>
 
