@@ -7,7 +7,7 @@
 		<form>
 			<span style="color:rgba(0,0,0,.600); margin-left:5px; font-size:1.5rem; font-weight:bold;">Title: </span>
 			<input v-model="title" style="width:250px; border-radius:4px; border:3px rgba(0,0,0,.125) solid; margin-bottom:5px;" placeholder="제목을 입력해주세요.">
-			<ckeditor v-model="editorData" :config="editorConfig"></ckeditor>
+			<ckeditor id="editorD" v-model="editorData" :config="editorConfig"></ckeditor>
 			<center>
 					<button @click.prevent="Posting()" class="successpost" style="margin-top:10px;font-size:18px;cursor:pointer;">
 						작성 완료</button>
@@ -17,11 +17,12 @@
 </template>
 
 <script>
+String.prototype.trim = function() { return this.replace(/^\s+|\s+$/g,""); }
 import http from "@/util/http-common.js";
 export default {
   data() {
     return {
-        title: null,
+        title: '',
         content: null,
         editorData: '',
         editorConfig: {
@@ -48,6 +49,11 @@ export default {
   },
   methods: {
       Posting() {
+        if (this.title.trim()=='')
+          alert("제목을 입력해주세요.");
+        else if (this.editorData=='')
+          alert("내용을 입력해주세요.");
+        else
           http.post('/posts/write', {
             "uid": this.$store.state.user.uid,
             "nickname": this.$store.state.user.nickname,
@@ -58,8 +64,10 @@ export default {
             alert("글이 등록 완료되었습니다.");
             this.$router.push('/community').catch(()=>{});
           })
-          .catch(err => console.log('err!!'))
-      }
+          .catch(err => {
+            console.log('err!!')
+      })
+  }
   },
   mounted() {
   }

@@ -60,7 +60,7 @@ export default {
 	},
 	methods: {
 		moveToNewPost() {
-			this.$router.push('/post')
+			this.$router.push('/posteditor')
 		},
 	},
 	created() {
