@@ -24,7 +24,7 @@
                                     <option value="recipe_nm" >요리</option>
                                     <option value="irdnt">재료</option>
                                 </select>
-                                <button @click.prevent="searchirdnt" id="irdntbtn" style="float:right;"><i class="fa fa-search" ></i></button>
+                                <button @click.prevent="searchirdnt" id="irdntbtn" style="float:right;width:60px;"><i class="fa fa-search" ></i></button>
                             </div>
                             <div style="padding-top:40px;">
                                 <form class="s-form">
