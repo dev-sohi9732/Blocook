@@ -95,8 +95,8 @@
 	</insert>
 	
 	<insert id="addCooking">
-		INSERT INTO recipe_cooking ( recipe_id, cooking_no, cooking_dc, stre_step_image_url, step_tip)
-		VALUES ( #{recipeId}, #{cookingNo}, #{cookingDc}, #{streStepImageUrl}, #{stepTip} );
+		INSERT INTO recipe_cooking ( recipe_id, cooking_no, cooking_dc, stre_step_image_url, timer_yn, timer_m, timer_s)
+		VALUES ( #{recipeId}, #{cookingNo}, #{cookingDc}, #{streStepImageUrl}, #{timerYN}, #{timerM}, #{timerS} );
 	</insert>
 	
 	<insert id="addIrdnt">

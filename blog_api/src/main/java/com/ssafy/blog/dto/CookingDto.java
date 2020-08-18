@@ -8,7 +8,9 @@ public class CookingDto {
 	private String streStepImageUrl;	// 단계 이미지 URL
 	private String stepTip;				// 단계별 팁
 	private String timerYN;				// 타이머 유무
-	private int timerTime;				// 타이머 시간
+	private int timerM;					// 타이머 분
+	private int timerS;					// 타이머 초
+	
 	public int getId() {
 		return id;
 	}
@@ -51,17 +53,24 @@ public class CookingDto {
 	public void setTimerYN(String timerYN) {
 		this.timerYN = timerYN;
 	}
-	public int getTimerTime() {
-		return timerTime;
+	public int getTimerM() {
+		return timerM;
 	}
-	public void setTimerTime(int timerTime) {
-		this.timerTime = timerTime;
+	public void setTimerM(int timerM) {
+		this.timerM = timerM;
 	}
+	public int getTimerS() {
+		return timerS;
+	}
+	public void setTimerS(int timerS) {
+		this.timerS = timerS;
+	}
+	
 	@Override
 	public String toString() {
 		return "CookingDto [id=" + id + ", recipeId=" + recipeId + ", cookingNo=" + cookingNo + ", cookingDc="
 				+ cookingDc + ", streStepImageUrl=" + streStepImageUrl + ", stepTip=" + stepTip + ", timerYN=" + timerYN
-				+ ", timerTime=" + timerTime + "]";
+				+ ", timerM=" + timerM + ", timerS=" + timerS + "]";
 	}
 	
 }

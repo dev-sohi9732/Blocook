@@ -19,7 +19,7 @@
                             <p style="margin-top:15px;">Uploading : {{gibonpicture.uploadValue.toFixed() + "%"}}
                               <progress :value="gibonpicture.uploadValue" max="100"></progress>
                             </p>
-                            <button class="button btn" @click="onUploadGibon" style="width:185px;margin-top:0px;">
+                            <button class="button btn" @click="onUploadGibon" style="width:180px;height: 46px;margin-top:0px;border-radius: .55rem;font-family:'Noto Sans KR',sans-serif;font-size:15px;">
                               대표 이미지 등록&nbsp;<i class="fa fa-camera"></i>
                             </button>
                           </div>
@@ -180,7 +180,7 @@
                               <p style="margin-top:15px;">Uploading : {{cookingpicture[steps.indexOf(step)].uploadValue.toFixed() + "%"}}
                                 <progress :value="cookingpicture[steps.indexOf(step)].uploadValue" max="100"></progress>
                               </p>
-                              <button class="button btn" @click="onUploadCooking(steps.indexOf(step))" style="width:185px;">
+                              <button class="button btn" @click="onUploadCooking(steps.indexOf(step))" style="width:185px;border-radius: .55rem;font-family:'Noto Sans KR',sans-serif;font-size:15px;height: 46px;">
                                 과정 이미지 등록&nbsp;<i class="fa fa-camera"></i>
                               </button>
                             </div>
@@ -212,11 +212,9 @@
                               <img src="@/assets/blocookImg/stopwatch.png" id="stopwatch">
                               <table>
                                 <tr>
-                                  <td id="time"><b-form-input size="sm" type="number" min="0" placeholder="시" style="width:50px;"></b-form-input></td>
-                                  <td style="width:5px;vertical-align:middle;">:</td>
-                                  <td id="time"><b-form-input size="sm" type="number" min="0" placeholder="분" style="width:50px;"></b-form-input></td>
-                                  <td style="width:5px;vertical-align:middle;">:</td>
-                                  <td id="time"><b-form-input size="sm" type="number" min="0" placeholder="초" style="width:50px;"></b-form-input></td>
+                                  <td id="time"><b-form-input v-model="step.timerM" size="sm" type="number" min="0" placeholder="분" style="width:50px;float:right;"></b-form-input></td>
+                                  <td style="width:10px;font-weight:bold;"> : </td>
+                                  <td id="time"><b-form-input v-model="step.timerS" size="sm" type="number" min="0" placeholder="초" style="width:50px;"></b-form-input></td>
                                 </tr>
                               </table>
                             </div>
@@ -237,12 +235,10 @@
                     </tab-pane>
                 </card>
             </tabs>
-        </div>
 
-        <div class="user">
-          <button class="button btn" @click="checkHandler()" style="width:190px; height: 40px; margin-bottom:30px; background-color:rgb(41, 165, 0);">
-            <i class="fa fa-check"></i>&nbsp;레시피 등록 완료
-          </button>
+            <button class="button btn" @click="checkHandler()" id="registerbtn">
+              <i class="fa fa-check"></i>&nbsp;레시피 등록 완료
+            </button>
         </div>
     </div>
 </template>
@@ -264,7 +260,7 @@ export default {
       title: "addrecipe page",
       minus: false,
       steps: [
-        {cookingNo: 1, cookingDc: "", streStepImageUrl: require('@/assets/blocookImg/addimage.jpg'), timerYN: "N", timerTime: 0}
+        {cookingNo: 1, cookingDc: "", streStepImageUrl: require('@/assets/blocookImg/addimage.jpg'), timerYN: "N", timerM: 0, timerS: 0}
       ],
       addRecipeId: '',
 
@@ -433,10 +429,11 @@ export default {
     addtimer(timerstep) {
       if(this.steps[timerstep].timerYN == "N") this.steps[timerstep].timerYN = "Y";
       else if(this.steps[timerstep].timerYN == "Y") this.steps[timerstep].timerYN = "N";
+      console.log(this.steps);
 		},
     addstep() {
       this.cookingpicture.push({uploaded: false, imageData: null, uploadValue: 0});
-			this.steps.push({cookingNo:this.steps.length + 1, cookingDc:"", streStepImageUrl: require('@/assets/blocookImg/addimage.jpg'), timerYN:"N", timerTime:0});
+			this.steps.push({cookingNo:this.steps.length + 1, cookingDc:"", streStepImageUrl: require('@/assets/blocookImg/addimage.jpg'), timerYN:"N", timerM: 0, timerS: 0});
 			this.minus = true;
 		},
 		removestep(rmstep) {
@@ -450,6 +447,10 @@ export default {
       for(var i = 0; i < this.steps.length; i++) {
         !this.steps[i].cookingDc && (msg = '레시피 과정 정보를 입력해주세요.', err = false);
         !this.cookingpicture[i].uploaded && (msg = '레시피 과정 이미지를 등록해주세요.', err = false);
+        if(this.steps[i].timerYN == 'Y' && this.steps[i].timerM == 0 && this.steps[i].timerS == 0) {
+          msg = '타이머에 시간을 입력해주세요.';
+          err = false;
+        }
       }
       
 			!this.recipenm && (msg = '레시피 이름을 입력해주세요.', err = false);
@@ -621,7 +622,7 @@ select {
   background-color:rgb(94, 114, 228);
 	border-radius: 100%;
 	width: 38px;
-	margin-right: 5px;
+	padding-left: 22px;
   float: none;
 }
 #minusbtn {
@@ -646,5 +647,15 @@ select {
 }
 #imginput {
   margin-top:8px;
+}
+#registerbtn {
+  width:190px; 
+  height: 40px; 
+  margin: 40px 0 50px 25%;
+  background-color:rgb(41, 165, 0);
+  border-radius: .55rem;
+  font-family:'Noto Sans KR',sans-serif;
+  font-size:15px;
+  height: 46px;
 }
 </style>

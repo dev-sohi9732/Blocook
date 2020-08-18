@@ -19,7 +19,7 @@
                         <div class="row justify-content-center">
                             <div class="col-lg-3 order-lg-2">
                                 <div class="card-profile-image">
-                                    <img v-lazy="'img/blocook/noprofile.png'" class="rounded-circle">
+                                    <img :src="profileimg" class="rounded-circle">
                                 </div>
                             </div>
                             <div class="col-lg-4 order-lg-3 text-lg-right align-self-lg-center">
@@ -68,12 +68,16 @@ export default {
     return {
       title: "My page",
       like: false,
+      profileimg : require('@/assets/blocookImg/noprofile.png')
     };
   },
   created() {
     if(this.$store.state.user.nickname == "") {
       alert("로그인이 필요합니다.");
       this.$router.push("/login");
+    }
+    if(this.$store.state.user.img != null) {
+        this.profileimg = this.$store.state.user.img;
     }
   },
   methods: {
