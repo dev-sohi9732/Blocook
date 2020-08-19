@@ -29,6 +29,9 @@
     <button class="button pause" v-if="started" @click="pauseTimer()" id="timer_pause">Pause</button>
     <button class="button reset" @click="resetTimer" id="timer_reset">&#8635;</button> 
   </div>
+  <audio v-if="this.time==0" autoplay>
+    <source src="@/../public/audio/ring.mp3" type="audio/mp3">
+  </audio>
 </div>
 
 <!-- FOR STROKE GRADIENT 
@@ -83,7 +86,7 @@ export default {
       if(this.time > 0) {
         this.time--;
       } else {
-        this.resetTimer();
+      
       }
     },
     formatTime(time) {
@@ -99,7 +102,7 @@ export default {
   },
   computed: {
     setProgress() {
-      const offset = 654 - this.time / this.startTime * 654;
+      const offset = 680 - this.time / this.startTime * 680;
       return -offset;
     },
     minutes() {
