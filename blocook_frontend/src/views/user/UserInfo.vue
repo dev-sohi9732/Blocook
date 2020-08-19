@@ -104,6 +104,10 @@ export default {
     };
   },
   created() {
+    if(this.$store.state.user.nickname == "") {
+      alert("로그인이 필요합니다.");
+      this.$router.push("/login");
+    }
     const params = new URL(document.location).searchParams;
     http
         .get(`/account/userinfo/${params.get('email')}`)

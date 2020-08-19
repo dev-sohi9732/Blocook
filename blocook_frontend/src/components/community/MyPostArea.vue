@@ -68,7 +68,12 @@ export default {
 		},
 	},
 	created() {
-		http.get(`/posts/search/uid/${this.$store.state.user.uid}`)
+		if(this.$store.state.user.nickname == "") {
+		alert("로그인이 필요합니다.");
+		this.$router.push("/login");
+		}
+		else
+		{http.get(`/posts/search/uid/${this.$store.state.user.uid}`)
 			.then(res => {
 				this.posts = res.data
 				if(res.data.length == 0) this.noPost = true;
@@ -83,7 +88,7 @@ export default {
 			})
 			.catch(err => {
 				console.log("error!!!")
-			})
+			})}
 	},
 }
 </script>

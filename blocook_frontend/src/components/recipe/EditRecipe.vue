@@ -319,7 +319,7 @@ export default {
     }
   },
   created() {
-		//재료 데이터 가져오기
+    //재료 데이터 가져오기
 		http
 		.post("/recipes/get/irdnts")
 		.then(({ data }) => {
@@ -330,7 +330,12 @@ export default {
 		});
 		// 기존 레시피 정보 가져오기
 		const params = new URL(document.location).searchParams;
-		http.get(`/recipes/${params.get('Id')}`) // 레시피 기본 정보
+    if(this.$store.state.user.nickname == "") {
+      alert("로그인이 필요합니다.");
+      this.$router.push("/login");
+    }
+    else
+    http.get(`/recipes/${params.get('Id')}`) // 레시피 기본 정보
 			.then(response => {
 				this.gibonpicture.picture = response.data.imgUrl;
 				if(response.data.imgUrl != null) this.gibonpicture.uploaded = true;

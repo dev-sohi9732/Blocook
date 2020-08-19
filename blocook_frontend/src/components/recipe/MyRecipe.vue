@@ -48,7 +48,12 @@ export default {
 		}
 	},
 	created() {
-		http
+		if(this.$store.state.user.nickname == "") {
+      alert("로그인이 필요합니다.");
+      this.$router.push("/login");
+    }
+    else
+		{http
 		.post("recipes/search/userUid", this.$store.state.user.uid)
     .then(({ data }) => {
 			this.myRecipes = data;
@@ -57,7 +62,7 @@ export default {
     .catch((error) => {
 			alert('결과 요청에 실패하였습니다.')
 			console.log(error)
-    })
+    })}
 	},
 	methods: {
 		editRecipe() {
