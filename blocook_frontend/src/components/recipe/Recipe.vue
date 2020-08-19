@@ -2,6 +2,24 @@
 	<div style="padding-bottom: 20px;">
 		<center class="menu" id="recipetitle">
 			<h1 style="margin-top: 28px;">{{recipe.recipeNmKo}}</h1>
+			<h6 style="text-align:right;width:80%;max-width:550px;">음성으로 블로쿡 이용하기&nbsp;<i class="fa fa-bullhorn"></i>&nbsp;
+				<button class="btn" id="popover-target-1" style="font-weight:bold;">사용법</button>
+			</h6>
+			<b-popover target="popover-target-1" triggers="hover" placement="bottomleft" style="width:300px;">
+				<br>
+				<b style="font-family: 'Poor Story', cursive;"><h5 style="color:#F77479;">&emsp;이렇게 말해보세요 :)&emsp;</h5></b><br>
+				<b style="font-family: 'Poor Story', cursive;"><h6 style="color:#FABA5F;">&emsp;<i class="fa fa-volume-up"></i> 음성인식 이용 방법 <i class="fa fa-volume-up"></i>&emsp;</h6></b>
+				<p style="font-family: 'Poor Story', cursive;">&emsp;<i class="fa fa-microphone-slash"></i> 음성인식 종료 :&emsp;"마이크 꺼줘" &nbsp;</p>
+				<p style="font-family: 'Poor Story', cursive;">&emsp;<i class="fa fa-toggle-right"></i> 다음 페이지 :&emsp;"다음"</p>
+				<p style="font-family: 'Poor Story', cursive;">&emsp;<i class="fa fa-toggle-left"></i> 이전 페이지 :&emsp;"이전"</p>
+				<p style="font-family: 'Poor Story', cursive;">&emsp;<i class="fa fa-refresh"></i> 레시피 Replay :&emsp;"다시"</p>
+				<p style="font-family: 'Poor Story', cursive;">&emsp;<i class="fa fa-eye"></i> 레시피 보기 :&emsp;"레시피"</p>
+				<b style="font-family: 'Poor Story', cursive;"><h6 style="color:#FABA5F;">&emsp;<i class="fa fa-clock-o"></i> 타이머 이용 방법 <i class="fa fa-clock-o"></i>&emsp;</h6></b>
+				<p style="font-family: 'Poor Story', cursive;">&emsp;<i class="	fa fa-eye"></i> 타이머 보기 :&emsp;"타이머"</p>
+				<p style="font-family: 'Poor Story', cursive;">&emsp;<i class="fa fa-check-circle"></i> 타이머 시작 :&emsp;"타이머 시작"</p>
+				<p style="font-family: 'Poor Story', cursive;">&emsp;<i class="fa fa-minus-circle"></i> 타이머 정지 :&emsp;"타이머 정지"</p>
+				<p style="font-family: 'Poor Story', cursive;">&emsp;<i class="fa fa-history"></i> 타이머 Reset :&emsp;"타이머 리셋"</p>
+			</b-popover>
 		</center>
 
 		<div id="carousel">
@@ -12,13 +30,25 @@
 									<img class="d-block" :src="imgUrl" alt="Second slide">
 								</center>
 
-								<center class="menu" v-if="this.$store.state.user.authorized == true">
-									<button class="btn" style="color:red;font-weight:bold;" @click="addBookmark()" v-if="like == false">
+								<center class="menu">
+								<p style="width:90%;max-width:550px;padding-bottom:35px;">
+									<button class="btn" id="popover-target-2" @click="record" style="background-color:#F77479;float:left;"><i class="fa fa-microphone"></i> ON</button>
+									<b-popover target="popover-target-2" triggers="hover" placement="bottomright" style="padding-top:20px;">
+										<p style="font-family: 'Poor Story', cursive;padding-bottom:0px;">음성인식 켜기</p>
+									</b-popover>
+									<button class="btn" id="popover-target-3" @click="stop" style="background-color:#FABA5F;float:left;"><i class="fa fa-microphone-slash"></i> OFF</button>
+									<b-popover target="popover-target-3" triggers="hover" placement="bottomright" style="padding-top:20px;">
+										<p style="font-family: 'Poor Story', cursive;padding-bottom:0px;">음성인식 끄기</p>
+									</b-popover>
+									<!-- 좋아요 누르기 전 -->
+									<button class="btn" style="color:red;font-weight:bold;float:right;" @click="addBookmark()" v-if="like == false && this.$store.state.user.authorized == true">
 										Like&nbsp;<i class="fa fa-heart-o"></i>
 									</button>
-									<button class="btn" style="color:red;font-weight:bold;" @click="rmBookmark()" v-else>
+									<!-- 좋아요 누른 후 -->
+									<button class="btn" style="color:red;font-weight:bold;float:right;" @click="rmBookmark()" v-else-if="like == true && this.$store.state.user.authorized == true">
 										Like&nbsp;<i class="fa fa-heart"></i>
 									</button>
+								</p> 
 								</center>
 
 								<div class="container">
@@ -70,44 +100,52 @@
 						<slide v-for="(cooking,cooking_key) in cookings" :key="cooking_key">
 								<div style="margin-bottom: 20px;">
 									<b-card no-body>
-									<b-tabs card >
-									<b-tab no-body title="레시피" id="recipe">
-										<center class="menu">
-											<h5 style="margin-top: 15px;">Step {{ cookings.indexOf(cooking) + 1 }}</h5>
-											<br>
-											<div class="cookingimg">
-												<b-card-img :src="cooking.streStepImageUrl"></b-card-img>
+										<b-tabs card >
+										<b-tab no-body title="레시피" id="recipe">
+											<center class="menu">
+												<h5 style="margin-top: 15px;">Step {{ cookings.indexOf(cooking) + 1 }}</h5>
+												<br>
+												<div class="cookingimg">
+													<b-card-img :src="cooking.streStepImageUrl"></b-card-img>
+												</div>
+											</center>
+											<div class="container inputbox">
+												<table>
+												<tbody>
+													<tr>
+														<td style="width:300px;">
+															{{cooking.cookingDc}}
+														</td>
+													</tr>
+												</tbody>
+												</table>
+												<!-- v-if="cooking.timerYN==Y" -->
+												<!-- <router-link :to="'timer?time='+cooking.timerTime" class="timer_btn">타이머 보기</router-link> -->
 											</div>
-										</center>
-										<div class="container inputbox">
-											<table>
-											<tbody>
-												<tr>
-													<td style="width:300px;">
-														{{cooking.cookingDc}}
-													</td>
-												</tr>
-											</tbody>
-											</table>
-											<!-- v-if="cooking.timerYN==Y" -->
-											<!-- <router-link :to="'timer?time='+cooking.timerTime" class="timer_btn">타이머 보기</router-link> -->
-										</div>
-									</b-tab>
-									<b-tab v-if="cooking.timerYN=='Y'" title="타이머" id="timer">
-									<!-- v-if="cooking.timerYN==Y" -->
-										<Timer :cooking="cooking" />
-									</b-tab>
-									</b-tabs>
-								</b-card>
+										</b-tab>
+										<b-tab v-if="cooking.timerYN=='Y'" title="타이머" id="timer">
+										<!-- v-if="cooking.timerYN==Y" -->
+											<Timer :cooking="cooking" />
+										</b-tab>
+										</b-tabs>
+									</b-card>
 								</div>
+			<p style="margin-left:30px;width:80%;text-align:left;max-width:550px;">
+			<button class="btn" id="popover-target-4" @click="record" style="background-color:#F77479;"><i class="fa fa-microphone"></i> ON</button>
+			<b-popover target="popover-target-4" triggers="hover" placement="bottomright" style="padding-top:20px;">
+				<p style="font-family: 'Poor Story', cursive;padding-bottom:0px;">음성인식 켜기</p>
+			</b-popover>
+			<button class="btn" id="popover-target-5" @click="stop" style="background-color:#FABA5F;"><i class="fa fa-microphone-slash"></i> OFF</button>
+			<b-popover target="popover-target-5" triggers="hover" placement="bottomright" style="padding-top:20px;">
+				<p style="font-family: 'Poor Story', cursive;padding-bottom:0px;">음성인식 끄기</p>
+			</b-popover>
+			</p> 
 						</slide>
 				</carousel>
 		</div>
-
-		<button class="button btn" @click="record">음성인식</button>
-		<!-- <button class="button btn" @click="stop">음성종료</button> -->
 	</div>
 </template>
+
 <script>
 import http from "@/util/http-common.js";
 import Timer from '@/components/recipe/Timer.vue'
@@ -282,6 +320,7 @@ export default {
 			speechRecognition.start();
 		},
 		stop(){
+			speechRecognition.onend = null;
 			speechRecognition.stop();
 		},
 		textToSpeech(sumary) {
