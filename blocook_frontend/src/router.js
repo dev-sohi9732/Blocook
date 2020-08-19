@@ -20,6 +20,7 @@ import MyPost from "./views/community/MyPost.vue";
 import DetailPost from "./views/community/DetailPost.vue";
 import EditPost from "./views/community/EditPost.vue";
 import Timer from "./components/recipe/Timer.vue";
+import PageNotFound from "./views/PageNotFound.vue";
 Vue.use(Router);
 
 export default new Router({
@@ -178,6 +179,14 @@ export default new Router({
         default: EditPost
       }
     },
+    {
+      path: "*",
+      redirect: '/404'
+    },
+    {
+      path: '/404',
+      component : PageNotFound
+    }
   ],
   scrollBehavior: to => {
     if (to.hash) {
