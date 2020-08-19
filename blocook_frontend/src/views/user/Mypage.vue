@@ -79,6 +79,7 @@ export default {
     if(this.$store.state.user.img != null) {
         this.profileimg = this.$store.state.user.img;
     }
+    this.$store.state.speechRecognition.onend = null;
     this.$store.state.speechRecognition.stop();
     this.$store.state.audio.pause();
   },
