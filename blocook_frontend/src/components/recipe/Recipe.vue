@@ -140,6 +140,7 @@ export default {
 	watch:{
 		slideIndex: function() {
 			this.$store.state.audio.pause();
+			this.$store.state.audio.currentTime = 0;
 			//tts
 			if(this.slideIndex != 0){
 				this.textToSpeech(this.cookings[this.slideIndex-1].cookingDc);
@@ -200,13 +201,15 @@ export default {
 		// 뒤로가기 버튼 누르면 오디오, 마이크 정지
 		window.onpopstate = function(event) {
 			audio.pause();
+			audio.currentTime = 0;
 			speechRecognition.onend = null;
 			speechRecognition.stop();
 		}
 
 		// STT
 		this.$store.state.audio.pause();
-		this.$store.state.speechRecognition = new webkitSpeechRecognition();
+		this.$store.state.audio.currentTime = 0;
+		// this.$store.state.speechRecognition = new webkitSpeechRecognition();
 		speechRecognition = this.$store.state.speechRecognition;
 
 
@@ -216,7 +219,8 @@ export default {
 		speechRecognitionList.addFromString(grammar, 1);
 
 		speechRecognition.grammars = speechRecognitionList;
-		speechRecognition.continuous = false;
+		speechRecognition.continuous = true;
+		speechRecognition.maxAlternatives = 3;
 		speechRecognition.addEventListener('result', event => {
 				// console.log(event.results);
 				var text = event.results[event.results.length-1][0].transcript.trim();
@@ -234,12 +238,12 @@ export default {
 		speechRecognition.onnomatch = function(event) {
 			console.log("노매치");
 		}
-		speechRecognition.onend = function() {
+		this.$store.state.speechRecognition.onend = function() {
 			// if(this.micStat){
 			// 	console.log("들어오니");
 			// 	speechRecognition.start();
 			// }
-			speechRecognition.start();
+				speechRecognition.start();
 		};
 
 		speechRecognition.start();
@@ -282,6 +286,7 @@ export default {
 		},
 		textToSpeech(sumary) {
 			this.$store.state.audio.pause();
+			this.$store.state.audio.currentTime = 0;
 			http
 				.post('/recipes/tts', {
 					content: sumary
@@ -304,6 +309,7 @@ export default {
 		speechHandler(text){
 			if(text.endsWith("다음")) {
 				this.$store.state.audio.pause();
+				this.$store.state.audio.currentTime = 0;
 				if(this.slideIndex == this.cookingsLen){
 					this.textToSpeech("마지막 단계 입니다.");
 				}
@@ -312,6 +318,7 @@ export default {
 			}
 			else if(text.endsWith("이전")) {
 				this.$store.state.audio.pause();
+				this.$store.state.audio.currentTime = 0;
 				if(this.slideIndex == 0){
 					this.textToSpeech("첫 페이지입니다.");
 				}
@@ -351,10 +358,11 @@ export default {
 				speechRecognition.onend = null;
 				speechRecognition.stop();
 			}
-			else {
-				this.$store.state.audio.pause();
-				this.textToSpeech("정확하게 말씀해주세요.");
-			}
+			// else {
+			// 	this.$store.state.audio.pause();
+			// 	this.$store.state.audio.currentTime = 0;
+			// 	this.textToSpeech("정확하게 말씀해주세요.");
+			// }
 
 		}
 	}
