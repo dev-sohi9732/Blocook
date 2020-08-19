@@ -310,8 +310,13 @@ export default {
     }
   },
   created() {
-		//재료 데이터 가져오기
-		http
+    //재료 데이터 가져오기
+    if(this.$store.state.user.nickname == "") {
+      alert("로그인이 필요합니다.");
+      this.$router.push("/login");
+    }
+    else
+		{http
 		.post("/recipes/get/irdnts")
 		.then(({ data }) => {
 			this.irdnts = Array.from(data);
@@ -329,7 +334,7 @@ export default {
     })
 		.catch((error) => {
 			console.dir(error);
-    });
+    });}
 	},
 	methods: {
     previewGibonImage(event) {

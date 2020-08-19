@@ -65,6 +65,11 @@ export default {
   },
   created() {
       const params = new URL(document.location).searchParams;
+      if(this.$store.state.user.nickname == "") {
+      alert("로그인이 필요합니다.");
+      this.$router.push("/login");
+    }
+    else
       http.get(`/posts/${params.get('Id')}`)
       .then(res => {
           this.Epost = res.data
