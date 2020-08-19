@@ -310,20 +310,16 @@ export default {
 			if(text.endsWith("다음")) {
 				this.$store.state.audio.pause();
 				this.$store.state.audio.currentTime = 0;
-				if(this.slideIndex == this.cookingsLen){
-					this.textToSpeech("마지막 단계 입니다.");
-				}
-				else
+				if(this.slideIndex != this.cookingsLen){
 					this.slideIndex++;
+				}
 			}
 			else if(text.endsWith("이전")) {
 				this.$store.state.audio.pause();
 				this.$store.state.audio.currentTime = 0;
-				if(this.slideIndex == 0){
-					this.textToSpeech("첫 페이지입니다.");
-				}
-				else
+				if(this.slideIndex != 0){
 					this.slideIndex--;
+				}
 			}
 			else if(text.endsWith("다시")) {
 				if(this.slideIndex != 0){
