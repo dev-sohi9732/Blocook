@@ -209,6 +209,7 @@ export default {
             console.log(error);
         }) 
 
+        this.$store.state.speechRecognition.onend = null;
         this.$store.state.speechRecognition.stop();
         this.$store.state.audio.pause();
     },

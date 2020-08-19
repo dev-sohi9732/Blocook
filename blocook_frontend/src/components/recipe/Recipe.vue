@@ -200,6 +200,7 @@ export default {
 		// 뒤로가기 버튼 누르면 오디오, 마이크 정지
 		window.onpopstate = function(event) {
 			audio.pause();
+			speechRecognition.onend = null;
 			speechRecognition.stop();
 		}
 
@@ -215,7 +216,7 @@ export default {
 		speechRecognitionList.addFromString(grammar, 1);
 
 		speechRecognition.grammars = speechRecognitionList;
-		speechRecognition.continuous = true;
+		speechRecognition.continuous = false;
 		speechRecognition.addEventListener('result', event => {
 				// console.log(event.results);
 				var text = event.results[event.results.length-1][0].transcript.trim();
@@ -223,19 +224,22 @@ export default {
 				this.speechHandler(text);
 		})
 
-		speechRecognition.onerror = function(event) {
-			// console.log('onerror', event);
+		// speechRecognition.onerror = function(event) {
+		// 	// console.log('onerror', event);
 
-			if (event.error.match(/no-speech|audio-capture|not-allowed/)) {
-				console.log("무시");
-			}
-		};
+		// 	if (event.error.match(/no-speech|audio-capture|not-allowed/)) {
+		// 		console.log("무시");
+		// 	}
+		// };
 		speechRecognition.onnomatch = function(event) {
 			console.log("노매치");
 		}
 		speechRecognition.onend = function() {
-			if(this.micStat)
-				speechRecognition.start();
+			// if(this.micStat){
+			// 	console.log("들어오니");
+			// 	speechRecognition.start();
+			// }
+			speechRecognition.start();
 		};
 
 		speechRecognition.start();
@@ -344,7 +348,7 @@ export default {
 					ele.click();
 			}
 			else if(text.endsWith("마이크 꺼 줘")){
-				this.micStat = false;
+				speechRecognition.onend = null;
 				speechRecognition.stop();
 			}
 			else {

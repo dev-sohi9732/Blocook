@@ -222,7 +222,7 @@ td {
 }
 .sorting {
 	margin: 17px 8px 7px;
-  float: left;
+  	float: left;
 	display:inline;
 	height: 43px;
 	width: 100px;

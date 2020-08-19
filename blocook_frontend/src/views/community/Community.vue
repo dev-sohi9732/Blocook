@@ -15,6 +15,7 @@ export default {
     LogoArea
   },
   created(){
+    this.$store.state.speechRecognition.onend = null;
     this.$store.state.speechRecognition.stop()
     this.$store.state.audio.pause();  
   }
