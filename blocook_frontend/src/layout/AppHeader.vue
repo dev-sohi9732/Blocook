@@ -69,6 +69,10 @@ export default {
 	logout() {
       //this.$router.push('/');
       this.$store.dispatch('user/LOGOUT');
+      if(this.$store.state.user.nickname == "") {
+        alert("로그아웃 되었습니다.");
+        this.$router.push("/");
+      }
     }
   }
 };
