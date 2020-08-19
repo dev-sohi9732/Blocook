@@ -105,7 +105,7 @@
 		</div>
 
 		<button class="button btn" @click="record">음성인식</button>
-		<button class="button btn" @click="stop">음성종료</button>
+		<!-- <button class="button btn" @click="stop">음성종료</button> -->
 	</div>
 </template>
 <script>
