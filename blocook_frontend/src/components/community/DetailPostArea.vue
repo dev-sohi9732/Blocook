@@ -85,7 +85,6 @@ export default {
 		http.get(`/posts/${params.get('Id')}`)
 			.then(response => {
                 this.post = response.data
-                console.log(this.post)
                 this.unickname = this.$store.state.user.nickname
                 // 좋아요 표시했는지 여부 확인
                 if(this.$store.state.user.authorized == true) {
