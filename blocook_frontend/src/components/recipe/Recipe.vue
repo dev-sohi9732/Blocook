@@ -448,7 +448,7 @@ center > h1 {
 	max-width: 600px;
 }
 .cookingimg {
-	background-image: url("../../assets/blocookImg/addimage.jpg");
+	background-image: url("../../assets/blocookImg/cook.png");
 	background-size: 92%;
 	background-repeat: no-repeat;
   background-position: center;
