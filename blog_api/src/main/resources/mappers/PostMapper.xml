@@ -59,8 +59,8 @@
 	</select>
 	
 	<insert id="addPost">
-		INSERT INTO post (uid, recipe_id, title, content, nickname)
-		VALUES (#{uid}, #{recipe_id}, #{title}, #{content}, #{nickname});
+		INSERT INTO post (uid, title, content, nickname, img)
+		VALUES (#{uid}, #{title}, #{content}, #{nickname}, #{img});
 	</insert>
 	
 	<update id="update"	>

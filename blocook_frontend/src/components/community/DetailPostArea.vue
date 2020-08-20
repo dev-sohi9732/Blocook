@@ -21,9 +21,12 @@
 						</div>
 						<hr style="margin-top:25px;">
         </center>
-            <div class="post-content" style="margin-left:20px; margin-right:15px; min-height:150px;">
-                <span v-html="post.content"></span>
-            </div>
+
+        <div class="post-content" style="margin-left:20px; margin-right:15px; min-height:150px;">
+            <img :src="post.img" style="width:100%;">
+            <span v-html="post.content"></span>
+        </div>
+
         <center class="menu" v-if="this.$store.state.user.authorized == true">
             <button class="btn" style="color:red;font-weight:bold;" @click="addBookmark()" v-if="like == false">
                 Like <i class="fa fa-heart-o"></i>
@@ -73,7 +76,8 @@ export default {
             comments: [],
             like: false,
             unickname:'',
-            leng:0
+            leng:0,
+            img: ''
         }
     },
     created() {
@@ -81,6 +85,7 @@ export default {
 		http.get(`/posts/${params.get('Id')}`)
 			.then(response => {
                 this.post = response.data
+                console.log(this.post)
                 this.unickname = this.$store.state.user.nickname
                 // 좋아요 표시했는지 여부 확인
                 if(this.$store.state.user.authorized == true) {

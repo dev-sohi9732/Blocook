@@ -13,6 +13,7 @@ public class PostDto {
 	private LocalDateTime createDate;
 	private String nickname;
 	private int likeCnt;
+	private String img;
 	
 	public int getId() {
 		return id;
@@ -68,13 +69,18 @@ public class PostDto {
 	public void setLike_cnt(int likeCnt) {
 		this.likeCnt = likeCnt;
 	}
+	public String getImg() {
+		return img;
+	}
+	public void setImg(String img) {
+		this.img = img;
+	}
 	
 	@Override
 	public String toString() {
 		return "PostDto [id=" + id + ", uid=" + uid + ", recipe_id=" + recipe_id + ", title=" + title + ", content="
 				+ content + ", viewCnt=" + viewCnt + ", createDate=" + createDate + ", nickname=" + nickname
-				+ ", likeCnt=" + likeCnt + "]";
+				+ ", likeCnt=" + likeCnt + ", img=" + img + "]";
 	}
-	
 
 }

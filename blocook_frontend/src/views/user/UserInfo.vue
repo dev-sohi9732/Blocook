@@ -32,6 +32,7 @@
 
                         <div class="text-center col-lg-12" id="infocard">
                             <input type="file" @change="previewProfileImage" accept="image/*" style="width:210px;border-style:none;">
+                            <img :src="picture">
                             <button class="button btn" id="imagebtn" @click="uploadimg">
                                 <span>이미지 업로드 <i class="fa fa-pencil"></i></span>
                             </button>
@@ -100,7 +101,8 @@ export default {
         // 이미지 데이터
         profileimg: require('@/assets/blocookImg/noprofile.png'),
         imageData: null,
-        uploadValue: 0
+        uploadValue: 0,
+        picture: ''
     };
   },
   created() {
@@ -191,16 +193,16 @@ export default {
           this.imageData = event.target.files[0];
       },
       uploadimg() {
-          const storageRef = firebase.storage().ref(`${this.imageData.name}`).put(this.imageData);
-			storageRef.on(`state_changed`, snapshot => {
-					this.uploadValue = (snapshot.bytesTransferred/snapshot.totalBytes) * 100;
-				}, error => {console.log(error.message)},
-				() => {this.uploadValue = 100;
-					storageRef.snapshot.ref.getDownloadURL().then((url) => {
-                        this.profileimg = url;
-					});
-				}
-			);
+        const storageRef = firebase.storage().ref(`${this.imageData.name}`).put(this.imageData);
+        storageRef.on(`state_changed`, snapshot => {
+                this.uploadValue = (snapshot.bytesTransferred/snapshot.totalBytes) * 100;
+            }, error => {console.log(error.message)},
+            () => {this.uploadValue = 100;
+                storageRef.snapshot.ref.getDownloadURL().then((url) => {
+                    this.picture = url;
+                });
+            }
+        );
       }
   }
 }
