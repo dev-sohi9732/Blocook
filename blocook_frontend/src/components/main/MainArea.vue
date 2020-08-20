@@ -191,23 +191,23 @@ export default {
         });
 
         http
-        .get('recipes/search/irdnts/소금')
+		.post("recipes/search/userUid", '38')
         .then(({ data }) => {
-        this.recipes = data;
-        for (var i=0; i<6; i++ ) {
-            http.get(`/recipes/${this.recipes[i].recipeId}/bookmark-count`)
-                .then((res) => {
-                    this.likeCnt.push(res.data)
-                })
-                .catch((error) => {
-                    console.dir(error);
-                });
-            }
+            this.recipes = data;
+            for (var i=0; i<6; i++ ) {
+                http.get(`/recipes/${this.recipes[i].recipeId}/bookmark-count`)
+                    .then((res) => {
+                        this.likeCnt.push(res.data)
+                    })
+                    .catch((error) => {
+                        console.dir(error);
+                    });
+                }
         })
         .catch((error) => {
-            alert('검색 결과 요청에 실패하였습니다.');
-            console.log(error);
-        }) 
+                alert('결과 요청에 실패하였습니다.')
+                console.log(error)
+        })
 
         if (typeof webkitSpeechRecognition === 'function') {
             this.$store.commit('recognition/setOnEnd', null);
