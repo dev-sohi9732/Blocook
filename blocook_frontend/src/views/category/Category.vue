@@ -1,6 +1,5 @@
 <template>
     <div>
-
         <div class="position-relative">
             <!-- shape Hero -->
             <section class="section-hero section-shaped my-0" style="padding-top:20%; padding-bottom:20%">
@@ -83,7 +82,6 @@
             </section>
             <!-- 1st Hero Variation -->
         </div>
-
     </div>
 </template>
 

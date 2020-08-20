@@ -162,7 +162,8 @@ export default {
 				"uid":this.$store.state.user.uid
 			})
 			.then(({ data }) => {
-				this.like = true;
+                this.like = true;
+                
 			})
 			.catch((error) => {
 				alert('처리 실패하였습니다.')
