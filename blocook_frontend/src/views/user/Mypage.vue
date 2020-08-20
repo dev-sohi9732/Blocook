@@ -76,13 +76,16 @@ export default {
       alert("로그인이 필요합니다.");
       this.$router.push("/login");
     }
-    else
-        {if(this.$store.state.user.img != null) {
+    else {
+        if(this.$store.state.user.img != null) {
             this.profileimg = this.$store.state.user.img;
         }
-        this.$store.state.speechRecognition.onend = null;
-        this.$store.state.speechRecognition.stop();
-        this.$store.state.audio.pause();}
+        if (typeof webkitSpeechRecognition === 'function') {
+            this.$store.commit('recognition/setOnEnd', null);
+            this.$store.state.recognition.speechRecognition.stop();
+            this.$store.state.audio.pause();
+        }
+    }
   },
   methods: {
     moveToUserInfo() {

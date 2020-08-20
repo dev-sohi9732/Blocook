@@ -5,7 +5,7 @@
 			<h6 style="text-align:right;width:80%;max-width:550px;">음성으로 블로쿡 이용하기&nbsp;<i class="fa fa-bullhorn"></i>&nbsp;
 				<button class="btn" id="popover-target-1" style="font-weight:bold;">사용법</button>
 			</h6>
-			<b-popover target="popover-target-1" triggers="hover" placement="bottomleft" style="width:300px;">
+			<b-popover :show.sync="show" target="popover-target-1" triggers="hover" placement="bottomleft" style="width:300px;">
 				<br>
 				<b style="font-family: 'Poor Story', cursive;"><h5 style="color:#F77479;">&emsp;이렇게 말해보세요 :)&emsp;</h5></b><br>
 				<b style="font-family: 'Poor Story', cursive;"><h6 style="color:#FABA5F;">&emsp;<i class="fa fa-volume-up"></i> 음성인식 이용 방법 <i class="fa fa-volume-up"></i>&emsp;</h6></b>
@@ -23,7 +23,7 @@
 		</center>
 
 		<div id="carousel">
-				<carousel :loop="true" :perPage="1" :navigationEnabled="true" :centerMode="true" :navigateTo="slideIndex" v-on:pageChange="pageChange">
+				<carousel ref="carousel" :loop="true" :perPage="1" :navigationEnabled="true" :centerMode="true" :navigateTo="slideIndex" v-on:pageChange="pageChange">
 						<!--------------------------- 레시피 기본정보 --------------------------->
 						<slide>
 								<center class="menu">
@@ -95,8 +95,6 @@
 									</table>
 								</div>
 						</slide>
-
-						<!--------------------------- 레시피 과정정보 --------------------------->
 						<slide v-for="(cooking,cooking_key) in cookings" :key="cooking_key">
 								<div style="margin-bottom: 20px;">
 									<b-card no-body>
@@ -119,12 +117,9 @@
 													</tr>
 												</tbody>
 												</table>
-												<!-- v-if="cooking.timerYN==Y" -->
-												<!-- <router-link :to="'timer?time='+cooking.timerTime" class="timer_btn">타이머 보기</router-link> -->
 											</div>
 										</b-tab>
 										<b-tab v-if="cooking.timerYN=='Y'" title="타이머" id="timer">
-										<!-- v-if="cooking.timerYN==Y" -->
 											<Timer :cooking="cooking" />
 										</b-tab>
 										</b-tabs>
@@ -172,7 +167,8 @@ export default {
 			like: false,
 			slideIndex: 0,
 			cookingsLen: 0,
-			micStat: true
+			micStat: true,
+			show: false
 		};
 	},
 	watch:{
@@ -236,55 +232,20 @@ export default {
 			console.log(err)
 		})
 
-		// 뒤로가기 버튼 누르면 오디오, 마이크 정지
-		window.onpopstate = function(event) {
-			audio.pause();
-			audio.currentTime = 0;
-			speechRecognition.onend = null;
-			speechRecognition.stop();
-		}
+		//STT
+		if (typeof webkitSpeechRecognition === 'function') {
+			this.$store.state.recognition.speechRecognition = null;
+			this.$store.state.recognition.speechRecognition = new webkitSpeechRecognition();
 
-		// STT
-		this.$store.state.audio.pause();
-		this.$store.state.audio.currentTime = 0;
-		// this.$store.state.speechRecognition = new webkitSpeechRecognition();
-		speechRecognition = this.$store.state.speechRecognition;
-
-
-		var says = [ '다음' , '이전' , '다시', '레시피', '타이머', '타이머 시작', '타이머 정지', '타이머 리셋', '마이크 꺼 줘'];
-		var grammar = '#JSGF V1.0; grammar says; public <say> = ' + says.join(' | ') + ' ;'
-		var speechRecognitionList = new webkitSpeechGrammarList();
-		speechRecognitionList.addFromString(grammar, 1);
-
-		speechRecognition.grammars = speechRecognitionList;
-		speechRecognition.continuous = true;
-		speechRecognition.maxAlternatives = 3;
-		speechRecognition.addEventListener('result', event => {
-				// console.log(event.results);
+			this.$store.commit('recognition/setContinuous', true);
+			this.$store.commit('recognition/setMaxAlterNatives', 3);
+			this.$store.commit('recognition/setOnResult', event => {
 				var text = event.results[event.results.length-1][0].transcript.trim();
-				// console.log("say: "+text);
+				console.log("say: "+text);
 				this.speechHandler(text);
-		})
-
-		// speechRecognition.onerror = function(event) {
-		// 	// console.log('onerror', event);
-
-		// 	if (event.error.match(/no-speech|audio-capture|not-allowed/)) {
-		// 		console.log("무시");
-		// 	}
-		// };
-		speechRecognition.onnomatch = function(event) {
-			console.log("노매치");
+			});
+			this.record();
 		}
-		this.$store.state.speechRecognition.onend = function() {
-			// if(this.micStat){
-			// 	console.log("들어오니");
-			// 	speechRecognition.start();
-			// }
-				speechRecognition.start();
-		};
-
-		speechRecognition.start();
 	},
 	methods: {
 		addBookmark() { // 좋아요 누름
@@ -316,12 +277,17 @@ export default {
 			this.slideIndex = i;
 		},		
 		record() {
-			speechRecognition.stop();
-			speechRecognition.start();
+			if (typeof webkitSpeechRecognition === 'function') {
+				this.stop();
+				this.$store.commit('recognition/setOnEnd', 'start');
+				this.$store.state.recognition.speechRecognition.start();
+			}
 		},
 		stop(){
-			speechRecognition.onend = null;
-			speechRecognition.stop();
+			if (typeof webkitSpeechRecognition === 'function') {
+				this.$store.commit('recognition/setOnEnd', null);
+				this.$store.state.recognition.speechRecognition.stop();
+			}
 		},
 		textToSpeech(sumary) {
 			this.$store.state.audio.pause();
@@ -336,6 +302,7 @@ export default {
 					// console.log(data);
 					var blob=new Blob([data], {type : 'audio/ogg'});
 					const audioUrl = URL.createObjectURL(blob);
+					this.$store.state.audio = null
 					this.$store.state.audio = new Audio(audioUrl);
 					audio = this.$store.state.audio;
 					this.$store.state.audio.play();
@@ -347,58 +314,71 @@ export default {
 		},
 		speechHandler(text){
 			if(text.endsWith("다음")) {
-				this.$store.state.audio.pause();
-				this.$store.state.audio.currentTime = 0;
 				if(this.slideIndex != this.cookingsLen){
 					this.slideIndex++;
 				}
-			}
-			else if(text.endsWith("이전")) {
-				this.$store.state.audio.pause();
-				this.$store.state.audio.currentTime = 0;
+			} else if(text.endsWith("이전")) {
 				if(this.slideIndex != 0){
 					this.slideIndex--;
 				}
-			}
-			else if(text.endsWith("다시")) {
+			} else if(text.endsWith("다시")) {
 				if(this.slideIndex != 0){
 					this.textToSpeech(this.cookings[this.slideIndex-1].cookingDc);
 				} else {
 					this.textToSpeech(this.recipe.recipeNmKo);
 				}
-			}
-			else if(text.endsWith("레시피"))
-				document.getElementById('recipe___BV_tab_button__').click();
-			else if(text.endsWith("타이머")) { 
-				var ele = document.getElementById('timer___BV_tab_button__');
-				if(ele != null)
+			} else if(text.endsWith("레시피")){
+				if(this.slideIndex != 0){
+					var ele = document.querySelectorAll(".card ul #recipe___BV_tab_button__")[this.slideIndex-1];
 					ele.click();
-			}
-			else if(text.endsWith("타이머 시작")) {
-				var ele = document.getElementById('timer_start');
-				if(ele != null)
-					ele.click();
-			}
-			else if(text.endsWith("타이머 정지")) {
-				var ele = document.getElementById('timer_pause');
-				if(ele != null)
-					ele.click();
-			}
-			else if(text.endsWith("타이머 리셋")){
-				var ele = document.getElementById('timer_reset');
-				if(ele != null)
-					ele.click();
-			}
-			else if(text.endsWith("마이크 꺼 줘")){
-				speechRecognition.onend = null;
-				speechRecognition.stop();
-			}
-			// else {
-			// 	this.$store.state.audio.pause();
-			// 	this.$store.state.audio.currentTime = 0;
-			// 	this.textToSpeech("정확하게 말씀해주세요.");
-			// }
-
+				}
+			} else if(text.endsWith("타이머")) {
+				if(this.slideIndex != 0){
+					var ele = document.querySelectorAll(".card ul")[this.slideIndex-1].childNodes[2].firstChild;
+					if(ele != null)
+						ele.click();
+				}
+			} else if(text.endsWith("타이머 시작")) {
+				if(this.slideIndex != 0){
+					var ele1 = document.querySelectorAll(".card ul")[this.slideIndex-1].childNodes[2].firstChild;
+					if(ele1 != null){
+						var ele2 = document.querySelectorAll(".tab-content")[this.slideIndex-1].childNodes[1].childNodes[0].childNodes[1].childNodes[0];
+						console.log(document.querySelectorAll(".tab-content")[this.slideIndex-1].childNodes[1].childNodes[0].childNodes[1].childNodes);
+						if(ele2.nodeName == 'BUTTON')
+							ele2.click();
+					}
+				}
+			} else if(text.endsWith("타이머 정지")) {
+				if(this.slideIndex != 0){
+					var ele1 = document.querySelectorAll(".card ul")[this.slideIndex-1].childNodes[2].firstChild;
+					if(ele1 != null){
+						var ele2 = document.querySelectorAll(".tab-content")[this.slideIndex-1].childNodes[1].childNodes[0].childNodes[1].childNodes[1];
+						if(ele2.nodeName == 'BUTTON')
+							ele2.click();
+					}
+				}
+			} else if(text.endsWith("타이머 리셋")){
+				if(this.slideIndex != 0){
+					var ele1 = document.querySelectorAll(".card ul")[this.slideIndex-1].childNodes[2].firstChild;
+					if(ele1 != null){
+						var ele2 = document.querySelectorAll(".tab-content")[this.slideIndex-1].childNodes[1].childNodes[0].childNodes[1].childNodes[2];
+						if(ele2.nodeName == 'BUTTON')
+							ele2.click();
+					}
+				}
+			} else if(text.endsWith("마이크 꺼 줘")){
+				if (typeof webkitSpeechRecognition === 'function') {
+					this.$store.commit('recognition/setOnEnd', null);
+					this.$store.state.recognition.speechRecognition.stop();
+				}
+			} else if(text.endsWith("사용법")) {
+				this.show = true
+				setTimeout(() => {
+					this.show = false;
+				},4000)
+			} else {
+				this.textToSpeech("정확하게 말씀해주세요.");
+			} 
 		}
 	}
 }

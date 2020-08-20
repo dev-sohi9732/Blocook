@@ -157,7 +157,7 @@ export default {
         slide: 0,
         sliding: null,
         multi: [],
-        likeCnt: [],
+        likeCnt: []
       }
     },
     created() {
@@ -209,9 +209,12 @@ export default {
             console.log(error);
         }) 
 
-        this.$store.state.speechRecognition.onend = null;
-        this.$store.state.speechRecognition.stop();
-        this.$store.state.audio.pause();
+        if (typeof webkitSpeechRecognition === 'function') {
+            this.$store.commit('recognition/setOnEnd', null);
+            this.$store.state.recognition.speechRecognition.stop();
+            this.$store.state.audio.pause();
+        }
+        
     },
     methods: {
         searchtitle() {

@@ -70,7 +70,6 @@
                 <img style="width:45px; height:45px; opacity: 0.5;" src="@/assets/blocookImg/top.png">
             </a> 
         </div>
-    </section>
 </template>
 
 <script>
@@ -120,6 +119,12 @@ export default {
             .catch(error => {
             console.log(error)
             })
+        }
+
+        if (typeof webkitSpeechRecognition === 'function') {
+            this.$store.commit('recognition/setOnEnd', null);
+            this.$store.state.recognition.speechRecognition.stop();
+            this.$store.state.audio.pause();
         }
     },
     methods: {
