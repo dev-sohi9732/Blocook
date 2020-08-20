@@ -37,8 +37,8 @@
 			</select>
 
 			<b-dropdown id="dropdown-right" right text="내 포스트" variant="success" class="writing" no-caret v-if="this.$store.state.user.authorized">
-				<b-dropdown-item @click="moveToNewPost()" style="text-align:center">새 글 쓰기</b-dropdown-item>
-				<b-dropdown-item @click="moveToMyPost()" style="text-align:center">내가 쓴 글</b-dropdown-item>
+				<b-dropdown-item class="item1" @click="moveToNewPost()">새 글 쓰기</b-dropdown-item>
+				<b-dropdown-item class="item2" @click="moveToMyPost()">내가 쓴 글</b-dropdown-item>
 			</b-dropdown>
 		</div>
 
