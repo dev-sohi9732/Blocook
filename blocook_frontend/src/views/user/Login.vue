@@ -112,7 +112,14 @@ export default {
 			}
 			return true;
 		},
-	},
+    },
+    created() {
+        if (typeof webkitSpeechRecognition === 'function') {
+            this.$store.commit('recognition/setOnEnd', null);
+            this.$store.state.recognition.speechRecognition.stop();
+            this.$store.state.audio.pause();
+        }
+    }
 }
 </script>
 
