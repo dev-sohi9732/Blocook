@@ -475,7 +475,7 @@ export default {
     addtimer(timerstep) {
       if(this.steps[timerstep].timerYN == "N") this.steps[timerstep].timerYN = "Y";
       else if(this.steps[timerstep].timerYN == "Y") this.steps[timerstep].timerYN = "N";
-      console.log(this.steps);
+      // console.log(this.steps);
 		},
     addstep() {
       this.cookingpicture.push({uploaded: false, imageData: null, uploadValue: 0});

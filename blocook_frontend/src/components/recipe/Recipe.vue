@@ -126,17 +126,11 @@
 									</b-card>
 								</div>
 			<p style="margin-left:30px;width:80%;text-align:left;max-width:550px;">
-			<button class="btn" id="popover-target-4" @click="record" style="background-color:#F77479;"><i class="fa fa-microphone"></i> ON</button>
-			<b-popover target="popover-target-4" triggers="hover" placement="bottomright" style="padding-top:20px;">
-				<p style="font-family: 'Poor Story', cursive;padding-bottom:0px;">음성인식 켜기</p>
-			</b-popover>
-			<button class="btn" id="popover-target-5" @click="stop" style="background-color:#FABA5F;"><i class="fa fa-microphone-slash"></i> OFF</button>
-			<b-popover target="popover-target-5" triggers="hover" placement="bottomright" style="padding-top:20px;">
-				<p style="font-family: 'Poor Story', cursive;padding-bottom:0px;">음성인식 끄기</p>
-			</b-popover>
+				<button class="btn" @click="record" style="background-color:#F77479;"><i class="fa fa-microphone"></i> ON</button>
+				<button class="btn" @click="stop" style="background-color:#FABA5F;"><i class="fa fa-microphone-slash"></i> OFF</button>
 			</p> 
-						</slide>
-				</carousel>
+					</slide>
+			</carousel>
 		</div>
 	</div>
 </template>
@@ -234,6 +228,7 @@ export default {
 
 		//STT
 		if (typeof webkitSpeechRecognition === 'function') {
+			this.stop();
 			this.$store.state.recognition.speechRecognition = null;
 			this.$store.state.recognition.speechRecognition = new webkitSpeechRecognition();
 
@@ -241,9 +236,10 @@ export default {
 			this.$store.commit('recognition/setMaxAlterNatives', 3);
 			this.$store.commit('recognition/setOnResult', event => {
 				var text = event.results[event.results.length-1][0].transcript.trim();
-				console.log("say: "+text);
+				// console.log("say: "+text);
 				this.speechHandler(text);
 			});
+			this.$store.commit('recognition/setOnEnd', 'start');
 			this.record();
 		}
 	},
@@ -343,7 +339,6 @@ export default {
 					var ele1 = document.querySelectorAll(".card ul")[this.slideIndex-1].childNodes[2].firstChild;
 					if(ele1 != null){
 						var ele2 = document.querySelectorAll(".tab-content")[this.slideIndex-1].childNodes[1].childNodes[0].childNodes[1].childNodes[0];
-						console.log(document.querySelectorAll(".tab-content")[this.slideIndex-1].childNodes[1].childNodes[0].childNodes[1].childNodes);
 						if(ele2.nodeName == 'BUTTON')
 							ele2.click();
 					}
