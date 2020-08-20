@@ -1,8 +1,8 @@
 <template>
-    <div>
+    <section class="section-hero section-shaped my-0">
         <NavBackgroundRecipe></NavBackgroundRecipe>
 				<SearchRecipeArea></SearchRecipeArea>
-    </div>
+    </section>
 </template>
 <script>
 import SearchRecipeArea from "@/components/recipe/SearchRecipeArea";

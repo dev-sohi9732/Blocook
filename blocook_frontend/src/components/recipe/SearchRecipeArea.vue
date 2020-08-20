@@ -239,4 +239,14 @@ img {
 		margin-left: 8vw;
     }
 }
+@media(max-width: 991px) {
+	.container {
+		padding-top: 55px;
+	}
+}
+@media(min-width: 991px) {
+	.container {
+		padding-top: 80px;
+	}
+}
 </style>
