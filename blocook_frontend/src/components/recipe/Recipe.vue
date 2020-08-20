@@ -1,5 +1,5 @@
 <template>
-	<div style="padding-bottom: 20px;">
+	<div class="section-recipe" style="background-color:white;padding-top:15px;">
 		<center class="menu" id="recipetitle">
 			<h1 style="margin-top: 28px;">{{recipe.recipeNmKo}}</h1>
 			<h6 style="text-align:right;width:80%;max-width:550px;">음성으로 블로쿡 이용하기&nbsp;<i class="fa fa-bullhorn"></i>&nbsp;
@@ -406,6 +406,20 @@ export default {
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding:wght@400;700&family=Poor+Story&display=swap');
+@media(max-width: 991px) {
+	.section-recipe {
+		margin-top: 58px;
+		margin-left:5vw;
+		margin-right:5vw;
+	}
+}
+@media(min-width: 991px) {
+	.section-recipe {
+		margin-top: 92px;
+		margin-left:20vw;
+		margin-right:20vw;
+	}
+}
 center {
 	margin-top: 10px;
 	font-weight: bold;
@@ -465,5 +479,7 @@ center > h1 {
   background-position: center;
 	max-width: 600px;
 }
-
+.VueCarousel-slide {
+  flex-basis: inherit;
+}
 </style>

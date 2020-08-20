@@ -52,7 +52,7 @@
                                 <i class="fa fa-lock"></i> 비밀번호&emsp;&emsp;&nbsp;&nbsp;
                                 <input v-model="password"
                                         id="password"
-                                        type="text" 
+                                        type="password"
                                         placeholder="비밀번호를 입력해주세요"/>
                             </div>
                             <div style="width:300px;margin:3px auto 3px auto;font-weight:bold;">

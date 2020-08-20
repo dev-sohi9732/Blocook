@@ -1,8 +1,8 @@
 <template>
-    <div>
+    <section class="section-hero section-shaped my-0">
         <NavBackgroundRecipe></NavBackgroundRecipe>
 				<Recipe></Recipe>
-    </div>
+    </section>
 </template>
 <script>
 import Recipe from "@/components/recipe/Recipe";
