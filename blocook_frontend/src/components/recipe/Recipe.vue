@@ -1,5 +1,5 @@
 <template>
-	<div class="section-recipe" style="background-color:white;padding-top:15px;">
+	<div class="section-recipe" style="background-color:white;padding-top:1px;">
 		<center class="menu" id="recipetitle">
 			<h1 style="margin-top: 28px;">{{recipe.recipeNmKo}}</h1>
 			<h6 style="text-align:right;width:80%;max-width:550px;">음성으로 블로쿡 이용하기&nbsp;<i class="fa fa-bullhorn"></i>&nbsp;
