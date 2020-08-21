@@ -10,9 +10,7 @@
 
 ## 개요
 
-![main](.\imgs\sub3imgs\main.PNG?raw=true)
-
-
+![main](imgs/sub3imgs/main.PNG)
 
 Blocook은 Blog와 Cooking의 합성어로서 **Blocook(블로쿡)** 이란 이름을 갖게 되었습니다.
 
@@ -27,13 +25,13 @@ Blocook은 Blog와 Cooking의 합성어로서 **Blocook(블로쿡)** 이란 이�
 **Spring Boot** 를 이용하여 백엔드 REST API를 구현하였고 **Vue.js 프레임워크**를 이용하여 프론트 단을 구현하였습니다.
 레시피 정보 조회 및 검색과 같은 요청 발생 시 프론트단에서 서버와 비동기 통신하여 JSON 형태로 응답 결과를 받아와 처리 후 보여줍니다.
 
-![arc](.\imgs\sub3imgs\arc.jpg?raw=true)
+![arc](imgs/sub3imgs/arc.jpg)
 
 ### 1. 음성인식(STT) & 음성합성(TTS)
 
 
 
-![detailrecipe](.\imgs\sub3imgs\detailrecipe.PNG?raw=true)
+![detailrecipe](imgs/sub3imgs/detailrecipe.PNG)
 
 
 
