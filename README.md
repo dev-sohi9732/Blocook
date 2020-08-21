@@ -8,7 +8,7 @@
   PC - 크롬 브라우저
   Mobile - 안드로이드 + 크롬, 삼성 인터넷 브라우저
 
-## 개요
+## 개요.
 
 ![main](.\imgs\subimgs\main.PNG)
 
