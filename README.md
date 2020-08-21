@@ -10,7 +10,7 @@
 
 ## 개요
 
-![main](.\imgs\sub3imgs\main.PNG)
+![main](.\imgs\subimgs\main.PNG)
 
 
 
