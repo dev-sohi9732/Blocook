@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.ssafy.blog.mapper.RecipeMapper">
+
+	<select id="selectAllRecipes" resultType="com.ssafy.blog.dto.RecipeDto">
+		SELECT a.*, b.like_cnt
+		  FROM (SELECT * 
+		  		  FROM recipe) as a
+		  LEFT JOIN (SELECT count(*) as like_cnt, recipe_id
+		  			   FROM recipe_bookmark 
+		  			  GROUP BY recipe_id) as b
+				 ON a.recipe_id = b.recipe_id
+              ORDER BY recipe_id DESC;
+	</select>
+
+	<select id="selectByNationCode" parameterType="String" resultType="com.ssafy.blog.dto.RecipeDto">
+		SELECT a.*, b.like_cnt
+		  FROM (SELECT * 
+				  FROM recipe 
+				 WHERE nation_code = #{nationCode}
+		order by recipe_id) as a
+		  LEFT JOIN (SELECT count(*) as like_cnt, recipe_id
+		  			   FROM recipe_bookmark 
+		  			  GROUP BY recipe_id) as b
+				 ON a.recipe_id = b.recipe_id
+              ORDER BY recipe_id DESC;
+	</select>
+
+	<select id="selectByIrdnts" resultType="com.ssafy.blog.dto.RecipeDto">
+		SELECT a.*, b.like_cnt
+		  FROM (select r.RECIPE_ID, r.RECIPE_NM_KO, r.SUMRY, r.NATION_CODE, r.NATION_NM,
+		       		   r.TY_CODE, r.TY_NM, r.COOKING_TIME, r.CALORIE, r.QNT, 
+		       		   r.LEVEL_NM, r.IRDNT_CODE, r.PC_NM, r.IMG_URL
+			      from recipe as r
+			     inner join (select *, count(recipe_id) as coun
+							   from recipe_irdnt
+							  where IRDNT_NM in 
+									<foreach collection="array" item="irdnt" open="(" close=")" separator=",">
+									#{irdnt}
+									</foreach>
+							  group by recipe_id
+							  order by coun desc) as i
+								 on r.recipe_id = i.recipe_id) as a
+		   LEFT JOIN (SELECT count(*) as like_cnt, recipe_id
+		  			    FROM recipe_bookmark 
+		  			   GROUP BY recipe_id) as b
+			      ON a.recipe_id = b.recipe_id
+	</select>
+	
+	<select id="selectByTitle" parameterType="String" resultType="com.ssafy.blog.dto.RecipeDto">
+		SELECT a.*, b.like_cnt
+		  FROM (SELECT * 
+				  FROM recipe 
+				 WHERE recipe_nm_ko LIKE CONCAT('%', #{title}, '%')) as a
+		  LEFT JOIN (SELECT count(*) as like_cnt, recipe_id
+		  			   FROM recipe_bookmark 
+		  			  GROUP BY recipe_id) as b
+				 ON a.recipe_id = b.recipe_id
+              ORDER BY recipe_id DESC
+	</select>
+	
+	<select id="selectByUid" parameterType="String" resultType="com.ssafy.blog.dto.RecipeDto">
+		SELECT a.*, b.like_cnt
+		  FROM (SELECT * 
+				  FROM recipe 
+       		     WHERE user_uid = #{uid}) as a
+		  LEFT JOIN (SELECT count(*) as like_cnt, recipe_id 
+		  			   FROM recipe_bookmark 
+		  			  WHERE uid = #{uid}
+		  			  GROUP BY recipe_id) as b
+		 	ON a.recipe_id = b.recipe_id
+		 ORDER BY recipe_id DESC;
+	</select>
+	
+	<select id="selectRecipeById" parameterType="String" resultType="com.ssafy.blog.dto.RecipeDto">
+		SELECT * FROM recipe WHERE recipe_id = #{recipeId}
+	</select>
+	
+	<select id="selectCookingById" parameterType="String" resultType="com.ssafy.blog.dto.CookingDto">
+		SELECT * FROM recipe_cooking WHERE recipe_id = #{recipeId} order by cooking_no
+	</select>
+	
+	<select id="selectIrdntById" parameterType="String" resultType="com.ssafy.blog.dto.IrdntDto">
+		select * from recipe_irdnt where recipe_id = #{recipeId} order by irdnt_sn
+	</select>
+	
+	<select id="selectAllIrdnts" resultType="String">
+		select distinct irdnt_nm from recipe_irdnt
+	</select>
+	
+	<insert id="bookmarkRecipe">
+		INSERT INTO recipe_bookmark ( recipe_id, uid )
+		VALUES ( #{recipeId}, #{uid} );
+	</insert>
+	
+	<delete id="unBookmarkRecipe">
+		DELETE 
+		FROM recipe_bookmark
+		WHERE recipe_id = #{recipeId} AND uid = #{uid};
+	</delete>
+	
+	<select id="selectBookmarkCount" parameterType="String" resultType="Integer">
+		SELECT COUNT(*) 
+		FROM recipe_bookmark
+		WHERE recipe_id = #{recipeId};
+	</select>
+	
+	<select id="isBookmarkedRecipe" resultType="Integer">
+		SELECT COUNT(*) 
+		FROM recipe_bookmark
+		WHERE recipe_id = #{recipeId} AND uid = #{uid};
+	</select>
+	
+	<insert id="addRecipe">
+		INSERT INTO recipe ( recipe_id, recipe_nm_ko, sumry, nation_code, nation_nm, ty_code, ty_nm, cooking_time, calorie, qnt, level_nm, irdnt_code, img_url, det_url, user_uid)
+		VALUES ( #{recipeId}, #{recipeNmKo}, #{sumry}, #{nationCode}, #{nationNm}, #{tyCode}, #{tyNm}, #{cookingTime}, #{calorie}, #{qnt}, #{levelNm}, #{irdntCode}, #{imgUrl}, #{detUrl}, #{userUid});
+	</insert>
+	
+	<insert id="addCooking">
+		INSERT INTO recipe_cooking ( recipe_id, cooking_no, cooking_dc, stre_step_image_url, timer_yn, timer_m, timer_s)
+		VALUES ( #{recipeId}, #{cookingNo}, #{cookingDc}, #{streStepImageUrl}, #{timerYN}, #{timerM}, #{timerS} );
+	</insert>
+	
+	<insert id="addIrdnt">
+		INSERT INTO recipe_irdnt ( recipe_id, irdnt_sn, irdnt_nm, irdnt_cpcty, irdnt_ty_code, irdnt_ty_nm)
+		VALUES ( #{recipeId}, #{irdntSn}, #{irdntNm}, #{irdntCpcty}, #{irdntTyCode}, #{irdntTyNm});
+	</insert>
+	
+	<select id="selectMaxId" resultType="Integer">
+		SELECT max(recipe_id) 
+		FROM recipe;
+	</select>
+	
+	<select id="selectMaxIrdntSn" resultType="Integer">
+		SELECT max(irdnt_sn) 
+		FROM recipe_irdnt;
+	</select>
+	
+	<select id="mybookmarkedrecipe" parameterType="String" resultType="com.ssafy.blog.dto.RecipeDto">
+		SELECT a.*, b.like_cnt 
+		FROM ( SELECT * 
+			   FROM recipe WHERE recipe_id IN ( SELECT recipe_id 
+			   									FROM recipe_bookmark 
+			   									WHERE uid = #{uid} ) ) as a 
+	 	LEFT JOIN ( SELECT count(*) as like_cnt, recipe_id 
+	 				FROM recipe_bookmark 
+	 				GROUP BY recipe_id ) as b 
+	 	ON a.recipe_id = b.recipe_id
+	 	ORDER BY recipe_id DESC;
+	</select>
+	
+	<delete id="deleteRecipe" parameterType="String">
+		DELETE 
+		FROM recipe
+		WHERE recipe_id = #{recipeId};
+	</delete>
+	
+	<delete id="deleteRecipeCooking" parameterType="String">
+		DELETE 
+		FROM recipe_cooking
+		WHERE recipe_id = #{recipeId};
+	</delete>
+	
+	<delete id="deleteRecipeIrdnt" parameterType="String">
+		DELETE 
+		FROM recipe_irdnt
+		WHERE recipe_id = #{recipeId};
+	</delete>
+	
+	<select id="selectTypes" resultType="com.ssafy.blog.dto.RecipeDto">
+		SELECT DISTINCT ty_code, ty_nm
+		  FROM recipe;
+	</select>
+	
+</mapper>
+
+

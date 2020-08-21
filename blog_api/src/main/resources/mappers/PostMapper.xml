@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.ssafy.blog.mapper.PostMapper">
+
+	<select id="selectAllPosts" resultType="com.ssafy.blog.dto.PostDto">
+		SELECT a.*, b.like_cnt
+		  FROM (SELECT * 
+		  		  FROM post) as a
+		  LEFT JOIN (SELECT count(*) as like_cnt, post_id 
+		  			   FROM post_bookmark 
+		  			  GROUP BY post_id) as b
+				 ON a.id = b.post_id;
+	</select>
+
+	<select id="selectByTitle" parameterType="String" resultType="com.ssafy.blog.dto.PostDto">
+		SELECT * 
+		FROM post 
+		WHERE title LIKE CONCAT('%', #{title}, '%')
+	</select>
+	
+	<select id="selectByUid" parameterType="String" resultType="com.ssafy.blog.dto.PostDto">
+		SELECT * 
+		FROM post 
+		WHERE uid = #{userUid}
+	</select>
+	
+	<select id="selectByNickname" parameterType="String" resultType="com.ssafy.blog.dto.PostDto">
+		SELECT * 
+		FROM post 
+		WHERE nickname LIKE CONCAT('%', #{nickname}, '%')
+	</select>
+	
+	<select id="selectPostById" parameterType="String" resultType="com.ssafy.blog.dto.PostDto">
+		SELECT a.*, b.like_cnt
+		  FROM (SELECT * 
+		  		  FROM post 
+		  		 WHERE id = #{id}) as a
+		  LEFT JOIN (SELECT count(*) as like_cnt, post_id 
+		  			   FROM post_bookmark 
+		  			  GROUP BY post_id) as b
+			ON a.id = b.post_id;
+	</select>
+	
+	<insert id="bookmarkPost">
+		INSERT INTO post_bookmark ( post_id, uid )
+		VALUES ( #{id}, #{uid} );
+	</insert>
+	
+	<delete id="unBookmarkPost">
+		DELETE 
+		FROM post_bookmark
+		WHERE post_id = #{id} AND uid = #{uid};
+	</delete>
+	
+	<select id="isBookmarkedPost" resultType="Integer">
+		SELECT COUNT(*) 
+		FROM post_bookmark
+		WHERE post_id = #{id} AND uid = #{uid};
+	</select>
+	
+	<insert id="addPost">
+		INSERT INTO post (uid, title, content, nickname, img)
+		VALUES (#{uid}, #{title}, #{content}, #{nickname}, #{img});
+	</insert>
+	
+	<update id="update"	>
+		update post 
+		set title = #{title}, content = #{content}
+		where id = #{id}
+	</update>
+	
+	<delete id="delete" parameterType="map">
+		delete from post where id = #{id}
+	</delete>
+	
+	<update id="addViewCount" parameterType="String">
+		update post 
+		set view_cnt = view_cnt + 1
+		where id = #{id}
+	</update>
+
+</mapper>
